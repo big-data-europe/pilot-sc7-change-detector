@@ -81,10 +81,10 @@ public class TileBased {
 
 	public static void main(String[] args) throws Exception {
 		TileBased parallelTiles = new TileBased();
-		parallelTiles.processTiles(args[0],args[1],args[2]);
+		parallelTiles.processTiles(args[0],args[1],args[2],args[3]);
 	}
 
-	public void processTiles(String hdfsPath,String masterZipFilePath,String slaveZipFilePath) throws Exception {
+	public void processTiles(String hdfsPath,String masterZipFilePath,String slaveZipFilePath,String targetPath) throws Exception {
        
         ZipHandler2 zipHandler = new ZipHandler2();
         //String masterTiffInHDFS = "/home/hadoop/s1a-iw-grd-vv-20141225t142407-20141225t142436-003877-004a54-001.tiff";
@@ -187,8 +187,7 @@ public class TileBased {
 		myChangeDetection.setId("changeD");
 		sp.initOperator(myChangeDetection);
 		
-		String filesPath = "/home/efi/SNAP/sentinel-images/";
-		File targetFile = new File(filesPath, "changeD-tile-based");
+		File targetFile = new File(targetPath, "changeDetection-output");
 		MyWrite writeOp = new MyWrite(myChangeDetection.getTargetProduct(), targetFile, "BEAM-DIMAP");
 		writeOp.setId("write");
 		sp.initOperator(writeOp);
