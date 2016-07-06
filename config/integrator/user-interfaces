@@ -4,71 +4,55 @@
     "type": "user-interfaces",
     "attributes": {
       "label": "Spark Master",
-      #"base-url": "http://spark-master.demo.big-data-europe.local"
-	# base-url == environment: VIRTUAL_HOST (@compose)
+      "base-url": "http://spark-master.iit.demokritos.gr"
     }
   },
   {
     "id": 2,
     "type": "user-interfaces",
     "attributes": {
-      "label": "Spark Worker",
-      #"base-url": "http://spark-worker.demo.big-data-europe.local"
-	# base-url == environment: VIRTUAL_HOST (@compose)
+      "label": "Spark Worker1",
+      "base-url": "http://spark-worker1.iit.demokritos.gr"
     }
   },
   {
     "id": 3,
     "type": "user-interfaces",
     "attributes": {
-      "label": "HDFS Namenode",
-      #"base-url": "http://hdfs-namenode.demo.big-data-europe.local"
-	# base-url == environment: VIRTUAL_HOST (@compose)
+      "label": "Spark Worker2",
+      "base-url": "http://spark-worker2.iit.demokritos.gr"
     }
   },
   {
     "id": 4,
     "type": "user-interfaces",
     "attributes": {
-      "label": "HDFS Node manager",
-      #"base-url": "http://hdfs-nodemanager.demo.big-data-europe.local"
-	# base-url == environment: VIRTUAL_HOST (@compose)
+      "label": "Spark Worker3",
+      "base-url": "http://spark-worker3.iit.demokritos.gr"
     }
   },
   {
     "id": 5,
     "type": "user-interfaces",
     "attributes": {
-      "label": "HDFS Resource manager",
-      #"base-url": "http://hdfs-resourcemanager.demo.big-data-europe.local"
-	# base-url == environment: VIRTUAL_HOST (@compose)
+      "label": "Spark Worker4",
+      "base-url": "http://spark-worker4.iit.demokritos.gr"
     }
   },
   {
     "id": 6,
     "type": "user-interfaces",
     "attributes": {
-      "label": "Hue",
-      #"base-url": "http://hue.demo.big-data-europe.local"
-	# base-url == environment: VIRTUAL_HOST (@compose)
+      "label": "Virtuoso",
+      "base-url": "http://virtuoso.iit.demokritos.gr"
     }
   },
   {
     "id": 7,
     "type": "user-interfaces",
     "attributes": {
-      "label": "Virtuoso",
-      #"base-url": "http://virtuoso.demo.big-data-europe.local"
-	# base-url == environment: VIRTUAL_HOST (@compose)
-    }
-  },
-  {
-    "id": 8,
-    "type": "user-interfaces",
-    "attributes": {
       "label": "Monitor",
-      #"base-url": "http://monitor.demo.big-data-europe.local"
-	# base-url == environment: VIRTUAL_HOST (@compose)
+      #"base-url": "http://monitor.iit.demokritos.gr"
     }
   }
 
