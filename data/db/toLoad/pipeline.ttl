@@ -1,0 +1,25 @@
+@prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ns1:	<http://purl.org/spar/pwo/> .
+<http://www.big-data-europe.eu/data/workflows/577E0CAE56E2780009000001>	rdf:type	ns1:Workflow .
+@prefix ns2:	<http://mu.semte.ch/vocabularies/core/> .
+<http://www.big-data-europe.eu/data/workflows/577E0CAE56E2780009000001>	ns2:uuid	"577E0CAE56E2780009000001" .
+@prefix ns3:	<http://purl.org/dc/terms/> .
+<http://www.big-data-europe.eu/data/workflows/577E0CAE56E2780009000001>	ns3:title	"  SC7_Pilot_02" ;
+	ns3:description	"Pipeline-workflow for the SC7 Pilot, BigDataEurope Horizon2020." ;
+	ns1:hasStep	<http://www.big-data-europe.eu/data/steps/577E0EE056E2780009000003> ,
+		<http://www.big-data-europe.eu/data/steps/577E0E8856E2780009000002> .
+<http://www.big-data-europe.eu/data/steps/577E0E8856E2780009000002>	rdf:type	ns1:Step ;
+	ns2:uuid	"577E0E8856E2780009000002" ;
+	ns3:title	"Starting spark-cluster" ;
+	ns3:description	"At first we initiate spark master and workers" .
+@prefix ns4:	<http://www.big-data-europe.eu/vocabularies/pipeline/> .
+<http://www.big-data-europe.eu/data/steps/577E0E8856E2780009000002>	ns4:code	"setup_spark" ;
+	ns4:order	0 ;
+	ns4:status	"not_started" .
+<http://www.big-data-europe.eu/data/steps/577E0EE056E2780009000003>	rdf:type	ns1:Step ;
+	ns2:uuid	"577E0EE056E2780009000003" ;
+	ns3:title	"Execute spark-app" ;
+	ns3:description	"After initiating spark-cluster, the change-detector spark-app is ready to go." ;
+	ns4:code	"detect_changes" ;
+	ns4:order	1 ;
+	ns4:status	"not_started" .
