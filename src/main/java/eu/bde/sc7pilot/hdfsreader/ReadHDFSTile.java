@@ -14,6 +14,7 @@ import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.esa.snap.core.datamodel.ProductData;
+
 import eu.bde.sc7pilot.tilebased.model.MyTile;
 
 public class ReadHDFSTile {
