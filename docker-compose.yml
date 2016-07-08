@@ -210,7 +210,7 @@ services:
       - VIRTUAL_HOST:virtuoso.iit.demokritos.gr
       - VIRTUAL_PORT:8890
     volumes:
-      - ./data/db:/data
+      - ./data/db/toLoad:/data
     ports:
       - "8890:8890"
     networks:
