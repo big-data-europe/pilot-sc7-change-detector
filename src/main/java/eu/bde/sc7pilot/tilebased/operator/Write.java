@@ -24,7 +24,6 @@ import com.bc.ceres.core.ProgressMonitor;
 import eu.bde.sc7pilot.tilebased.model.MyTile;
 
 
-
 public class Write {
 	private Product sourceProduct;
 	private Product targetProduct;
