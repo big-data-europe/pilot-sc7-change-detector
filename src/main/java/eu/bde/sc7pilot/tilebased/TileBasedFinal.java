@@ -68,28 +68,8 @@ import scala.Tuple3;
 
 public class TileBasedFinal {
 	public static void main(String[] args) throws Exception {
-		String filesPath = "/home/efi/SNAP/sentinel-images/";
-		String hdfsPath = "/sentinel-images";
-		// String filesPath = "hdfs://localhost:9000/sentinel-images/";
-		String masterFile = filesPath + "S1A_IW_GRDH_1SSV_20141225T142407_20141225T142436_003877_004A54_040F.zip";
-		String slaveFile = filesPath + "S1A_IW_GRDH_1SSV_20150518T142409_20150518T142438_005977_007B49_AF76.zip";
-		// File masterFile = new File(filesPath,
-		// "S1A_IW_GRDH_1SSV_20141225T142407_20141225T142436_003877_004A54_040F.zip");
-		// File slaveFile = new File(filesPath,
-		// "S1A_IW_GRDH_1SSV_20150518T142409_20150518T142438_005977_007B49_AF76.zip");
-
-		// File masterFile = new File(filesPath,
-		// "subset_0_of_S1A_IW_GRDH_1SDV_20151110T145915_20151110T145940_008544_00C1A6_F175.dim");
-		// File slaveFile = new File(filesPath,
-		// "subset_1_of_S1A_IW_GRDH_1SDV_20151029T145915_20151029T145940_008369_00BD0B_334C.dim");
-		// File masterFile = new File(filesPath,
-		// "subset3_of_S1A_IW_GRDH_1SSV_20141225T142407_20141225T142436_003877_004A54_040F.dim");
-		// File slaveFile = new File(filesPath,
-		// "subset3_of_S1A_IW_GRDH_1SSV_20150518T142409_20150518T142438_005977_007B49_AF76.dim");
-
 		TileBasedFinal parallelTiles = new TileBasedFinal();
 		parallelTiles.processTiles(args[0], args[1], args[2], args[3]);
-		//parallelTiles.processTiles(hdfsPath,masterFile,slaveFile,"test");
 	}
 
 	public void processTiles(String hdfsPath, String masterZipFilePath, String slaveZipFilePath, String targetPath)
@@ -217,8 +197,6 @@ public class TileBasedFinal {
 		// the absolutely essential metadata for tile computations
 		Object2ObjectMap<String, ImageMetadata> imageMetadata = new Object2ObjectOpenHashMap<String, ImageMetadata>(
 				myCalibration1.getTargetProduct().getNumBands() * 3);
-		// Map<String, String> sourceTargetMap = new HashMap<String, String>(
-		// myCalibration1.getTargetProduct().getNumBands()* 3);
 		OpMetadataCreator opMetadataCreator = new OpMetadataCreator();
 		Object2ObjectMap<String, CalibrationMetadata> calMetadata = new Object2ObjectOpenHashMap<String, CalibrationMetadata>(
 				myCalibration1.getTargetProduct().getNumBands() * 4);
@@ -249,7 +227,7 @@ public class TileBasedFinal {
 		// SparkConf().setMaster("local[4]").set("spark.driver.maxResultSize",
 		// "3g")
 		// .setAppName("First test on tile parallel processing");
-		SparkConf conf = new SparkConf().setMaster("local[4]").set("spark.driver.maxResultSize", "5g")
+		SparkConf conf = new SparkConf().set("spark.driver.maxResultSize", "5g")
 				.setAppName("First test on tile parallel processing");
 				// SparkConf conf = new SparkConf()
 				// .setAppName("First test on tile parallel processing");
@@ -259,7 +237,7 @@ public class TileBasedFinal {
 		// All classes that should be serialized by kryo, are registered in
 		// MyRegitration class .
 		conf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer");
-		conf.set("spark.kryo.registrator", "tileBased.MyRegistrator").set("spark.kryoserializer.buffer.max", "2047m");
+		conf.set("spark.kryo.registrator", "eu.bde.sc7pilot.tilebased.MyRegistrator").set("spark.kryoserializer.buffer.max", "2047m");
 		JavaSparkContext sc = new JavaSparkContext(conf);
 		// broadcast image metadata
 		Broadcast<Map<String, ImageMetadata>> imgMetadataB = sc.broadcast(imageMetadata);
@@ -431,42 +409,7 @@ public class TileBasedFinal {
 					return pairs;
 				});
 		createstackResults.unpersist();
-		// List<Tuple2<Tuple2<String, Rectangle>, MyTile>>
-		// list=dependentPairsWarp.collect();
-		// Map<Tuple2<String, Rectangle>,List<MyTile>> mapWarp=new
-		// HashMap<Tuple2<String, Rectangle>,List<MyTile>>();
-		// for (int i = 0; i < list.size(); i++) {
-		// Tuple2<String, Rectangle> bandName = list.get(i)._1;
-		// if (mapWarp.containsKey(bandName)) {
-		// mapWarp.get(bandName).add(list.get(i)._2);
-		// } else {
-		// List<MyTile> tiles = new ArrayList<MyTile>();
-		// tiles.add(list.get(i)._2);
-		// mapWarp.put(bandName, tiles);
-		// }
-		// }
-		// System.out.println("warp rectangles "+mapWarp.size());
-		// for(Map.Entry<Tuple2<String, Rectangle>, List<MyTile>>
-		// entry:mapWarp.entrySet())
-		// {
-		// System.out.println("entry key is "+entry.getKey()+" and entry value
-		// size is "+entry.getValue().size());
-		//
-		// }
 		JavaPairRDD<Tuple2<String, Rectangle>, Iterable<MyTile>> warpResults1 = dependentPairsWarp.groupByKey();
-		// List<Tuple2<Tuple2<String, Rectangle>, Iterable<MyTile>>>
-		// list=warpResults1.collect();
-		// int totalPoints=0;
-		// for(int i=0;i<list.size();i++){
-		// System.out.println(list.get(i)._1);
-		// List<MyTile> tiles=Lists.newArrayList(list.get(i)._2);
-		// totalPoints+=tiles.size();
-		// System.out.println(tiles.size());
-		// Object2ObjectMap<Rectangle, ObjectList<Point>>
-		// pointsRect=dependPointsWarp.get(list.get(i)._1._1);
-		// System.out.println(pointsRect.get(list.get(i)._1._2));
-		// }
-		// System.out.println(totalPoints);
 		JavaPairRDD<Tuple2<Point, String>, MyTile> warpResults = warpResults1
 				.flatMapToPair((Tuple2<Tuple2<String, Rectangle>, Iterable<MyTile>> pair) -> {
 					List<Tuple2<Tuple2<Point, String>, MyTile>> trgtiles = new ArrayList<Tuple2<Tuple2<Point, String>, MyTile>>();
@@ -476,34 +419,18 @@ public class TileBasedFinal {
 					ImageMetadata srcImgMetadataWarp = imgMetadataB.getValue().get(pair._1._1() + "_warp" + "_source");
 
 					int bufferType = ImageManager.getDataBufferType(srcImgMetadataWarp.getDataType());
-//					final SampleModel sampleModel = ImageUtils.createSingleBandedSampleModel(bufferType,
-//							srcImgMetadataWarp.getImageWidth(), srcImgMetadataWarp.getImageHeight());
 					final SampleModel sampleModel = ImageUtils.createSingleBandedSampleModel(bufferType,
 							srcImgMetadataWarp.getTileSize().width, srcImgMetadataWarp.getTileSize().height);
 					final ColorModel cm = PlanarImage.createColorModel(sampleModel);
-					//WritableRaster raster = RasterFactory.createWritableRaster(sampleModel, new Point(0, 0));
-					//BufferedImage img1 = new BufferedImage(cm, raster, false, new java.util.Hashtable());
-
-//					TiledImage img = new TiledImage(img1, srcImgMetadataWarp.getTileSize().width,
-//							srcImgMetadataWarp.getTileSize().height);
 
 					TiledImage img = new TiledImage(0,0, srcImgMetadataWarp.getImageWidth(),srcImgMetadataWarp.getImageHeight(),0,0,
 							sampleModel,cm);
 
-					// WritableRaster raster =
-					// RasterFactory.createWritableRaster(sampleModel, new
-					// Point(0, 0));
-					// BufferedImage img = new BufferedImage(cm, raster, false,
-					// new java.util.Hashtable());
+				
 					List<MyTile> tiles = Lists.newArrayList(pair._2.iterator());
 					List<Point> targetPoints = pointsRect.get(pair._1._2);
 					for (MyTile myTile : tiles) {
-						// img.getRaster().setDataElements(myTile.getMinX(),
-						// myTile.getMinY(), myTile.getWidth(),
-						// myTile.getHeight(),
-						// myTile.getRawSamples().getElems());
 						img.setData(myTile.getWritableRaster());
-
 					}
 					tiles = null;
 					Map<String, WarpData> map = warpDataMapB.getValue();
@@ -526,7 +453,6 @@ public class TileBasedFinal {
 								new Tuple2<Point, String>(p, stackImgMetadata.getBandPairName()), targetTile));
 						System.out.println(System.currentTimeMillis() - startWarpPoint + " ends warp for point " + p);
 					}
-					// System.out.println("warp results ok");
 					return trgtiles;
 				});
 		JavaPairRDD<Tuple2<Point, String>, MyTile> changeDResults = masterRastersCal.join(warpResults)
@@ -537,10 +463,6 @@ public class TileBasedFinal {
 					ImageMetadata trgImgMetadata = imgMetadataB.getValue().get("ratio_changeD");
 					MyTile targetTile = new MyTile(trgImgMetadata.getWritableRaster(pair._1._1.x, pair._1._1.y),
 							trgImgMetadata.getRectangle(pair._1._1.x, pair._1._1.y), trgImgMetadata.getDataType());
-					// MyTile
-					// denominatorTile=Utils.getSubTile(pair._2._2,targetTile.getRectangle());
-					// MyTile
-					// nominatorTile=Utils.getSubTile(pair._2._1,targetTile.getRectangle());
 					try {
 						changeDetection.computeTile(pair._2._1, pair._2._2, targetTile, targetTile.getRectangle());
 					} catch (ArrayIndexOutOfBoundsException e) {
@@ -552,21 +474,17 @@ public class TileBasedFinal {
 					return new Tuple2<Tuple2<Point, String>, MyTile>(new Tuple2<Point, String>(pair._1._1, "ratio"),
 							targetTile);
 				});
-		// List<Tuple2<Tuple2<Point, String>, MyTile>> warpRes =
-		// warpResults.collect();
 		List<Tuple2<Tuple2<Point, String>, MyTile>> changeResults = changeDResults.collect();
 		System.out.println("result tiles " + changeResults.size());
 		long endTime = System.currentTimeMillis();
 		long totalTime = endTime - startTime;
-		// System.out.println("warp + change detection time
-		// "+(startWarpTime-totalTime));
+		
 		System.out.println("total time " + totalTime);
 		Write write = new Write(myChangeDetection.getTargetProduct(), targetFile, "BEAM-DIMAP");
 		for (int i = 0; i < changeResults.size(); i++) {
 			Band targetBand = writeOp.getTargetProduct().getBand(changeResults.get(i)._1._2);
 			write.storeTile(targetBand, changeResults.get(i)._2);
 		}
-		// //Checks.checkWarp(warpRes);
 
 	}
 }
