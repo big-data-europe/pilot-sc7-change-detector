@@ -1,11 +1,11 @@
 package eu.bde.sc7pilot.tilebased;
 
-
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.ColorModel;
 import java.awt.image.SampleModel;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -78,18 +78,20 @@ public class TileBasedFinal {
 		// String outFile = args[3];
 
 		ZipHandler2 zipHandler = new ZipHandler2();
-		String masterTiffInHDFS = "/home/hadoop/s1a-iw-grd-vv-20141225t142407-20141225t142436-003877-004a54-001.tiff";
-		String slaveTiffInHDFS = "/home/hadoop/s1a-iw-grd-vv-20150518t142409-20150518t142438-005977-007b49-001.tiff";
+		// String masterTiffInHDFS =
+		// "/home/hadoop/s1a-iw-grd-vv-20141225t142407-20141225t142436-003877-004a54-001.tiff";
+		// String slaveTiffInHDFS =
+		// "/home/hadoop/s1a-iw-grd-vv-20150518t142409-20150518t142438-005977-007b49-001.tiff";
 
-//		 String masterTiffInHDFS = "";
-//		 String slaveTiffInHDFS = "";
-//		 try {
-//		 masterTiffInHDFS = zipHandler.tiffToHDFS(masterZipFilePath,hdfsPath);
-//		 slaveTiffInHDFS = zipHandler.tiffToHDFS(slaveZipFilePath, hdfsPath);
-//		 } catch (IOException e) {
-//		 // TODO Auto-generated catch block
-//		 e.printStackTrace();
-//		 }
+		String masterTiffInHDFS = "";
+		String slaveTiffInHDFS = "";
+		try {
+			masterTiffInHDFS = zipHandler.tiffToHDFS(masterZipFilePath, hdfsPath);
+			slaveTiffInHDFS = zipHandler.tiffToHDFS(slaveZipFilePath, hdfsPath);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println(masterTiffInHDFS);
 		System.out.println(slaveTiffInHDFS);
 		long startTime = System.currentTimeMillis();
@@ -107,8 +109,6 @@ public class TileBasedFinal {
 		Product slaveTargetProduct = null;
 		try {
 			masterTargetProduct = zipHandler.findTargetProduct(masterZipFilePath);
-			// myRead1 = new MyRead(masterFile, "read1");
-			// masterRasters = sp.readTiles(myRead1,selectedPolarisations);
 			for (int i = 0; i < masterTargetProduct.getNumBands(); i++) {
 				Band band = masterTargetProduct.getBandAt(i);
 				if (band.getClass() == Band.class) {
@@ -123,9 +123,6 @@ public class TileBasedFinal {
 
 		try {
 			slaveTargetProduct = zipHandler.findTargetProduct(slaveZipFilePath);
-			// myRead2 = new MyRead(slaveFile, "read2");
-			// slaveRasters = sp.readTiles(myRead2,selectedPolarisations);
-			// Product targetProduct=myRead2.getTargetProduct();
 			for (int i = 0; i < slaveTargetProduct.getNumBands(); i++) {
 				Band band = slaveTargetProduct.getBandAt(i);
 				if (band.getClass() == Band.class) {
@@ -237,7 +234,8 @@ public class TileBasedFinal {
 		// All classes that should be serialized by kryo, are registered in
 		// MyRegitration class .
 		conf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer");
-		conf.set("spark.kryo.registrator", "eu.bde.sc7pilot.tilebased.MyRegistrator").set("spark.kryoserializer.buffer.max", "2047m");
+		conf.set("spark.kryo.registrator", "eu.bde.sc7pilot.tilebased.MyRegistrator")
+				.set("spark.kryoserializer.buffer.max", "2047m");
 		JavaSparkContext sc = new JavaSparkContext(conf);
 		// broadcast image metadata
 		Broadcast<Map<String, ImageMetadata>> imgMetadataB = sc.broadcast(imageMetadata);
@@ -423,10 +421,9 @@ public class TileBasedFinal {
 							srcImgMetadataWarp.getTileSize().width, srcImgMetadataWarp.getTileSize().height);
 					final ColorModel cm = PlanarImage.createColorModel(sampleModel);
 
-					TiledImage img = new TiledImage(0,0, srcImgMetadataWarp.getImageWidth(),srcImgMetadataWarp.getImageHeight(),0,0,
-							sampleModel,cm);
+					TiledImage img = new TiledImage(0, 0, srcImgMetadataWarp.getImageWidth(),
+							srcImgMetadataWarp.getImageHeight(), 0, 0, sampleModel, cm);
 
-				
 					List<MyTile> tiles = Lists.newArrayList(pair._2.iterator());
 					List<Point> targetPoints = pointsRect.get(pair._1._2);
 					for (MyTile myTile : tiles) {
@@ -478,7 +475,7 @@ public class TileBasedFinal {
 		System.out.println("result tiles " + changeResults.size());
 		long endTime = System.currentTimeMillis();
 		long totalTime = endTime - startTime;
-		
+
 		System.out.println("total time " + totalTime);
 		Write write = new Write(myChangeDetection.getTargetProduct(), targetFile, "BEAM-DIMAP");
 		for (int i = 0; i < changeResults.size(); i++) {
