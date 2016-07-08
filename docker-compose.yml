@@ -1,0 +1,222 @@
+version: '2'
+services:
+
+  lookupservice:
+    image: gioargyr/lookup-service:1.0.0
+    hostname: lookup-service
+    container_name: lookupservice
+    environment:
+      - "constraint:node==slave1"
+    ports:
+      - "8190:8080"
+    networks:
+      - default
+
+  imageaggregator:
+    image: gioargyr/image-aggregator:1.0.0
+    hostname: imageaggregator
+    container_name: imageaggregator
+    environment:
+      - "constraint:node==master"
+    volumes:
+      - /home/iitadmin/imageaggregator:/images
+    ports:
+      - "12345:8080"
+    networks:
+      - default
+
+  postgis:
+    image: bde2020/postgis
+    hostname: postgis
+    container_name: postgis
+    environment:
+      - "constraint:node==slave3"
+    volumes:
+      - /srv/postgis:/var/lib/postgresql/9.4/main
+    ports:
+      - "5432:5432"
+    networks:
+      - default
+
+  strabon:
+    image: bde2020/strabon
+    hostname: strabon
+    container_name: strabon
+    environment:
+      - "constraint:node==slave3"
+    ports:
+      - "8191:8080"
+    depends_on:
+      - postgis
+    networks:
+      - default
+
+  master:
+    image: bde2020/spark-master:1.5.1-hadoop2.6
+    hostname: spark-master
+    container_name: spark-master
+    environment:
+      - "constraint:node==master"
+      - INIT_DAEMON_STEP:spark_master_init
+      - VIRTUAL_HOST:spark-master.iit.demokritos.gr
+      - VIRTUAL_PORT:8080
+    ports:
+      - "8195:8080"
+    volumes:
+      - ./data/spark-master:/data
+    networks:
+      - default
+
+  worker1:
+    image: bde2020/spark-worker:1.5.1-hadoop2.6
+    hostname: worker1
+    container_name: worker1
+    environment:
+      - "constraint:node==slave1"
+      - VIRTUAL_HOST:spark-worker1.iit.demokritos.gr
+      - VIRTUAL_PORT:8081
+    depends_on:
+      - master
+    networks:
+      - default
+
+  worker2:
+    image: bde2020/spark-worker:1.5.1-hadoop2.6
+    hostname: worker2
+    container_name: worker2
+    environment:
+      - "constraint:node==slave2"
+      - VIRTUAL_HOST:spark-worker2.iit.demokritos.gr
+      - VIRTUAL_PORT:8082
+    depends_on:
+      - master
+    networks:
+      - default
+
+  worker3:
+    image: bde2020/spark-worker:1.5.1-hadoop2.6
+    hostname: worker3
+    container_name: worker3
+    environment:
+      - "constraint:node==slave3"
+      - VIRTUAL_HOST:spark-worker3.iit.demokritos.gr
+      - VIRTUAL_PORT:8083
+    depends_on:
+      - master
+    networks:
+      - default
+
+  worker4:
+    image: bde2020/spark-worker:1.5.1-hadoop2.6
+    hostname: worker4
+    container_name: worker4
+    environment:
+      - "constraint:node==slave4"
+      - VIRTUAL_HOST:spark-worker4.iit.demokritos.gr
+      - VIRTUAL_PORT:8084
+    depends_on:
+      - master
+    networks:
+      - default
+
+  changedetector:
+    image: gioargyr/pilot-sc7-change-detector:1.0.0
+    hostname: changedetector
+    container_name: changedetector
+    environment:
+      - "constraint:node==master"
+      - INIT_DAEMON_STEP:detect_changes
+    volumes:
+      - /home/iitadmin/imageaggregator:/inputimages
+    depends_on:
+      - master
+    networks:
+      - default
+
+  integratorui:
+    image: bde2020/integrator-ui:latest
+    hostname: integratorui
+    container_name: integratorui
+    environment:
+      - "constraint:node==slave1"
+      - VIRTUAL_HOST:iit.demokritos.gr
+    ports:
+      - "8196:80"
+    volumes:
+      - ./config/integrator:/app/config
+    networks:
+      - default
+
+  dispatcher:
+    image: semtech/mu-dispatcher:1.0.1
+    hostname: dispatcher
+    container_name: dispatcher
+    environment:
+      - "constraint:node==slave1"
+    volumes:
+      - ./config:/config
+    networks:
+      - default
+
+  identifier:
+    image: semtech/mu-identifier:1.0.0
+    hostname: identifier
+    container_name: identifier
+    environment:
+      - "constraint:node==slave2"
+    networks:
+      - default
+
+  monitor:
+    image: bde2020/pipeline-monitor-frontend:0.1.0
+    hostname: monitor
+    container_name: monitor
+    environment:
+      - "constraint:node==slave2"
+      - VIRTUAL_HOST:monitor.iit.demokritos.gr
+    ports:
+      - "8197:80"
+    links:
+      - identifier:backend
+    networks:
+      - default
+
+  initdaemon:
+    image: bde2020/mu-init-daemon-service:0.1.0
+    hostname: initdaemon
+    container_name: initdaemon
+    environment:
+      - "constraint:node==slave3"
+    networks:
+      - default
+
+  pipeline:
+    image: bde2020/mu-pipeline-service:0.1.0
+    hostname: pipeline
+    container_name: pipeline
+    environment:
+      - "constraint:node==slave4"
+    networks:
+      - default
+
+  database:
+    image: tenforce/virtuoso:1.0.0-virtuoso7.2.2
+    hostname: database
+    container_name: database
+    environment:
+      - "constraint:node==slave3"
+      - SPARQL_UPDATE:"true"
+      - DEFAULT_GRAPH:http://mu.semte.ch/application
+      - VIRTUAL_HOST:virtuoso.iit.demokritos.gr
+      - VIRTUAL_PORT:8890
+    volumes:
+      - ./data/db/toLoad:/data
+    ports:
+      - "8890:8890"
+    networks:
+      - default
+
+networks:
+  default:
+    external:
+      name: bde_net
