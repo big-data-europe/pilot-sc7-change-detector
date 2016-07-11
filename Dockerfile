@@ -9,7 +9,7 @@ MAINTAINER Giorgos Argyriou <gioargyr@gmail.com>
 
 ### OVERRIDE
 ENV SPARK_APPLICATION_JAR_NAME changedetector-0.0.1-SNAPSHOT-allinone
-ENV SPARK_APPLICATION_MAIN_CLASS eu.bde.sc7pilot.tilebased.TileBased
+ENV SPARK_APPLICATION_MAIN_CLASS eu.bde.sc7pilot.tilebased.TileBasedFinal
 
 ### ARGS
 ENV APP_ARGS_HDFSDIR hdfs://namenode:8020
