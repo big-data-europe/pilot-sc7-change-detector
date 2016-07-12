@@ -50,6 +50,17 @@ services:
       - postgis
     networks:
       - default
+      
+  geotriples:
+    image: gioargyr/docker-geotriples-ws:1.0.0
+    hostname: geotriples
+    container_name: geotriples
+    ports:
+      - "8192:8080"
+    depends_on:
+      - strabon
+    networks:
+      - default
 
   master:
     image: bde2020/spark-master:1.5.1-hadoop2.6
