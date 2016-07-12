@@ -52,7 +52,7 @@
     "type": "user-interfaces",
     "attributes": {
       "label": "Monitor",
-      #"base-url": "http://monitor.iit.demokritos.gr"
+      "base-url": "http://monitor.iit.demokritos.gr"
     }
   }
 
