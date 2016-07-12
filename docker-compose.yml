@@ -55,6 +55,8 @@ services:
     image: gioargyr/docker-geotriples-ws:1.0.0
     hostname: geotriples
     container_name: geotriples
+    environment:
+      - "constraint:node==slave2"
     ports:
       - "8192:8080"
     depends_on:
