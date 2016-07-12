@@ -1,0 +1,2193 @@
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix svd: <http://rdf.iit.demokritos.gr/2013/sevod#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+_:node1anfhamn0x1 a void:Dataset ;
+	void:propertyPartition [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasId> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://www.opengis.net/ont/geosparql#asWKT> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://www.opengis.net/ont/geosparql#hasGeometry> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+		svd:objectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasArea> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+		svd:objectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://www.opengis.net/ont/geosparql#asWKT> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://www.opengis.net/ont/geosparql#hasGeometry> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+		svd:objectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasDate> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasId> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
+		void:triples "14"^^xsd:long ;
+		void:distinctSubjects "14"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+		svd:objectVocabulary <http://www.opengis.net/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasArea> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+		svd:objectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasId> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasArea> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+		svd:objectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasDate> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasId> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasDate> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasArea> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+		svd:objectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://www.opengis.net/ont/geosparql#hasGeometry> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+		svd:objectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
+		void:triples "14"^^xsd:long ;
+		void:distinctSubjects "14"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+		svd:objectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasArea> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+		svd:objectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://www.opengis.net/ont/geosparql#hasGeometry> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+		svd:objectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasTitle> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasId> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://www.opengis.net/ont/geosparql#hasGeometry> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+		svd:objectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasTitle> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasId> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasArea> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+		svd:objectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasId> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasArea> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+		svd:objectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasTitle> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
+		void:triples "14"^^xsd:long ;
+		void:distinctSubjects "14"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+		svd:objectVocabulary <http://www.opengis.net/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasTitle> ;
+		void:triples "2"^^xsd:long ;
+		void:distinctSubjects "2"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://www.opengis.net/ont/geosparql#asWKT> ;
+		void:triples "4"^^xsd:long ;
+		void:distinctSubjects "4"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasName> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasId> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://www.opengis.net/ont/geosparql#asWKT> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasArea> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+		svd:objectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasDate> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasArea> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+		svd:objectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasDate> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://www.opengis.net/ont/geosparql#hasGeometry> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+		svd:objectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasId> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://www.opengis.net/ont/geosparql#hasGeometry> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+		svd:objectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasName> ;
+		void:triples "5"^^xsd:long ;
+		void:distinctSubjects "5"^^xsd:int ;
+		void:distinctObjects "2"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://www.opengis.net/ont/geosparql#asWKT> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasId> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasDate> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasArea> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+		svd:objectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasName> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasId> ;
+		void:triples "2"^^xsd:long ;
+		void:distinctSubjects "2"^^xsd:int ;
+		void:distinctObjects "2"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://www.opengis.net/ont/geosparql#asWKT> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasDate> ;
+		void:triples "2"^^xsd:long ;
+		void:distinctSubjects "2"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasName> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasId> ;
+		void:triples "2"^^xsd:long ;
+		void:distinctSubjects "2"^^xsd:int ;
+		void:distinctObjects "2"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://www.opengis.net/ont/geosparql#hasGeometry> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+		svd:objectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasDate> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasId> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasArea> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+		svd:objectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasId> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasName> ;
+		void:triples "5"^^xsd:long ;
+		void:distinctSubjects "5"^^xsd:int ;
+		void:distinctObjects "2"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://www.opengis.net/ont/geosparql#hasGeometry> ;
+		void:triples "2"^^xsd:long ;
+		void:distinctSubjects "2"^^xsd:int ;
+		void:distinctObjects "2"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+		svd:objectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasName> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://www.opengis.net/ont/geosparql#hasGeometry> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+		svd:objectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasId> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://www.opengis.net/ont/geosparql#hasGeometry> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+		svd:objectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasArea> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+		svd:objectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasId> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasTitle> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasArea> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+		svd:objectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://www.opengis.net/ont/geosparql#hasGeometry> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+		svd:objectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasId> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://www.opengis.net/ont/geosparql#hasGeometry> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+		svd:objectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasId> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
+		void:triples "6"^^xsd:long ;
+		void:distinctSubjects "6"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+		svd:objectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasArea> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+		svd:objectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://big-data-europe.eu/security/man-made-changes/ontology#hasTitle> ;
+		void:triples "1"^^xsd:long ;
+		void:distinctSubjects "1"^^xsd:int ;
+		void:distinctObjects "1"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] , [
+		void:property <http://www.opengis.net/ont/geosparql#asWKT> ;
+		void:triples "5"^^xsd:long ;
+		void:distinctSubjects "5"^^xsd:int ;
+		void:distinctObjects "2"^^xsd:int ;
+		svd:subjectVocabulary <http://big-data-europe.eu/> ;
+	] ;
+	void:classPartition [
+		void:class <http://big-data-europe.eu/security/man-made-changes/ontology#Area> ;
+		void:entities "14"^^xsd:long ;
+	] , [
+		void:class <http://big-data-europe.eu/security/man-made-changes/ontology#NewsEvent> ;
+		void:entities "6"^^xsd:long ;
+	] , [
+		void:class <http://www.opengis.net/ont/geosparql#Feature> ;
+		void:entities "14"^^xsd:long ;
+	] , [
+		void:class <http://www.opengis.net/ont/geosparql#Geometry> ;
+		void:entities "14"^^xsd:long ;
+	] ;
+	void:sparqlEndpoint <http://strabon:8080/strabon/Query> ;
+	void:triples "140"^^xsd:long ;
+	void:properties "8"^^xsd:int ;
+	void:classes "4"^^xsd:int ;
+	void:entities "48"^^xsd:long ;
+	void:distinctSubjects "34"^^xsd:int ;
+	void:distinctObjects "82"^^xsd:int .
+@prefix cdv: <http://schema.org/> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+
+_:node1anf8s8evx1 a cdv:cassandraDB ;
+	void:sparqlEndpoint <http://cassandra.semagrow.eu/bde> ;
+	cdv:address "10.10.0.2" ;
+	cdv:port "9042" ;
+	cdv:keyspace "bde" ;
+	cdv:base "http://cassandra.semagrow.eu/bde" ;
+	cdv:tables _:node1anf8s8evx2 .
+
+_:node1anf8s8evx2 cdv:name "twitter_posts_per_coordinates" ;
+	cdv:tableSchema _:node1anf8s8evx3 .
+
+_:node1anf8s8evx3 cdv:columns _:node1anf8s8evx4 .
+
+_:node1anf8s8evx4 cdv:name "geo_bucket" ;
+	cdv:columnType cdv:partition ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx3 cdv:columns _:node1anf8s8evx5 .
+
+_:node1anf8s8evx5 cdv:name "created_at" ;
+	cdv:columnType cdv:clustering ;
+	cdv:clusteringPosition "0"^^xsd:int ;
+	cdv:clusteringOrder "DESC" ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx3 cdv:columns _:node1anf8s8evx6 .
+
+_:node1anf8s8evx6 cdv:name "geolocation" ;
+	cdv:columnType cdv:clustering ;
+	cdv:clusteringPosition "1"^^xsd:int ;
+	cdv:clusteringOrder "DESC" ;
+	cdv:datatype <http://iit.demokritos.gr/WKT/cassandraDatatype#udt> .
+
+_:node1anf8s8evx3 cdv:columns _:node1anf8s8evx7 .
+
+_:node1anf8s8evx7 cdv:name "post_id" ;
+	cdv:columnType cdv:clustering ;
+	cdv:clusteringPosition "2"^^xsd:int ;
+	cdv:clusteringOrder "DESC" ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx3 cdv:columns _:node1anf8s8evx8 .
+
+_:node1anf8s8evx8 cdv:name "account_name" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx3 cdv:columns _:node1anf8s8evx9 .
+
+_:node1anf8s8evx9 cdv:name "language" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx3 cdv:columns _:node1anf8s8evx10 .
+
+_:node1anf8s8evx10 cdv:name "tweet" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx3 cdv:columns _:node1anf8s8evx11 .
+
+_:node1anf8s8evx11 cdv:name "url" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx3 cdv:primaryKey "geo_bucket" , "created_at" , "geolocation" , "post_id" .
+
+_:node1anf8s8evx1 cdv:tables _:node1anf8s8evx12 .
+
+_:node1anf8s8evx12 cdv:name "location_extraction_log" ;
+	cdv:tableSchema _:node1anf8s8evx13 .
+
+_:node1anf8s8evx13 cdv:columns _:node1anf8s8evx14 .
+
+_:node1anf8s8evx14 cdv:name "schedule_type" ;
+	cdv:columnType cdv:partition ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx13 cdv:columns _:node1anf8s8evx15 .
+
+_:node1anf8s8evx15 cdv:name "schedule_id" ;
+	cdv:columnType cdv:clustering ;
+	cdv:clusteringPosition "0"^^xsd:int ;
+	cdv:clusteringOrder "DESC" ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx13 cdv:columns _:node1anf8s8evx16 .
+
+_:node1anf8s8evx16 cdv:name "end" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx13 cdv:columns _:node1anf8s8evx17 .
+
+_:node1anf8s8evx17 cdv:name "items_updated" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx13 cdv:columns _:node1anf8s8evx18 .
+
+_:node1anf8s8evx18 cdv:name "last_parsed" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx13 cdv:columns _:node1anf8s8evx19 .
+
+_:node1anf8s8evx19 cdv:name "start" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx13 cdv:primaryKey "schedule_type" , "schedule_id" .
+
+_:node1anf8s8evx1 cdv:tables _:node1anf8s8evx20 .
+
+_:node1anf8s8evx20 cdv:name "twitter_user" ;
+	cdv:tableSchema _:node1anf8s8evx21 .
+
+_:node1anf8s8evx21 cdv:columns _:node1anf8s8evx22 .
+
+_:node1anf8s8evx22 cdv:name "user_id" ;
+	cdv:columnType cdv:partition ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx21 cdv:columns _:node1anf8s8evx23 .
+
+_:node1anf8s8evx23 cdv:name "account_name" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx21 cdv:columns _:node1anf8s8evx24 .
+
+_:node1anf8s8evx24 cdv:name "followers_count" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx21 cdv:columns _:node1anf8s8evx25 .
+
+_:node1anf8s8evx25 cdv:name "friends_count" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx21 cdv:columns _:node1anf8s8evx26 .
+
+_:node1anf8s8evx26 cdv:name "listed_count" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx21 cdv:columns _:node1anf8s8evx27 .
+
+_:node1anf8s8evx27 cdv:name "location" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx21 cdv:columns _:node1anf8s8evx28 .
+
+_:node1anf8s8evx28 cdv:name "name" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx21 cdv:columns _:node1anf8s8evx29 .
+
+_:node1anf8s8evx29 cdv:name "statuses_count" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx21 cdv:columns _:node1anf8s8evx30 .
+
+_:node1anf8s8evx30 cdv:name "timezone" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx21 cdv:secondaryIndex "account_name" ;
+	cdv:primaryKey "user_id" .
+
+_:node1anf8s8evx1 cdv:tables _:node1anf8s8evx31 .
+
+_:node1anf8s8evx31 cdv:name "events_per_place_literal" ;
+	cdv:tableSchema _:node1anf8s8evx32 .
+
+_:node1anf8s8evx32 cdv:columns _:node1anf8s8evx33 .
+
+_:node1anf8s8evx33 cdv:name "place_literal" ;
+	cdv:columnType cdv:partition ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx32 cdv:columns _:node1anf8s8evx34 .
+
+_:node1anf8s8evx34 cdv:name "event_id" ;
+	cdv:columnType cdv:clustering ;
+	cdv:clusteringPosition "0"^^xsd:int ;
+	cdv:clusteringOrder "DESC" ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx32 cdv:columns _:node1anf8s8evx35 .
+
+_:node1anf8s8evx35 cdv:name "description" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx32 cdv:columns _:node1anf8s8evx36 .
+
+_:node1anf8s8evx36 cdv:name "event_date" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx32 cdv:columns _:node1anf8s8evx37 .
+
+_:node1anf8s8evx37 cdv:name "event_source_urls" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype <http://iit.demokritos.gr/WKT/cassandraDatatype#set> .
+
+_:node1anf8s8evx32 cdv:columns _:node1anf8s8evx38 .
+
+_:node1anf8s8evx38 cdv:name "place_polygon" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx32 cdv:columns _:node1anf8s8evx39 .
+
+_:node1anf8s8evx39 cdv:name "title" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx32 cdv:columns _:node1anf8s8evx40 .
+
+_:node1anf8s8evx40 cdv:name "tweet_post_ids" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype <http://iit.demokritos.gr/WKT/cassandraDatatype#set> .
+
+_:node1anf8s8evx32 cdv:primaryKey "place_literal" , "event_id" .
+
+_:node1anf8s8evx1 cdv:tables _:node1anf8s8evx41 .
+
+_:node1anf8s8evx41 cdv:name "twitter_posts_per_date" ;
+	cdv:tableSchema _:node1anf8s8evx42 .
+
+_:node1anf8s8evx42 cdv:columns _:node1anf8s8evx43 .
+
+_:node1anf8s8evx43 cdv:name "year_month_day_bucket" ;
+	cdv:columnType cdv:partition ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx42 cdv:columns _:node1anf8s8evx44 .
+
+_:node1anf8s8evx44 cdv:name "created_at" ;
+	cdv:columnType cdv:clustering ;
+	cdv:clusteringPosition "0"^^xsd:int ;
+	cdv:clusteringOrder "DESC" ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx42 cdv:columns _:node1anf8s8evx45 .
+
+_:node1anf8s8evx45 cdv:name "post_id" ;
+	cdv:columnType cdv:clustering ;
+	cdv:clusteringPosition "1"^^xsd:int ;
+	cdv:clusteringOrder "DESC" ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx42 cdv:columns _:node1anf8s8evx46 .
+
+_:node1anf8s8evx46 cdv:name "account_name" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx42 cdv:columns _:node1anf8s8evx47 .
+
+_:node1anf8s8evx47 cdv:name "language" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx42 cdv:columns _:node1anf8s8evx48 .
+
+_:node1anf8s8evx48 cdv:name "tweet" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx42 cdv:columns _:node1anf8s8evx49 .
+
+_:node1anf8s8evx49 cdv:name "url" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx42 cdv:secondaryIndex "language" ;
+	cdv:primaryKey "year_month_day_bucket" , "created_at" , "post_id" .
+
+_:node1anf8s8evx1 cdv:tables _:node1anf8s8evx50 .
+
+_:node1anf8s8evx50 cdv:name "news_articles_per_crawled_date" ;
+	cdv:tableSchema _:node1anf8s8evx51 .
+
+_:node1anf8s8evx51 cdv:columns _:node1anf8s8evx52 .
+
+_:node1anf8s8evx52 cdv:name "year_month_day_literal" ;
+	cdv:columnType cdv:partition ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx51 cdv:columns _:node1anf8s8evx53 .
+
+_:node1anf8s8evx53 cdv:name "crawled" ;
+	cdv:columnType cdv:clustering ;
+	cdv:clusteringPosition "0"^^xsd:int ;
+	cdv:clusteringOrder "DESC" ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx51 cdv:columns _:node1anf8s8evx54 .
+
+_:node1anf8s8evx54 cdv:name "entry_url" ;
+	cdv:columnType cdv:clustering ;
+	cdv:clusteringPosition "1"^^xsd:int ;
+	cdv:clusteringOrder "ASC" ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx51 cdv:columns _:node1anf8s8evx55 .
+
+_:node1anf8s8evx55 cdv:name "clean_text" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx51 cdv:columns _:node1anf8s8evx56 .
+
+_:node1anf8s8evx56 cdv:name "crawl_id" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx51 cdv:columns _:node1anf8s8evx57 .
+
+_:node1anf8s8evx57 cdv:name "feed_url" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx51 cdv:columns _:node1anf8s8evx58 .
+
+_:node1anf8s8evx58 cdv:name "language" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx51 cdv:columns _:node1anf8s8evx59 .
+
+_:node1anf8s8evx59 cdv:name "place_literal" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype <http://iit.demokritos.gr/WKT/cassandraDatatype#set> .
+
+_:node1anf8s8evx51 cdv:columns _:node1anf8s8evx60 .
+
+_:node1anf8s8evx60 cdv:name "published" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx51 cdv:columns _:node1anf8s8evx61 .
+
+_:node1anf8s8evx61 cdv:name "raw_text" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx51 cdv:columns _:node1anf8s8evx62 .
+
+_:node1anf8s8evx62 cdv:name "title" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx51 cdv:secondaryIndex "language" , "crawl_id" ;
+	cdv:primaryKey "year_month_day_literal" , "crawled" , "entry_url" .
+
+_:node1anf8s8evx1 cdv:tables _:node1anf8s8evx63 .
+
+_:node1anf8s8evx63 cdv:name "twitter_posts_per_engine" ;
+	cdv:tableSchema _:node1anf8s8evx64 .
+
+_:node1anf8s8evx64 cdv:columns _:node1anf8s8evx65 .
+
+_:node1anf8s8evx65 cdv:name "engine_type" ;
+	cdv:columnType cdv:partition ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx64 cdv:columns _:node1anf8s8evx66 .
+
+_:node1anf8s8evx66 cdv:name "engine_id" ;
+	cdv:columnType cdv:clustering ;
+	cdv:clusteringPosition "0"^^xsd:int ;
+	cdv:clusteringOrder "DESC" ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx64 cdv:columns _:node1anf8s8evx67 .
+
+_:node1anf8s8evx67 cdv:name "post_id" ;
+	cdv:columnType cdv:clustering ;
+	cdv:clusteringPosition "1"^^xsd:int ;
+	cdv:clusteringOrder "DESC" ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx64 cdv:primaryKey "engine_type" , "engine_id" , "post_id" .
+
+_:node1anf8s8evx1 cdv:tables _:node1anf8s8evx68 .
+
+_:node1anf8s8evx68 cdv:name "news_articles" ;
+	cdv:tableSchema _:node1anf8s8evx69 .
+
+_:node1anf8s8evx69 cdv:columns _:node1anf8s8evx70 .
+
+_:node1anf8s8evx70 cdv:name "reversed_host" ;
+	cdv:columnType cdv:partition ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx69 cdv:columns _:node1anf8s8evx71 .
+
+_:node1anf8s8evx71 cdv:name "entry_url" ;
+	cdv:columnType cdv:clustering ;
+	cdv:clusteringPosition "0"^^xsd:int ;
+	cdv:clusteringOrder "ASC" ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx69 cdv:columns _:node1anf8s8evx72 .
+
+_:node1anf8s8evx72 cdv:name "clean_text" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx69 cdv:columns _:node1anf8s8evx73 .
+
+_:node1anf8s8evx73 cdv:name "crawl_id" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx69 cdv:columns _:node1anf8s8evx74 .
+
+_:node1anf8s8evx74 cdv:name "crawled" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx69 cdv:columns _:node1anf8s8evx75 .
+
+_:node1anf8s8evx75 cdv:name "feed_url" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx69 cdv:columns _:node1anf8s8evx76 .
+
+_:node1anf8s8evx76 cdv:name "language" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx69 cdv:columns _:node1anf8s8evx77 .
+
+_:node1anf8s8evx77 cdv:name "place_literal" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype <http://iit.demokritos.gr/WKT/cassandraDatatype#set> .
+
+_:node1anf8s8evx69 cdv:columns _:node1anf8s8evx78 .
+
+_:node1anf8s8evx78 cdv:name "published" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx69 cdv:columns _:node1anf8s8evx79 .
+
+_:node1anf8s8evx79 cdv:name "raw_text" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx69 cdv:columns _:node1anf8s8evx80 .
+
+_:node1anf8s8evx80 cdv:name "title" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx69 cdv:secondaryIndex "language" , "crawl_id" ;
+	cdv:primaryKey "reversed_host" , "entry_url" .
+
+_:node1anf8s8evx1 cdv:tables _:node1anf8s8evx81 .
+
+_:node1anf8s8evx81 cdv:name "twitter_log" ;
+	cdv:tableSchema _:node1anf8s8evx82 .
+
+_:node1anf8s8evx82 cdv:columns _:node1anf8s8evx83 .
+
+_:node1anf8s8evx83 cdv:name "engine_type" ;
+	cdv:columnType cdv:partition ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx82 cdv:columns _:node1anf8s8evx84 .
+
+_:node1anf8s8evx84 cdv:name "engine_id" ;
+	cdv:columnType cdv:clustering ;
+	cdv:clusteringPosition "0"^^xsd:int ;
+	cdv:clusteringOrder "DESC" ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx82 cdv:columns _:node1anf8s8evx85 .
+
+_:node1anf8s8evx85 cdv:name "ended" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx82 cdv:columns _:node1anf8s8evx86 .
+
+_:node1anf8s8evx86 cdv:name "started" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx82 cdv:primaryKey "engine_type" , "engine_id" .
+
+_:node1anf8s8evx1 cdv:tables _:node1anf8s8evx87 .
+
+_:node1anf8s8evx87 cdv:name "twitter_source" ;
+	cdv:tableSchema _:node1anf8s8evx88 .
+
+_:node1anf8s8evx88 cdv:columns _:node1anf8s8evx89 .
+
+_:node1anf8s8evx89 cdv:name "account_name" ;
+	cdv:columnType cdv:partition ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx88 cdv:columns _:node1anf8s8evx90 .
+
+_:node1anf8s8evx90 cdv:name "active" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:boolean .
+
+_:node1anf8s8evx88 cdv:secondaryIndex "active" ;
+	cdv:primaryKey "account_name" .
+
+_:node1anf8s8evx1 cdv:tables _:node1anf8s8evx91 .
+
+_:node1anf8s8evx91 cdv:name "twitter_posts_per_referred_place" ;
+	cdv:tableSchema _:node1anf8s8evx92 .
+
+_:node1anf8s8evx92 cdv:columns _:node1anf8s8evx93 .
+
+_:node1anf8s8evx93 cdv:name "place_literal" ;
+	cdv:columnType cdv:partition ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx92 cdv:columns _:node1anf8s8evx94 .
+
+_:node1anf8s8evx94 cdv:name "created_at" ;
+	cdv:columnType cdv:clustering ;
+	cdv:clusteringPosition "0"^^xsd:int ;
+	cdv:clusteringOrder "DESC" ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx92 cdv:columns _:node1anf8s8evx95 .
+
+_:node1anf8s8evx95 cdv:name "post_id" ;
+	cdv:columnType cdv:clustering ;
+	cdv:clusteringPosition "1"^^xsd:int ;
+	cdv:clusteringOrder "DESC" ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx92 cdv:columns _:node1anf8s8evx96 .
+
+_:node1anf8s8evx96 cdv:name "account_name" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx92 cdv:columns _:node1anf8s8evx97 .
+
+_:node1anf8s8evx97 cdv:name "language" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx92 cdv:columns _:node1anf8s8evx98 .
+
+_:node1anf8s8evx98 cdv:name "location" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx92 cdv:columns _:node1anf8s8evx99 .
+
+_:node1anf8s8evx99 cdv:name "tweet" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx92 cdv:columns _:node1anf8s8evx100 .
+
+_:node1anf8s8evx100 cdv:name "url" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx92 cdv:primaryKey "place_literal" , "created_at" , "post_id" .
+
+_:node1anf8s8evx1 cdv:tables _:node1anf8s8evx101 .
+
+_:node1anf8s8evx101 cdv:name "twitter_post" ;
+	cdv:tableSchema _:node1anf8s8evx102 .
+
+_:node1anf8s8evx102 cdv:columns _:node1anf8s8evx103 .
+
+_:node1anf8s8evx103 cdv:name "post_id" ;
+	cdv:columnType cdv:partition ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx102 cdv:columns _:node1anf8s8evx104 .
+
+_:node1anf8s8evx104 cdv:name "language" ;
+	cdv:columnType cdv:clustering ;
+	cdv:clusteringPosition "0"^^xsd:int ;
+	cdv:clusteringOrder "ASC" ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx102 cdv:columns _:node1anf8s8evx105 .
+
+_:node1anf8s8evx105 cdv:name "account_name" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx102 cdv:columns _:node1anf8s8evx106 .
+
+_:node1anf8s8evx106 cdv:name "coordinates" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx102 cdv:columns _:node1anf8s8evx107 .
+
+_:node1anf8s8evx107 cdv:name "created_at" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx102 cdv:columns _:node1anf8s8evx108 .
+
+_:node1anf8s8evx108 cdv:name "external_links" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype <http://iit.demokritos.gr/WKT/cassandraDatatype#set> .
+
+_:node1anf8s8evx102 cdv:columns _:node1anf8s8evx109 .
+
+_:node1anf8s8evx109 cdv:name "followers_when_published" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx102 cdv:columns _:node1anf8s8evx110 .
+
+_:node1anf8s8evx110 cdv:name "place" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx102 cdv:columns _:node1anf8s8evx111 .
+
+_:node1anf8s8evx111 cdv:name "retweet_count" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx102 cdv:columns _:node1anf8s8evx112 .
+
+_:node1anf8s8evx112 cdv:name "tweet" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx102 cdv:columns _:node1anf8s8evx113 .
+
+_:node1anf8s8evx113 cdv:name "url" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx102 cdv:secondaryIndex "account_name" ;
+	cdv:primaryKey "post_id" , "language" .
+
+_:node1anf8s8evx1 cdv:tables _:node1anf8s8evx114 .
+
+_:node1anf8s8evx114 cdv:name "news_feeds" ;
+	cdv:tableSchema _:node1anf8s8evx115 .
+
+_:node1anf8s8evx115 cdv:columns _:node1anf8s8evx116 .
+
+_:node1anf8s8evx116 cdv:name "feed_url" ;
+	cdv:columnType cdv:partition ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx115 cdv:columns _:node1anf8s8evx117 .
+
+_:node1anf8s8evx117 cdv:name "etag" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx115 cdv:columns _:node1anf8s8evx118 .
+
+_:node1anf8s8evx118 cdv:name "last_modified" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx115 cdv:primaryKey "feed_url" .
+
+_:node1anf8s8evx1 cdv:tables _:node1anf8s8evx119 .
+
+_:node1anf8s8evx119 cdv:name "twitter_posts_per_hashtag" ;
+	cdv:tableSchema _:node1anf8s8evx120 .
+
+_:node1anf8s8evx120 cdv:columns _:node1anf8s8evx121 .
+
+_:node1anf8s8evx121 cdv:name "hashtag" ;
+	cdv:columnType cdv:partition ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx120 cdv:columns _:node1anf8s8evx122 .
+
+_:node1anf8s8evx122 cdv:name "created_at" ;
+	cdv:columnType cdv:clustering ;
+	cdv:clusteringPosition "0"^^xsd:int ;
+	cdv:clusteringOrder "DESC" ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx120 cdv:columns _:node1anf8s8evx123 .
+
+_:node1anf8s8evx123 cdv:name "post_id" ;
+	cdv:columnType cdv:clustering ;
+	cdv:clusteringPosition "1"^^xsd:int ;
+	cdv:clusteringOrder "DESC" ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx120 cdv:columns _:node1anf8s8evx124 .
+
+_:node1anf8s8evx124 cdv:name "account_name" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx120 cdv:columns _:node1anf8s8evx125 .
+
+_:node1anf8s8evx125 cdv:name "language" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx120 cdv:columns _:node1anf8s8evx126 .
+
+_:node1anf8s8evx126 cdv:name "tweet" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx120 cdv:columns _:node1anf8s8evx127 .
+
+_:node1anf8s8evx127 cdv:name "url" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx120 cdv:primaryKey "hashtag" , "created_at" , "post_id" .
+
+_:node1anf8s8evx1 cdv:tables _:node1anf8s8evx128 .
+
+_:node1anf8s8evx128 cdv:name "twitter_posts_per_place" ;
+	cdv:tableSchema _:node1anf8s8evx129 .
+
+_:node1anf8s8evx129 cdv:columns _:node1anf8s8evx130 .
+
+_:node1anf8s8evx130 cdv:name "place_literal" ;
+	cdv:columnType cdv:partition ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx129 cdv:columns _:node1anf8s8evx131 .
+
+_:node1anf8s8evx131 cdv:name "created_at" ;
+	cdv:columnType cdv:clustering ;
+	cdv:clusteringPosition "0"^^xsd:int ;
+	cdv:clusteringOrder "DESC" ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx129 cdv:columns _:node1anf8s8evx132 .
+
+_:node1anf8s8evx132 cdv:name "post_id" ;
+	cdv:columnType cdv:clustering ;
+	cdv:clusteringPosition "1"^^xsd:int ;
+	cdv:clusteringOrder "DESC" ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx129 cdv:columns _:node1anf8s8evx133 .
+
+_:node1anf8s8evx133 cdv:name "account_name" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx129 cdv:columns _:node1anf8s8evx134 .
+
+_:node1anf8s8evx134 cdv:name "language" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx129 cdv:columns _:node1anf8s8evx135 .
+
+_:node1anf8s8evx135 cdv:name "place" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype <http://iit.demokritos.gr/WKT/cassandraDatatype#udt> .
+
+_:node1anf8s8evx129 cdv:columns _:node1anf8s8evx136 .
+
+_:node1anf8s8evx136 cdv:name "tweet" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx129 cdv:columns _:node1anf8s8evx137 .
+
+_:node1anf8s8evx137 cdv:name "url" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx129 cdv:primaryKey "place_literal" , "created_at" , "post_id" .
+
+_:node1anf8s8evx1 cdv:tables _:node1anf8s8evx138 .
+
+_:node1anf8s8evx138 cdv:name "news_crawls" ;
+	cdv:tableSchema _:node1anf8s8evx139 .
+
+_:node1anf8s8evx139 cdv:columns _:node1anf8s8evx140 .
+
+_:node1anf8s8evx140 cdv:name "crawl_type" ;
+	cdv:columnType cdv:partition ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx139 cdv:columns _:node1anf8s8evx141 .
+
+_:node1anf8s8evx141 cdv:name "crawl_id" ;
+	cdv:columnType cdv:clustering ;
+	cdv:clusteringPosition "0"^^xsd:int ;
+	cdv:clusteringOrder "DESC" ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx139 cdv:columns _:node1anf8s8evx142 .
+
+_:node1anf8s8evx142 cdv:name "end" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx139 cdv:columns _:node1anf8s8evx143 .
+
+_:node1anf8s8evx143 cdv:name "start" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx139 cdv:primaryKey "crawl_type" , "crawl_id" .
+
+_:node1anf8s8evx1 cdv:tables _:node1anf8s8evx144 .
+
+_:node1anf8s8evx144 cdv:name "events" ;
+	cdv:tableSchema _:node1anf8s8evx145 .
+
+_:node1anf8s8evx145 cdv:columns _:node1anf8s8evx146 .
+
+_:node1anf8s8evx146 cdv:name "event_id" ;
+	cdv:columnType cdv:partition ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx145 cdv:columns _:node1anf8s8evx147 .
+
+_:node1anf8s8evx147 cdv:name "description" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx145 cdv:columns _:node1anf8s8evx148 .
+
+_:node1anf8s8evx148 cdv:name "event_date" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx145 cdv:columns _:node1anf8s8evx149 .
+
+_:node1anf8s8evx149 cdv:name "event_source_urls" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype <http://iit.demokritos.gr/WKT/cassandraDatatype#set> .
+
+_:node1anf8s8evx145 cdv:columns _:node1anf8s8evx150 .
+
+_:node1anf8s8evx150 cdv:name "place_mappings" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype <http://iit.demokritos.gr/WKT/cassandraDatatype#map> .
+
+_:node1anf8s8evx145 cdv:columns _:node1anf8s8evx151 .
+
+_:node1anf8s8evx151 cdv:name "title" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx145 cdv:columns _:node1anf8s8evx152 .
+
+_:node1anf8s8evx152 cdv:name "tweet_post_ids" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype <http://iit.demokritos.gr/WKT/cassandraDatatype#set> .
+
+_:node1anf8s8evx145 cdv:primaryKey "event_id" .
+
+_:node1anf8s8evx1 cdv:tables _:node1anf8s8evx153 .
+
+_:node1anf8s8evx153 cdv:name "news_articles_per_place" ;
+	cdv:tableSchema _:node1anf8s8evx154 .
+
+_:node1anf8s8evx154 cdv:columns _:node1anf8s8evx155 .
+
+_:node1anf8s8evx155 cdv:name "place_literal" ;
+	cdv:columnType cdv:partition ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx154 cdv:columns _:node1anf8s8evx156 .
+
+_:node1anf8s8evx156 cdv:name "entry_url" ;
+	cdv:columnType cdv:clustering ;
+	cdv:clusteringPosition "0"^^xsd:int ;
+	cdv:clusteringOrder "ASC" ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx154 cdv:columns _:node1anf8s8evx157 .
+
+_:node1anf8s8evx157 cdv:name "bounding_box" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx154 cdv:columns _:node1anf8s8evx158 .
+
+_:node1anf8s8evx158 cdv:name "clean_text" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx154 cdv:columns _:node1anf8s8evx159 .
+
+_:node1anf8s8evx159 cdv:name "crawl_id" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx154 cdv:columns _:node1anf8s8evx160 .
+
+_:node1anf8s8evx160 cdv:name "crawled" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx154 cdv:columns _:node1anf8s8evx161 .
+
+_:node1anf8s8evx161 cdv:name "feed_url" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx154 cdv:columns _:node1anf8s8evx162 .
+
+_:node1anf8s8evx162 cdv:name "language" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx154 cdv:columns _:node1anf8s8evx163 .
+
+_:node1anf8s8evx163 cdv:name "published" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx154 cdv:columns _:node1anf8s8evx164 .
+
+_:node1anf8s8evx164 cdv:name "raw_text" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx154 cdv:columns _:node1anf8s8evx165 .
+
+_:node1anf8s8evx165 cdv:name "title" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx154 cdv:secondaryIndex "language" , "crawl_id" ;
+	cdv:primaryKey "place_literal" , "entry_url" .
+
+_:node1anf8s8evx1 cdv:tables _:node1anf8s8evx166 .
+
+_:node1anf8s8evx166 cdv:name "twitter_posts_per_external_url" ;
+	cdv:tableSchema _:node1anf8s8evx167 .
+
+_:node1anf8s8evx167 cdv:columns _:node1anf8s8evx168 .
+
+_:node1anf8s8evx168 cdv:name "external_url" ;
+	cdv:columnType cdv:partition ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx167 cdv:columns _:node1anf8s8evx169 .
+
+_:node1anf8s8evx169 cdv:name "created_at" ;
+	cdv:columnType cdv:clustering ;
+	cdv:clusteringPosition "0"^^xsd:int ;
+	cdv:clusteringOrder "DESC" ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx167 cdv:columns _:node1anf8s8evx170 .
+
+_:node1anf8s8evx170 cdv:name "post_id" ;
+	cdv:columnType cdv:clustering ;
+	cdv:clusteringPosition "1"^^xsd:int ;
+	cdv:clusteringOrder "DESC" ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx167 cdv:columns _:node1anf8s8evx171 .
+
+_:node1anf8s8evx171 cdv:name "account_name" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx167 cdv:columns _:node1anf8s8evx172 .
+
+_:node1anf8s8evx172 cdv:name "language" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx167 cdv:columns _:node1anf8s8evx173 .
+
+_:node1anf8s8evx173 cdv:name "tweet" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx167 cdv:columns _:node1anf8s8evx174 .
+
+_:node1anf8s8evx174 cdv:name "url" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx167 cdv:primaryKey "external_url" , "created_at" , "post_id" .
+
+_:node1anf8s8evx1 cdv:tables _:node1anf8s8evx175 .
+
+_:node1anf8s8evx175 cdv:name "news_articles_per_published_date" ;
+	cdv:tableSchema _:node1anf8s8evx176 .
+
+_:node1anf8s8evx176 cdv:columns _:node1anf8s8evx177 .
+
+_:node1anf8s8evx177 cdv:name "year_month_day_literal" ;
+	cdv:columnType cdv:partition ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx176 cdv:columns _:node1anf8s8evx178 .
+
+_:node1anf8s8evx178 cdv:name "published" ;
+	cdv:columnType cdv:clustering ;
+	cdv:clusteringPosition "0"^^xsd:int ;
+	cdv:clusteringOrder "DESC" ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx176 cdv:columns _:node1anf8s8evx179 .
+
+_:node1anf8s8evx179 cdv:name "entry_url" ;
+	cdv:columnType cdv:clustering ;
+	cdv:clusteringPosition "1"^^xsd:int ;
+	cdv:clusteringOrder "ASC" ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx176 cdv:columns _:node1anf8s8evx180 .
+
+_:node1anf8s8evx180 cdv:name "clean_text" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx176 cdv:columns _:node1anf8s8evx181 .
+
+_:node1anf8s8evx181 cdv:name "crawl_id" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx176 cdv:columns _:node1anf8s8evx182 .
+
+_:node1anf8s8evx182 cdv:name "crawled" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:long .
+
+_:node1anf8s8evx176 cdv:columns _:node1anf8s8evx183 .
+
+_:node1anf8s8evx183 cdv:name "feed_url" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx176 cdv:columns _:node1anf8s8evx184 .
+
+_:node1anf8s8evx184 cdv:name "language" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx176 cdv:columns _:node1anf8s8evx185 .
+
+_:node1anf8s8evx185 cdv:name "place_literal" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype <http://iit.demokritos.gr/WKT/cassandraDatatype#set> .
+
+_:node1anf8s8evx176 cdv:columns _:node1anf8s8evx186 .
+
+_:node1anf8s8evx186 cdv:name "raw_text" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx176 cdv:columns _:node1anf8s8evx187 .
+
+_:node1anf8s8evx187 cdv:name "title" ;
+	cdv:columnType cdv:regular ;
+	cdv:datatype xsd:string .
+
+_:node1anf8s8evx176 cdv:secondaryIndex "language" , "crawl_id" ;
+	cdv:primaryKey "year_month_day_literal" , "published" , "entry_url" .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix svd: <http://rdf.iit.demokritos.gr/2013/sevod#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+_:node1anf8s8evx188 a void:Dataset ;
+	void:propertyPartition [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_coordinates#geo_bucket> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_coordinates#created_at> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_coordinates#geolocation> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_coordinates#post_id> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_coordinates#account_name> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_coordinates#language> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_coordinates#tweet> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_coordinates#url> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/location_extraction_log#schedule_type> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/location_extraction_log#schedule_id> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/location_extraction_log#end> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/location_extraction_log#items_updated> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/location_extraction_log#last_parsed> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/location_extraction_log#start> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_user#user_id> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_user#account_name> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_user#followers_count> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_user#friends_count> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_user#listed_count> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_user#location> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_user#name> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_user#statuses_count> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_user#timezone> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/events_per_place_literal#place_literal> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/events_per_place_literal#event_id> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/events_per_place_literal#description> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/events_per_place_literal#event_date> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/events_per_place_literal#event_source_urls> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/events_per_place_literal#place_polygon> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/events_per_place_literal#title> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/events_per_place_literal#tweet_post_ids> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_date#year_month_day_bucket> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_date#created_at> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_date#post_id> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_date#account_name> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_date#language> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_date#tweet> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_date#url> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_crawled_date#year_month_day_literal> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_crawled_date#crawled> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_crawled_date#entry_url> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_crawled_date#clean_text> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_crawled_date#crawl_id> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_crawled_date#feed_url> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_crawled_date#language> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_crawled_date#place_literal> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_crawled_date#published> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_crawled_date#raw_text> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_crawled_date#title> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_engine#engine_type> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_engine#engine_id> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_engine#post_id> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles#reversed_host> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles#entry_url> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles#clean_text> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles#crawl_id> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles#crawled> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles#feed_url> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles#language> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles#place_literal> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles#published> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles#raw_text> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles#title> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_log#engine_type> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_log#engine_id> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_log#ended> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_log#started> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_source#account_name> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_source#active> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_referred_place#place_literal> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_referred_place#created_at> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_referred_place#post_id> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_referred_place#account_name> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_referred_place#language> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_referred_place#location> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_referred_place#tweet> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_referred_place#url> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_post#post_id> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_post#language> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_post#account_name> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_post#coordinates> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_post#created_at> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_post#external_links> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_post#followers_when_published> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_post#place> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_post#retweet_count> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_post#tweet> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_post#url> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_feeds#feed_url> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_feeds#etag> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_feeds#last_modified> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_hashtag#hashtag> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_hashtag#created_at> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_hashtag#post_id> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_hashtag#account_name> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_hashtag#language> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_hashtag#tweet> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_hashtag#url> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_place#place_literal> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_place#created_at> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_place#post_id> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_place#account_name> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_place#language> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_place#place> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_place#tweet> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_place#url> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_crawls#crawl_type> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_crawls#crawl_id> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_crawls#end> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_crawls#start> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/events#event_id> ;
+		void:triples "4"^^xsd:long ;
+		void:distinctSubjects "4"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/events#description> ;
+		void:triples "3"^^xsd:long ;
+		void:distinctSubjects "3"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/events#event_date> ;
+		void:triples "3"^^xsd:long ;
+		void:distinctSubjects "3"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/events#event_source_urls> ;
+		void:triples "3"^^xsd:long ;
+		void:distinctSubjects "3"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/events#place_mappings> ;
+		void:triples "3"^^xsd:long ;
+		void:distinctSubjects "3"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/events#title> ;
+		void:triples "3"^^xsd:long ;
+		void:distinctSubjects "3"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/events#tweet_post_ids> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_place#place_literal> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_place#entry_url> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_place#bounding_box> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_place#clean_text> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_place#crawl_id> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_place#crawled> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_place#feed_url> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_place#language> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_place#published> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_place#raw_text> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_place#title> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_external_url#external_url> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_external_url#created_at> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_external_url#post_id> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_external_url#account_name> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_external_url#language> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_external_url#tweet> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/twitter_posts_per_external_url#url> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_published_date#year_month_day_literal> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_published_date#published> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_published_date#entry_url> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_published_date#clean_text> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_published_date#crawl_id> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_published_date#crawled> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_published_date#feed_url> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_published_date#language> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_published_date#place_literal> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_published_date#raw_text> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] , [
+		void:property <http://cassandra.semagrow.eu/bde/news_articles_per_published_date#title> ;
+		void:triples "0"^^xsd:long ;
+		void:distinctSubjects "0"^^xsd:long ;
+	] ;
+	void:sparqlEndpoint <http://cassandra.semagrow.eu/bde> ;
+	void:uriSpace "http://cassandra.semagrow.eu/bde" ;
+	void:triples "19"^^xsd:long ;
+	void:distinctSubjects "3"^^xsd:long .
