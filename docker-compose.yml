@@ -59,7 +59,6 @@ services:
     image: bde2020/spark-master:1.5.1-hadoop2.6
     hostname: spark-master
     environment:
-      - "constraint:node==master"
       - INIT_DAEMON_STEP:spark_master_init
       - VIRTUAL_HOST:spark-master.iit.demokritos.gr
       - VIRTUAL_PORT:8080
@@ -73,7 +72,6 @@ services:
   worker1:
     image: bde2020/spark-worker:1.5.1-hadoop2.6
     environment:
-      - "constraint:node==slave1"
       - VIRTUAL_HOST:spark-worker1.iit.demokritos.gr
       - VIRTUAL_PORT:8081
     depends_on:
@@ -84,7 +82,6 @@ services:
   worker2:
     image: bde2020/spark-worker:1.5.1-hadoop2.6
     environment:
-      - "constraint:node==slave2"
       - VIRTUAL_HOST:spark-worker2.iit.demokritos.gr
       - VIRTUAL_PORT:8082
     depends_on:
@@ -95,7 +92,6 @@ services:
   worker3:
     image: bde2020/spark-worker:1.5.1-hadoop2.6
     environment:
-      - "constraint:node==slave3"
       - VIRTUAL_HOST:spark-worker3.iit.demokritos.gr
       - VIRTUAL_PORT:8083
     depends_on:
@@ -106,7 +102,6 @@ services:
   worker4:
     image: bde2020/spark-worker:1.5.1-hadoop2.6
     environment:
-      - "constraint:node==slave4"
       - VIRTUAL_HOST:spark-worker4.iit.demokritos.gr
       - VIRTUAL_PORT:8084
     depends_on:
