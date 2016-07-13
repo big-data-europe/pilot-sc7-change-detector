@@ -75,7 +75,7 @@ services:
       - VIRTUAL_HOST:spark-worker1.iit.demokritos.gr
       - VIRTUAL_PORT:8081
     depends_on:
-      - master
+      - spark-master
     networks:
       - default
 
@@ -85,7 +85,7 @@ services:
       - VIRTUAL_HOST:spark-worker2.iit.demokritos.gr
       - VIRTUAL_PORT:8082
     depends_on:
-      - master
+      - spark-master
     networks:
       - default
 
@@ -95,7 +95,7 @@ services:
       - VIRTUAL_HOST:spark-worker3.iit.demokritos.gr
       - VIRTUAL_PORT:8083
     depends_on:
-      - master
+      - spark-master
     networks:
       - default
 
@@ -105,7 +105,7 @@ services:
       - VIRTUAL_HOST:spark-worker4.iit.demokritos.gr
       - VIRTUAL_PORT:8084
     depends_on:
-      - master
+      - spark-master
     networks:
       - default
 
