@@ -286,9 +286,11 @@ public class TileBasedFinal {
 
 					Point sourcePoint = srcImgMetadataStack.getTileIndices(pair._2.getMinX(), pair._2.getMinY());
 					List<Tuple2<Point, Rectangle>> tuples = dependRectangles.get(sourcePoint);
+					if(tuples!=null){
 					for (Tuple2<Point, Rectangle> tuple : tuples)
 						pairs.add(new Tuple2<Tuple3<Point, String, Rectangle>, MyTile>(
 								new Tuple3<Point, String, Rectangle>(tuple._1(), pair._1(), tuple._2()), pair._2));
+					}
 					return pairs;
 				});
 
@@ -397,10 +399,12 @@ public class TileBasedFinal {
 					ImageMetadata srcImgMetadataWarp = imgMetadataB.getValue().get(pair._1._2 + "_warp" + "_source");
 					Point sourcePoint = srcImgMetadataWarp.getTileIndices(pair._2.getMinX(), pair._2.getMinY());
 					Set<Rectangle> tuples = bandRects.get(sourcePoint);
+					if(tuples!=null){
 					for (Rectangle rect : tuples) {
 						pairs.add(new Tuple2<Tuple2<String, Rectangle>, MyTile>(
 								new Tuple2<String, Rectangle>(pair._1._2, rect), pair._2));
 						// System.out.println(pair._1._2+" "+rect);
+					}
 					}
 					// System.out.println("pairs ok");
 					// System.out.println(System.currentTimeMillis());
