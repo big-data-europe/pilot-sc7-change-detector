@@ -331,6 +331,11 @@ public class TileBasedFinal {
 							masterGcps.getValue(), rows.getValue());
 				}).collect();
 
+		if(slaveGCPs.isEmpty())
+		{
+			System.out.println("not enough GCPs detected");
+			return;
+		}
 		long endWithGCPTime = System.currentTimeMillis();
 		long totalwithGCPTime = endWithGCPTime - startTime;
 		System.out.println(" GCP " + totalwithGCPTime);
