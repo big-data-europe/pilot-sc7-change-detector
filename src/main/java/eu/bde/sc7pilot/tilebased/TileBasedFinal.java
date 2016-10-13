@@ -69,10 +69,10 @@ import scala.Tuple3;
 public class TileBasedFinal {
 	public static void main(String[] args) throws Exception {
 		TileBasedFinal parallelTiles = new TileBasedFinal();
-		parallelTiles.processTiles(args[0], args[1], args[2], args[3]);
+		parallelTiles.processTiles(args[0], args[1], args[2], args[3], Integer.parseInt(args[4]));
 	}
 
-	public void processTiles(String hdfsPath, String masterZipFilePath, String slaveZipFilePath, String targetPath)
+	public void processTiles(String hdfsPath, String masterZipFilePath, String slaveZipFilePath, String targetPath, int partitionsNumber)
 			throws Exception {
 		// String slaveZipFilePath = args[2];
 		// String outFile = args[3];
@@ -260,9 +260,9 @@ public class TileBasedFinal {
 		// JavaPairRDD<String, MyTile> slaveRastersRdd =
 		// sc.parallelizePairs(slaveRasters);
 		JavaPairRDD<String, Point> masterRastersRdd = sc.parallelizePairs(masterIndices)
-				.partitionBy(new HashPartitioner(12));
+				.partitionBy(new HashPartitioner(partitionsNumber));
 		JavaPairRDD<String, Point> slaveRastersRdd = sc.parallelizePairs(slaveIndices)
-				.partitionBy(new HashPartitioner(12));
+				.partitionBy(new HashPartitioner(partitionsNumber));
 		long startWithGCPTime = System.currentTimeMillis();
 		// master image calibration
 		JavaPairRDD<Tuple2<Point, String>, MyTile> masterRastersCal = masterRastersRdd
