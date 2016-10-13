@@ -52,11 +52,11 @@ public class TiffUnzipper {
 //                	System.out.println("I AM INSIDE THE FOR-LOOP. i = " + i);
 //                }
                 if (suffix[2].equals("tiff")) {
-                    String[] stringParts = suffix[1].split("-");
-                	int parts = stringParts.length;
-                	if (stringParts[3].equals("vv") || stringParts[parts - 1].equals("001")){
+//                    String[] stringParts = suffix[1].split("-");
+//                	int parts = stringParts.length;
+//                	if (stringParts[3].equals("vv") || stringParts[parts - 1].equals("001")){
                 		tiffFilePath = filePath;
-                	}
+//                	}
                     //System.out.println("THE TIFF'S LOCAL-FS-FILEPATH IS:");
                     //System.out.println(filePath);
                 }
