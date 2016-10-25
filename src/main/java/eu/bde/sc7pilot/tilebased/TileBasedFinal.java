@@ -222,9 +222,8 @@ public class TileBasedFinal {
 
 		long endSerial = System.currentTimeMillis();
 		long serialTotal = endSerial - startTime;
-		System.out.println("SerialProcessing completed in: " + serialTotal + "ms/n");
-
-
+		System.out.println("SerialProcessing completed in: " + serialTotal + "ms/n");		
+		System.out.println("~~~ Starting Spark ~~~");
 		// init sparkConf
 		// SparkConf conf = new
 		// SparkConf().setMaster("local[4]").set("spark.driver.maxResultSize",
