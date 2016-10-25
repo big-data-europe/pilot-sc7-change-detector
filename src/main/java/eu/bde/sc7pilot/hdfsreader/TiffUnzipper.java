@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -33,10 +34,11 @@ public class TiffUnzipper {
      * @param destDirectory
      * @throws IOException
      */
-    public String unzip(String zipFilePath) throws IOException {
-        String tiffFilePath = "";
+    public ArrayList<String> unzip(String zipFilePath) throws IOException {
+    	ArrayList<String> tiffFilePaths = new ArrayList<String>();
+        //String[] tiffFilePath = new String[];
         //System.out.println("");
-        System.out.println("~~~ Initiating unzipping ~~~");
+        //System.out.println("~~~ Initiating unzipping ~~~");
         File zipFile = new File(zipFilePath);
         String destDirectory = zipFile.getParent();
         ZipInputStream zipIn = new ZipInputStream(new FileInputStream(zipFilePath));
@@ -52,13 +54,10 @@ public class TiffUnzipper {
 //                	System.out.println("I AM INSIDE THE FOR-LOOP. i = " + i);
 //                }
                 if (suffix[2].equals("tiff")) {
-//                    String[] stringParts = suffix[1].split("-");
-//                	int parts = stringParts.length;
-//                	if (stringParts[3].equals("vv") || stringParts[parts - 1].equals("001")){
-                		tiffFilePath = filePath;
-//                	}
                     //System.out.println("THE TIFF'S LOCAL-FS-FILEPATH IS:");
                     //System.out.println(filePath);
+                    //tiffFilePath = filePath;
+                	tiffFilePaths.add(filePath);
                 }
             } else {
                 File dir = new File(filePath);
@@ -72,7 +71,7 @@ public class TiffUnzipper {
         //System.out.println("~~~ Completing unzipping ~~~");
         //System.out.println("");
         //System.out.println("");
-        return tiffFilePath;
+        return tiffFilePaths;
     }
 
     /**
