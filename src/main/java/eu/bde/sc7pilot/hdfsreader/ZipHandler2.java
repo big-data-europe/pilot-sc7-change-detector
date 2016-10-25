@@ -31,7 +31,7 @@ public class ZipHandler2 {
            
             double endUnzip = System.currentTimeMillis();
             double unzipTime = endUnzip - startUnzip;
-            System.out.println("Unzip made in: " + unzipTime + " ms\n");
+            System.out.println("Unzip made in: " + unzipTime + " ms");
  
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -57,7 +57,7 @@ public class ZipHandler2 {
                    
                     double endStore = System.currentTimeMillis();
                     double storeTime = endStore - startStore;
-                    System.out.println("File stored in HDFS in: " + storeTime + " ms\n");
+                    System.out.println("File stored in HDFS in: " + storeTime + " ms");
             	}
             	else {
             		File unwantedTiff = new File(tiffsLocalFilePaths.get(i));
@@ -106,7 +106,7 @@ public class ZipHandler2 {
            
             double endComp = System.currentTimeMillis();
             double compTime = endComp - startComp;
-            System.out.println("Completed compression in: " + compTime + " ms\n");
+            System.out.println("Completed compression in: " + compTime + " ms");
         }
         return tiffInHDFS;
 
