@@ -38,14 +38,14 @@ public class ZipHandler2 {
         }
         
         if (tiffsLocalFilePaths.isEmpty()) {
-        	System.out.println("No tiff found!\n");
+        	System.out.println("*No tiff found!*");
         }
         else if (tiffsLocalFilePaths.size() == 1) {
-        	System.out.println("Only one tiff found, procceding as usual\n");
+        	System.out.println("*Only one tiff found, procceding as usual*");
         	tiffInHDFS = tiffLocalToHDFS(tiffsLocalFilePaths.get(0), dirHDFS);
         }
         else {
-        	System.out.println("More than one tiffs found, wait for file-manipulation\n");
+        	System.out.println("*More than one tiffs found, wait for file-manipulation*");
         	for (int i = 0; i < tiffsLocalFilePaths.size(); i++) {
         		String[] stringParts = tiffsLocalFilePaths.get(i).split("-");
         		int parts = stringParts.length;
