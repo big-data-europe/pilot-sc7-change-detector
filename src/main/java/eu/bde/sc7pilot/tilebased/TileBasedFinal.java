@@ -94,6 +94,7 @@ public class TileBasedFinal {
 		}
 		System.out.println(masterTiffInHDFS);
 		System.out.println(slaveTiffInHDFS);
+		System.out.println("~~~ Starting SerialProcessing ~~~");
 		long startTime = System.currentTimeMillis();
 		// List<Tuple2<String, MyTile>> slaveRasters = null;
 		// List<Tuple2<String, MyTile>> masterRasters = null;
@@ -219,6 +220,11 @@ public class TileBasedFinal {
 		opMetadataCreator.createOpImgMetadata(imageMetadata, myChangeDetection);
 		ChangeDetectionMetadata changeDMetadata = opMetadataCreator.createChangeDMetadata(myChangeDetection, bParams3);
 
+		long endSerial = System.currentTimeMillis();
+		long serialTotal = endSerial - startTime;
+		System.out.println("SerialProcessing completed in: " + serialTotal + "ms/n");
+
+
 		// init sparkConf
 		// SparkConf conf = new
 		// SparkConf().setMaster("local[4]").set("spark.driver.maxResultSize",
@@ -338,7 +344,7 @@ public class TileBasedFinal {
 		}
 		long endWithGCPTime = System.currentTimeMillis();
 		long totalwithGCPTime = endWithGCPTime - startTime;
-		System.out.println(" GCP " + totalwithGCPTime);
+		System.out.println("GCP compeletd in: " + totalwithGCPTime + "ms/n");
 		// process
 		// put the gcps into a hashmap to eliminate some duplicates
 		Map<String, Map<Integer, Placemark>> gcpsMap = new HashMap<String, Map<Integer, Placemark>>();
@@ -352,7 +358,7 @@ public class TileBasedFinal {
 				gcpsMap.put(bandName, placemarksMap);
 			}
 		}
-		System.out.println("GCPs size" + slaveGCPs.size());
+		//System.out.println("GCPs size" + slaveGCPs.size());
 		// Checks.checkGCPs(gcpsMap, myGCPSelection.getMasterGcpGroup());
 		// //add gcps to the GCPManager
 		for (String name : bandsListGCP.keySet()) {
@@ -365,13 +371,13 @@ public class TileBasedFinal {
 		}
 		// compute the warp function
 		long startWarpTime = System.currentTimeMillis();
-		System.out.println("start computing warp function");
+		//System.out.println("start computing warp function");
 		myWarp.getWarpData();
 		Map<String, WarpData> warpdataMap = new HashMap<String, WarpData>();
 		Product targetProductWarp = myWarp.getTargetProduct();
 		String[] masterBandNamesWarp = StackUtils.getMasterBandNames(targetProductWarp);
 		Set<String> masterBandsWarp = new HashSet(Arrays.asList(masterBandNamesWarp));
-		System.out.println("start computing warp dependent rectangles");
+		//System.out.println("start computing warp dependent rectangles");
 		for (int i = 0; i < targetProductWarp.getNumBands(); i++) {
 			if (masterBandsWarp.contains(targetProductWarp.getBandAt(i).getName()))
 				continue;
@@ -393,7 +399,7 @@ public class TileBasedFinal {
 				.broadcast(dependRectsWarp2);
 		Broadcast<Object2ObjectMap<String, Object2ObjectMap<Rectangle, ObjectList<Point>>>> dependPointsWarpB = sc
 				.broadcast(dependPointsWarp);
-		System.out.println("start warp");
+		//System.out.println("start warp");
 
 		JavaPairRDD<Tuple2<String, Rectangle>, MyTile> dependentPairsWarp = createstackResults
 				.flatMapToPair((Tuple2<Tuple2<Point, String>, MyTile> pair) -> {
@@ -481,11 +487,11 @@ public class TileBasedFinal {
 							targetTile);
 				});
 		List<Tuple2<Tuple2<Point, String>, MyTile>> changeResults = changeDResults.collect();
-		System.out.println("result tiles " + changeResults.size());
+		//System.out.println("result tiles " + changeResults.size());
 		long endTime = System.currentTimeMillis();
 		long totalTime = endTime - startTime;
 
-		System.out.println("total time " + totalTime);
+		System.out.println("Basic procedures completed in: " + totalTime + "/ms");
 		Write write = new Write(myChangeDetection.getTargetProduct(), targetFile, "BEAM-DIMAP");
 		for (int i = 0; i < changeResults.size(); i++) {
 			Band targetBand = writeOp.getTargetProduct().getBand(changeResults.get(i)._1._2);

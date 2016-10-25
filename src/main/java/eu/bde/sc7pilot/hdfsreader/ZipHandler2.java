@@ -151,7 +151,7 @@ public class ZipHandler2 {
 
     public Product findTargetProduct(String zipLocalFilePath) {
         //System.out.println("");
-        System.out.println("~~~ Initiating Extract TP ~~~");
+        //System.out.println("~~~ Initiating Extract TP ~~~");
         File zipFile = new File(zipLocalFilePath);
         //Product targetProduct = processImages2(zipFile);
         MyRead myRead = null;
