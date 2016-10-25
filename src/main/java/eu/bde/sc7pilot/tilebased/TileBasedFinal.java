@@ -67,9 +67,17 @@ import scala.Tuple2;
 import scala.Tuple3;
 
 public class TileBasedFinal {
+	
 	public static void main(String[] args) throws Exception {
 		TileBasedFinal parallelTiles = new TileBasedFinal();
+        
+		double startAll = System.currentTimeMillis();
+		
 		parallelTiles.processTiles(args[0], args[1], args[2], args[3], Integer.parseInt(args[4]));
+		
+		double endAll = System.currentTimeMillis();
+		double totalAll = endAll - startAll;
+        System.out.println("Total time for all: " + totalAll + " ms");
 	}
 
 	public void processTiles(String hdfsPath, String masterZipFilePath, String slaveZipFilePath, String targetPath, int partitionsNumber)
@@ -222,7 +230,7 @@ public class TileBasedFinal {
 
 		long endSerial = System.currentTimeMillis();
 		long serialTotal = endSerial - startTime;
-		System.out.println("SerialProcessing completed in: " + serialTotal + "ms/n");		
+		System.out.println("SerialProcessing completed in: " + serialTotal + "ms");		
 		System.out.println("~~~ Starting Spark ~~~");
 		// init sparkConf
 		// SparkConf conf = new
@@ -343,7 +351,7 @@ public class TileBasedFinal {
 		}
 		long endWithGCPTime = System.currentTimeMillis();
 		long totalwithGCPTime = endWithGCPTime - startTime;
-		System.out.println("GCP compeletd in: " + totalwithGCPTime + "ms/n");
+		System.out.println("GCP compeletd in: " + totalwithGCPTime + "ms");
 		// process
 		// put the gcps into a hashmap to eliminate some duplicates
 		Map<String, Map<Integer, Placemark>> gcpsMap = new HashMap<String, Map<Integer, Placemark>>();
@@ -490,7 +498,7 @@ public class TileBasedFinal {
 		long endTime = System.currentTimeMillis();
 		long totalTime = endTime - startTime;
 
-		System.out.println("Basic procedures completed in: " + totalTime + "/ms");
+		System.out.println("Basic procedures completed in: " + totalTime + " ms");
 		Write write = new Write(myChangeDetection.getTargetProduct(), targetFile, "BEAM-DIMAP");
 		for (int i = 0; i < changeResults.size(); i++) {
 			Band targetBand = writeOp.getTargetProduct().getBand(changeResults.get(i)._1._2);
