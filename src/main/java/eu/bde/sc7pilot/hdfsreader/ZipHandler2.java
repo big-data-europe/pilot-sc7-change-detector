@@ -115,7 +115,6 @@ public class ZipHandler2 {
     private String tiffLocalToHDFS(String tiffLocalFilePath, String HDFSdir) throws IOException {
         //System.out.println("");
         //System.out.println("~~~ Initiating Local To HDFS ~~~");
-        //System.out.println("IMPORTING TO HDFS THE FILE:");
         //System.out.println(tiffLocalFilePath);
         //*** Copying the extracted tiff to HDFS
         //Tiff from local FS -> IpnutStream -> (target) HDFS
