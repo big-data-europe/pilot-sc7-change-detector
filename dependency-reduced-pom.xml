@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>spark.test</groupId>
+  <artifactId>spark.test</artifactId>
+  <name>sparkTest</name>
+  <version>0.0.1-SNAPSHOT</version>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>2.4.3</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <filters>
+            <filter>
+              <artifact>*:*</artifact>
+              <excludes>
+                <exclude>META-INF/*.SF</exclude>
+                <exclude>META-INF/*.DSA</exclude>
+                <exclude>META-INF/*.RSA</exclude>
+              </excludes>
+            </filter>
+          </filters>
+          <transformers>
+            <transformer>
+              <manifestEntries>
+                <Main-Class>tileBased.TileBasedFinal</Main-Class>
+              </manifestEntries>
+            </transformer>
+            <transformer />
+          </transformers>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <repositories>
+    <repository>
+      <releases>
+        <checksumPolicy>warn</checksumPolicy>
+      </releases>
+      <snapshots>
+        <checksumPolicy>warn</checksumPolicy>
+      </snapshots>
+      <id>snap-repo-public</id>
+      <name>Public Maven Repository for SNAP</name>
+      <url>http://nexus.senbox.net/nexus/content/repositories/public/</url>
+    </repository>
+  </repositories>
+  <properties>
+    <s1tbx.version>2.0.0</s1tbx.version>
+    <snap.version>2.0.2</snap.version>
+    <jdk.version>1.8</jdk.version>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+</project>
+
