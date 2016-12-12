@@ -84,14 +84,16 @@ public class ChangePointsClusteringParallel implements Serializable {
 		int w= raster.getWidth();
 		int h= raster.getHeight();
 		boolean[][] isChangingBool = makeBool(raster, 2.0).clone();
+		List<boolean[][]> isChangingList = new ArrayList<boolean[][]>();
+		for (int k = 0; k < numNodes; k++) {
+			boolean[][] isChanging1 = new boolean[w/numNodes][h];
+			for (int i = 0; i < w/numNodes; i++) {
+				for (int j = 0; j < h; j++) {
+					isChanging1[i][j]=isChangingBool[i+k*w/numNodes][j];
+				}
 
-		boolean[][] isChanging1 = new boolean[w/numNodes][h];
-		boolean[][] isChanging2 = new boolean[w/numNodes][h];
-		for (int i = 0; i < w/numNodes; i++) {
-			for (int j = 0; j < h; j++) {
-				isChanging1[i][j]=isChangingBool[i][j];
-				isChanging2[i][j]=isChangingBool[i+w/numNodes][j];
 			}
+			isChangingList.add(k, isChanging1);
 		}
 
 		long createArrayTime=System.currentTimeMillis();
@@ -109,7 +111,7 @@ public class ChangePointsClusteringParallel implements Serializable {
 
 		long sparkConfigTime=System.currentTimeMillis();
 		System.out.println("sparkConfigTime "+(sparkConfigTime-createArrayTime));
-		JavaRDD<boolean[][]> boolArDD= sc.parallelize(Arrays.asList(isChanging1, isChanging2));
+		JavaRDD<boolean[][]> boolArDD= sc.parallelize(isChangingList); //changeFIX
 		JavaRDD<List<Set<Point>>> result= boolArDD.map(new Function<boolean[][], List<Set<Point>>>() {
 			public List<Set<Point>> call(boolean[][] x) {return dbScanClusters(x, 4, 10, w/numNodes, h);}
 		});
