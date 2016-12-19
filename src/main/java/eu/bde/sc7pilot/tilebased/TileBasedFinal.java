@@ -5,7 +5,6 @@ import java.awt.Rectangle;
 import java.awt.image.ColorModel;
 import java.awt.image.SampleModel;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -69,72 +68,59 @@ import scala.Tuple3;
 public class TileBasedFinal {
 	public static void main(String[] args) throws Exception {
 		TileBasedFinal parallelTiles = new TileBasedFinal();
-		parallelTiles.processTiles(args[0], args[1], args[2], args[3]);
+		
+		long startAll = System.currentTimeMillis();
+		
+		parallelTiles.processTiles(args[0], args[1], args[2], args[3], args[4], args[5], Integer.parseInt(args[6]));
+		
+		long endAll = System.currentTimeMillis();
+		long totalAll = endAll - startAll;
+        System.out.println("/n" + totalAll + " ms, for storing to HDFS and running all operators including Write.");
 	}
 
-	public void processTiles(String hdfsPath, String masterZipFilePath, String slaveZipFilePath, String targetPath)
+	public void processTiles(String hdfsPath, String masterDimFilePath, String masterTiffFilePath, String slaveDimFilePath, String slaveTiffFilePath, String targetPath, int partitionsNumber)
 			throws Exception {
-		// String slaveZipFilePath = args[2];
-		// String outFile = args[3];
-
+		//***Storing tiffs to HDFS***
 		ZipHandler2 zipHandler = new ZipHandler2();
-		// String masterTiffInHDFS =
-		// "/home/hadoop/s1a-iw-grd-vv-20141225t142407-20141225t142436-003877-004a54-001.tiff";
-		// String slaveTiffInHDFS =
-		// "/home/hadoop/s1a-iw-grd-vv-20150518t142409-20150518t142438-005977-007b49-001.tiff";
-
-		String masterTiffInHDFS = "";
-		String slaveTiffInHDFS = "";
-		try {
-			masterTiffInHDFS = zipHandler.tiffToHDFS(masterZipFilePath, hdfsPath);
-			slaveTiffInHDFS = zipHandler.tiffToHDFS(slaveZipFilePath, hdfsPath);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		String masterTiffInHDFS = zipHandler.tiffLocalToHDFS(masterTiffFilePath, hdfsPath);
 		System.out.println(masterTiffInHDFS);
+		String slaveTiffInHDFS = zipHandler.tiffLocalToHDFS(slaveTiffFilePath, hdfsPath);
 		System.out.println(slaveTiffInHDFS);
-		long startTime = System.currentTimeMillis();
-		// List<Tuple2<String, MyTile>> slaveRasters = null;
-		// List<Tuple2<String, MyTile>> masterRasters = null;
+		
+		System.out.println("Serial Processing to acquire metadata...");
+		long startProcessing = System.currentTimeMillis();
+		
+		//***Extracting metadata through serial processing***
 		List<Tuple2<String, Point>> slaveIndices = null;
 		List<Tuple2<String, Point>> masterIndices = null;
 		Map<String, BandInfo> bandInfos = new HashMap<>(2);
 		Object2ObjectMap<String, Object2ObjectMap<Point, ObjectList<Tuple2<Point, Rectangle>>>> dependRects = new Object2ObjectOpenHashMap<String, Object2ObjectMap<Point, ObjectList<Tuple2<Point, Rectangle>>>>();
-
-		// read slave and master files as usual
+		
 		SerialProcessor sp = new SerialProcessor();
 		String[] selectedPolarisations = null;
 		Product masterTargetProduct = null;
 		Product slaveTargetProduct = null;
-		try {
-			masterTargetProduct = zipHandler.findTargetProduct(masterZipFilePath);
-			for (int i = 0; i < masterTargetProduct.getNumBands(); i++) {
-				Band band = masterTargetProduct.getBandAt(i);
-				if (band.getClass() == Band.class) {
-					BandInfo bandInfo = new BandInfo(masterTiffInHDFS, i, 0);
-					bandInfos.put(band.getName() + "_read1", bandInfo);
-				}
-			}
-			masterIndices = sp.readTilesIndices(masterTargetProduct, selectedPolarisations);
-		} catch (Exception e) {
-			throw e;
-		}
 
-		try {
-			slaveTargetProduct = zipHandler.findTargetProduct(slaveZipFilePath);
-			for (int i = 0; i < slaveTargetProduct.getNumBands(); i++) {
-				Band band = slaveTargetProduct.getBandAt(i);
-				if (band.getClass() == Band.class) {
-					BandInfo bandInfo = new BandInfo(slaveTiffInHDFS, i, 0);
-					bandInfos.put(band.getName() + "_read2", bandInfo);
-				}
+		masterTargetProduct = zipHandler.findTargetProduct(masterDimFilePath);
+		for (int i = 0; i < masterTargetProduct.getNumBands(); i++) {
+			Band band = masterTargetProduct.getBandAt(i);
+			if (band.getClass() == Band.class) {
+				BandInfo bandInfo = new BandInfo(masterTiffInHDFS, i, 0);
+				bandInfos.put(band.getName() + "_read1", bandInfo);
 			}
-			slaveIndices = sp.readTilesIndices(slaveTargetProduct, selectedPolarisations);
-		} catch (Exception e) {
-			throw e;
 		}
-		// initialize all operators as usual to acquire the necessary metadata
+		masterIndices = sp.readTilesIndices(masterTargetProduct, selectedPolarisations);
+
+		slaveTargetProduct = zipHandler.findTargetProduct(slaveDimFilePath);
+		for (int i = 0; i < slaveTargetProduct.getNumBands(); i++) {
+			Band band = slaveTargetProduct.getBandAt(i);
+			if (band.getClass() == Band.class) {
+				BandInfo bandInfo = new BandInfo(slaveTiffInHDFS, i, 0);
+				bandInfos.put(band.getName() + "_read2", bandInfo);
+			}
+		}
+		slaveIndices = sp.readTilesIndices(slaveTargetProduct, selectedPolarisations);
+
 		MyBandSelect bandselect1 = new MyBandSelect(selectedPolarisations, null);
 		bandselect1.setSourceProduct(masterTargetProduct);
 		sp.initOperator(bandselect1);
@@ -189,14 +175,11 @@ public class TileBasedFinal {
 		MyWrite writeOp = new MyWrite(myChangeDetection.getTargetProduct(), targetFile, "BEAM-DIMAP");
 		writeOp.setId("write");
 		sp.initOperator(writeOp);
-		// initialize the imageMetadata for all bands and operators.
-		// The imageMetadata class has replaced the band class and contains only
-		// the absolutely essential metadata for tile computations
-		Object2ObjectMap<String, ImageMetadata> imageMetadata = new Object2ObjectOpenHashMap<String, ImageMetadata>(
-				myCalibration1.getTargetProduct().getNumBands() * 3);
+		
+		/* The imageMetadata class has replaced the band class and contains only the absolutely essential metadata for tile computations */
+		Object2ObjectMap<String, ImageMetadata> imageMetadata = new Object2ObjectOpenHashMap<String, ImageMetadata>(myCalibration1.getTargetProduct().getNumBands() * 3);
 		OpMetadataCreator opMetadataCreator = new OpMetadataCreator();
-		Object2ObjectMap<String, CalibrationMetadata> calMetadata = new Object2ObjectOpenHashMap<String, CalibrationMetadata>(
-				myCalibration1.getTargetProduct().getNumBands() * 4);
+		Object2ObjectMap<String, CalibrationMetadata> calMetadata = new Object2ObjectOpenHashMap<String, CalibrationMetadata>(myCalibration1.getTargetProduct().getNumBands() * 4);
 		// read metadata.
 		opMetadataCreator.createProdImgMetadata(imageMetadata, masterTargetProduct, "read1");
 		opMetadataCreator.createProdImgMetadata(imageMetadata, slaveTargetProduct, "read2");
@@ -214,56 +197,42 @@ public class TileBasedFinal {
 		// Warp image metadata
 		opMetadataCreator.createOpImgMetadata(imageMetadata, myWarp);
 		WarpMetadata warpMetadata = opMetadataCreator.createWarpMetadata(myWarp);
-
 		// Change detection metadata
 		opMetadataCreator.createOpImgMetadata(imageMetadata, myChangeDetection);
 		ChangeDetectionMetadata changeDMetadata = opMetadataCreator.createChangeDMetadata(myChangeDetection, bParams3);
 
-		// init sparkConf
-		// SparkConf conf = new
-		// SparkConf().setMaster("local[4]").set("spark.driver.maxResultSize",
-		// "3g")
-		// .setAppName("First test on tile parallel processing");
-		SparkConf conf = new SparkConf().set("spark.driver.maxResultSize", "5g")
-				.setAppName("First test on tile parallel processing");
-				// SparkConf conf = new SparkConf()
-				// .setAppName("First test on tile parallel processing");
+		long endSerialProcessing = System.currentTimeMillis();
+		long durationSerialProcessing = endSerialProcessing - startProcessing;
+		System.out.println(durationSerialProcessing + " ms, for extracting metadata through Serial Processing");
+		
+		System.out.println("Parallel Processing using Spark...");		
 
-		// configure spark to use Kryo serializer instead of the java
-		// serializer.
-		// All classes that should be serialized by kryo, are registered in
-		// MyRegitration class .
+		//***Parallel Processing using Spark***
+		SparkConf conf = new SparkConf().set("spark.driver.maxResultSize", "5g").setAppName("Parallelized Operators in Spark");
+
+		/* configure spark to use Kryo serializer instead of the java serializer. */
+		/* All classes that should be serialized by kryo, are registered in MyRegitration class */
 		conf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer");
-		conf.set("spark.kryo.registrator", "eu.bde.sc7pilot.tilebased.MyRegistrator")
-				.set("spark.kryoserializer.buffer.max", "2047m");
+		conf.set("spark.kryo.registrator", "eu.bde.sc7pilot.tilebased.MyRegistrator").set("spark.kryoserializer.buffer.max", "2047m");
 		JavaSparkContext sc = new JavaSparkContext(conf);
+		
 		// broadcast image metadata
 		Broadcast<Map<String, ImageMetadata>> imgMetadataB = sc.broadcast(imageMetadata);
 		Broadcast<Map<String, CalibrationMetadata>> calMetadataB = sc.broadcast(calMetadata);
-
-		Broadcast<Object2ObjectMap<String, Object2ObjectMap<Point, ObjectList<Tuple2<Point, Rectangle>>>>> dependRectsB = sc
-				.broadcast(dependRects);
+		Broadcast<Object2ObjectMap<String, Object2ObjectMap<Point, ObjectList<Tuple2<Point, Rectangle>>>>> dependRectsB = sc.broadcast(dependRects);
 		Broadcast<ProductNodeGroup<Placemark>> masterGcps = sc.broadcast(myGCPSelection.getMasterGcpGroup());
 		Broadcast<GCPMetadata> GCPMetadataBroad = sc.broadcast(GCPMetadata);
 		Broadcast<Map<String, String>> bandsListGCPB = sc.broadcast(bandsListGCP);
-
 		Broadcast<WarpMetadata> warpMetadataB = sc.broadcast(warpMetadata);
 		Broadcast<ChangeDetectionMetadata> changeDMetadataB = sc.broadcast(changeDMetadata);
-
 		Broadcast<Integer> rows = sc.broadcast(limits.getNumXTiles());
 		Broadcast<Map<String, BandInfo>> bandInfosB = sc.broadcast(bandInfos);
 
 		LoopLimits limits2 = new LoopLimits(myWarp.getTargetProduct());
-		// Broadcast<LoopLimits> limitsBroad = sc.broadcast(limits2);
-		// JavaPairRDD<String, MyTile> masterRastersRdd =
-		// sc.parallelizePairs(masterRasters);
-		// JavaPairRDD<String, MyTile> slaveRastersRdd =
-		// sc.parallelizePairs(slaveRasters);
-		JavaPairRDD<String, Point> masterRastersRdd = sc.parallelizePairs(masterIndices)
-				.partitionBy(new HashPartitioner(12));
-		JavaPairRDD<String, Point> slaveRastersRdd = sc.parallelizePairs(slaveIndices)
-				.partitionBy(new HashPartitioner(12));
-		long startWithGCPTime = System.currentTimeMillis();
+		JavaPairRDD<String, Point> masterRastersRdd = sc.parallelizePairs(masterIndices).partitionBy(new HashPartitioner(partitionsNumber));
+		JavaPairRDD<String, Point> slaveRastersRdd = sc.parallelizePairs(slaveIndices).partitionBy(new HashPartitioner(partitionsNumber));
+
+		long startWithGCPTime = System.currentTimeMillis(); //Efi's time-counter
 		// master image calibration
 		JavaPairRDD<Tuple2<Point, String>, MyTile> masterRastersCal = masterRastersRdd
 				.mapPartitionsToPair((Iterator<Tuple2<String, Point>> iterator) -> {
@@ -283,7 +252,6 @@ public class TileBasedFinal {
 							.getValue();
 					Object2ObjectMap<Point, ObjectList<Tuple2<Point, Rectangle>>> dependRectangles = dependRectsMap
 							.get(pair._1);
-
 					Point sourcePoint = srcImgMetadataStack.getTileIndices(pair._2.getMinX(), pair._2.getMinY());
 					List<Tuple2<Point, Rectangle>> tuples = dependRectangles.get(sourcePoint);
 					if(tuples!=null){
@@ -293,14 +261,12 @@ public class TileBasedFinal {
 					}
 					return pairs;
 				});
-
 		JavaPairRDD<Tuple2<Point, String>, MyTile> createstackResults = dependentPairs.groupByKey()
 				.mapToPair((Tuple2<Tuple3<Point, String, Rectangle>, Iterable<MyTile>> pair) -> {
 					return CreateStackMappers.createStack(pair, imgMetadataB.getValue());
 				}).cache();
-		//
-		// //split the createstack tiles in groups of rows with a unique key to
-		// each group
+
+		// split the createstack tiles in groups of rows with a unique key to each group
 		JavaPairRDD<Tuple2<Integer, String>, MyTile> createstackResultsRows = createstackResults
 				.filter((Tuple2<Tuple2<Point, String>, MyTile> pair) -> {
 					Map<String, String> bandsList = bandsListGCPB.getValue();
@@ -308,8 +274,8 @@ public class TileBasedFinal {
 				}).flatMapToPair((Tuple2<Tuple2<Point, String>, MyTile> pair) -> {
 					return CreateStackMappers.mapToRows(pair, imgMetadataB.getValue(), rows.getValue());
 				});
-		// //split the master tiles in groups of rows with a unique key to each
-		// group
+
+		// split the master tiles in groups of rows with a unique key to each group
 		JavaPairRDD<Tuple2<Integer, String>, MyTile> masterRastersRdd2 = masterRastersCal
 				.filter((Tuple2<Tuple2<Point, String>, MyTile> pair) -> {
 					String name = imgMetadataB.getValue().get(pair._1._2 + "_stack").getBandPairName();
@@ -320,9 +286,7 @@ public class TileBasedFinal {
 					return CalibrationMappers.mapToRows(pair, imgMetadataB.getValue(), rows.getValue());
 
 				});
-		// //gcps computation. group by key the groups of rows and and compute
-		// the gcps contained to each group
-		// //Then, collect the gcps to the master node.
+		// gcps computation. group by key the groups of rows and and compute the gcps contained to each group. Then, collect the gcps to the master node.
 		JavaPairRDD<Tuple2<Integer, String>, Iterable<MyTile>> masterRows = masterRastersRdd2.groupByKey();
 		JavaPairRDD<Tuple2<Integer, String>, Iterable<MyTile>> stacktilesRows = createstackResultsRows.groupByKey();
 		List<Tuple2<String, Tuple2<Integer, Placemark>>> slaveGCPs = masterRows.join(stacktilesRows)
@@ -330,17 +294,17 @@ public class TileBasedFinal {
 					return GCPMappers.GCPSelection(pair, GCPMetadataBroad.getValue(), imgMetadataB.getValue(),
 							masterGcps.getValue(), rows.getValue());
 				}).collect();
-
 		if(slaveGCPs.isEmpty())
 		{
 			System.out.println("not enough GCPs detected");
 			return;
 		}
-		long endWithGCPTime = System.currentTimeMillis();
-		long totalwithGCPTime = endWithGCPTime - startTime;
-		System.out.println(" GCP " + totalwithGCPTime);
-		// process
-		// put the gcps into a hashmap to eliminate some duplicates
+
+//		long endWithGCPTime = System.currentTimeMillis(); //Efi's time-counter
+//		long totalwithGCPTime = endWithGCPTime - startProcessing; //Efi's time-counter
+//		System.out.println(" GCP " + totalwithGCPTime); //Efi's time-counter
+		
+		// process put the gcps into a hashmap to eliminate some duplicates
 		Map<String, Map<Integer, Placemark>> gcpsMap = new HashMap<String, Map<Integer, Placemark>>();
 		for (int i = 0; i < slaveGCPs.size(); i++) {
 			String bandName = slaveGCPs.get(i)._1;
@@ -353,8 +317,6 @@ public class TileBasedFinal {
 			}
 		}
 		System.out.println("GCPs size" + slaveGCPs.size());
-		// Checks.checkGCPs(gcpsMap, myGCPSelection.getMasterGcpGroup());
-		// //add gcps to the GCPManager
 		for (String name : bandsListGCP.keySet()) {
 			final ProductNodeGroup<Placemark> targetGCPGroup = GCPManager.instance()
 					.getGcpGroup(myGCPSelection.getTargetProduct().getBand(name));
@@ -363,15 +325,16 @@ public class TileBasedFinal {
 				targetGCPGroup.add(p);
 			}
 		}
+		
 		// compute the warp function
-		long startWarpTime = System.currentTimeMillis();
-		System.out.println("start computing warp function");
+		long startWarpTime = System.currentTimeMillis(); //Efi's time-counter
+		//System.out.println("start computing warp function");
 		myWarp.getWarpData();
 		Map<String, WarpData> warpdataMap = new HashMap<String, WarpData>();
 		Product targetProductWarp = myWarp.getTargetProduct();
 		String[] masterBandNamesWarp = StackUtils.getMasterBandNames(targetProductWarp);
 		Set<String> masterBandsWarp = new HashSet(Arrays.asList(masterBandNamesWarp));
-		System.out.println("start computing warp dependent rectangles");
+		//System.out.println("start computing warp dependent rectangles");
 		for (int i = 0; i < targetProductWarp.getNumBands(); i++) {
 			if (masterBandsWarp.contains(targetProductWarp.getBandAt(i).getName()))
 				continue;
@@ -389,11 +352,9 @@ public class TileBasedFinal {
 		Object2ObjectMap<String, Object2ObjectMap<Rectangle, ObjectList<Point>>> dependPointsWarp = new Object2ObjectOpenHashMap<String, Object2ObjectMap<Rectangle, ObjectList<Point>>>();
 
 		TileBasedUtils.getSourceDependWarp(myWarp, warpdataMap, imageMetadata, dependRectsWarp2, dependPointsWarp);
-		Broadcast<Object2ObjectMap<String, Object2ObjectMap<Point, ObjectSet<Rectangle>>>> dependRectsWarpB2 = sc
-				.broadcast(dependRectsWarp2);
-		Broadcast<Object2ObjectMap<String, Object2ObjectMap<Rectangle, ObjectList<Point>>>> dependPointsWarpB = sc
-				.broadcast(dependPointsWarp);
-		System.out.println("start warp");
+		Broadcast<Object2ObjectMap<String, Object2ObjectMap<Point, ObjectSet<Rectangle>>>> dependRectsWarpB2 = sc.broadcast(dependRectsWarp2);
+		Broadcast<Object2ObjectMap<String, Object2ObjectMap<Rectangle, ObjectList<Point>>>> dependPointsWarpB = sc.broadcast(dependPointsWarp);
+		//System.out.println("start warp");
 
 		JavaPairRDD<Tuple2<String, Rectangle>, MyTile> dependentPairsWarp = createstackResults
 				.flatMapToPair((Tuple2<Tuple2<Point, String>, MyTile> pair) -> {
@@ -408,11 +369,8 @@ public class TileBasedFinal {
 					for (Rectangle rect : tuples) {
 						pairs.add(new Tuple2<Tuple2<String, Rectangle>, MyTile>(
 								new Tuple2<String, Rectangle>(pair._1._2, rect), pair._2));
-						// System.out.println(pair._1._2+" "+rect);
 					}
 					}
-					// System.out.println("pairs ok");
-					// System.out.println(System.currentTimeMillis());
 					return pairs;
 				});
 		createstackResults.unpersist();
@@ -482,10 +440,17 @@ public class TileBasedFinal {
 				});
 		List<Tuple2<Tuple2<Point, String>, MyTile>> changeResults = changeDResults.collect();
 		System.out.println("result tiles " + changeResults.size());
-		long endTime = System.currentTimeMillis();
-		long totalTime = endTime - startTime;
+		
+		long endParallelProcessing = System.currentTimeMillis();
+		long durationParallelProcessing = endParallelProcessing - endSerialProcessing;
+		System.out.println(durationParallelProcessing + " ms, for all parallelized procedures.");
+		long durationImageProcessing = endParallelProcessing - startProcessing;
+        System.out.println(durationImageProcessing + " ms, for running all operators serial and parallel. No HDFS. No Write");
 
-		System.out.println("total time " + totalTime);
+//    	long endTime = System.currentTimeMillis(); //Efi's time-counter
+//    	long totalTime = endTime - startProcessing; //Efi's time-counter
+//		System.out.println("total time " + totalTime); //Efi's time-counter
+		
 		Write write = new Write(myChangeDetection.getTargetProduct(), targetFile, "BEAM-DIMAP");
 		for (int i = 0; i < changeResults.size(); i++) {
 			Band targetBand = writeOp.getTargetProduct().getBand(changeResults.get(i)._1._2);
