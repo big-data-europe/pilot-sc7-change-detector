@@ -16,9 +16,6 @@ import javax.media.jai.PlanarImage;
 import javax.media.jai.TiledImage;
 
 import org.esa.snap.core.datamodel.Band;
-import org.esa.snap.core.datamodel.GeoCoding;
-import org.esa.snap.core.datamodel.GeoPos;
-import org.esa.snap.core.datamodel.PixelPos;
 import org.esa.snap.core.datamodel.Product;
 import org.esa.snap.core.datamodel.RasterDataNode;
 import org.esa.snap.core.gpf.Tile;
@@ -76,14 +73,14 @@ public class TestingSubset {
 		}
 		System.out.println(polygon);
         
-		long startTime = System.nanoTime();
+		long startTime = System.currentTimeMillis();
 		
 		MySubset test = new MySubset(readProduct,polygon,"subset");
 		getBufferedImage(test,selectedPolarisations);
 		
-		long stopTime = System.nanoTime();
-		double executionTime = (double) (stopTime - startTime) / 1000000000.0;
-		System.out.println("Time to calculate subset:" + executionTime + "sec");
+		long stopTime = System.currentTimeMillis();
+		long executionTime = stopTime - startTime;
+		System.out.println(executionTime + " ms, to calculate subset");
 	
 		MyWrite writeOp = new MyWrite(test.getTargetProduct(), targetFile, "BEAM-DIMAP");
         writeOp.setId("write");
@@ -95,6 +92,14 @@ public class TestingSubset {
         processor.initOperatorForMultipleBands(writeOp2);
         processor.storeResult(writeOp2);
         
+        //Deleting input!
+        if (sourceFile.exists()) {
+        	sourceFile.delete();
+        	System.out.println("Input-Image deleted succesfully!\n");
+        }
+        else {
+        	System.out.println("Cannot delete Input-Image\n");
+        }
 	}
 	
 	// getBufferedImage needs to take AbstractOperator instead of my Read as first parameter
