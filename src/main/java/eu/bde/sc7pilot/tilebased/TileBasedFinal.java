@@ -75,7 +75,41 @@ public class TileBasedFinal {
 		
 		long endAll = System.currentTimeMillis();
 		long totalAll = endAll - startAll;
-        System.out.println("/n" + totalAll + " ms, for storing to HDFS and running all operators including Write.");
+        System.out.println("\n" + totalAll + " ms, for storing to HDFS and running all operators including Write.\n");
+        
+        File masterDim = new File(args[1]);
+        File masterTiff = new File(args[2]);
+        File slaveDim = new File(args[3]);
+        File slaveTiff = new File(args[4]);
+        if (masterDim.exists()) {
+        	masterDim.delete();
+        	System.out.println(masterDim.getName() + " deleted succesfully!");
+        }
+        else {
+        	System.out.println("Cannot delete: " + masterDim.getName());
+        }
+        if (masterTiff.exists()) {
+        	masterTiff.delete();
+        	System.out.println(masterTiff.getName() + " deleted succesfully!");
+        }
+        else {
+        	System.out.println("Cannot delete: " + masterTiff.getName());
+        }
+        if (slaveDim.exists()) {
+        	slaveDim.delete();
+        	System.out.println(slaveDim.getName() + " deleted succesfully!");
+        }
+        else {
+        	System.out.println("Cannot delete: " + slaveDim.getName());
+        }
+        if (slaveTiff.exists()) {
+        	slaveTiff.delete();
+        	System.out.println(slaveTiff.getName() + " deleted succesfully!");
+        }
+        else {
+        	System.out.println("Cannot delete: " + slaveTiff.getName());
+        }
+        
 	}
 
 	public void processTiles(String hdfsPath, String masterDimFilePath, String masterTiffFilePath, String slaveDimFilePath, String slaveTiffFilePath, String targetPath, int partitionsNumber)
