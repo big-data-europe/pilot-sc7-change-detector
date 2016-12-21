@@ -37,7 +37,15 @@ public class TestingSubset {
 		}
 		
 		String sourceFilePath = args[0] + args[1];
-		String outputFilePath = args[0] + "subset_of_" + args[1];
+		String zipName = "";
+		String[] parts = args[1].split("\\.");
+		if (parts[1].equals("zip")) {
+			zipName = parts[0];
+		}
+		else {
+			System.out.println("Cannot recognize file type");
+		}
+		String outputFilePath = args[0] + "subset_of_" + zipName;
 		File sourceFile = new File(sourceFilePath);
 		File targetFile = new File(outputFilePath);
 		
@@ -92,14 +100,15 @@ public class TestingSubset {
         processor.initOperatorForMultipleBands(writeOp2);
         processor.storeResult(writeOp2);
         
-        //Deleting input!
+        //Deleting input and unwanted output
         if (sourceFile.exists()) {
         	sourceFile.delete();
-        	System.out.println("Input-Image deleted succesfully!\n");
+        	System.out.println("Input-Image deleted succesfully!");
         }
         else {
-        	System.out.println("Cannot delete Input-Image\n");
+        	System.out.println("Cannot delete Input-Image");
         }
+        
 	}
 	
 	// getBufferedImage needs to take AbstractOperator instead of my Read as first parameter
