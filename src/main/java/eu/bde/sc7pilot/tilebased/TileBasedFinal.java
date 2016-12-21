@@ -77,17 +77,18 @@ public class TileBasedFinal {
 		long totalAll = endAll - startAll;
         System.out.println("\n" + totalAll + " ms, for storing to HDFS and running all operators including Write.\n");
         
-        File masterDim = new File(args[1]);
+        //***Deleting unnecessary files***
+//        File masterDim = new File(args[1]);
         File masterTiff = new File(args[2]);
-        File slaveDim = new File(args[3]);
+//        File slaveDim = new File(args[3]);
         File slaveTiff = new File(args[4]);
-        if (masterDim.exists()) {
-        	masterDim.delete();
-        	System.out.println(masterDim.getName() + " deleted succesfully!");
-        }
-        else {
-        	System.out.println("Cannot delete: " + masterDim.getName());
-        }
+//        if (masterDim.exists()) {
+//        	masterDim.delete();
+//        	System.out.println(masterDim.getName() + " deleted succesfully!");
+//        }
+//        else {
+//        	System.out.println("Cannot delete: " + masterDim.getName());
+//        }
         if (masterTiff.exists()) {
         	masterTiff.delete();
         	System.out.println(masterTiff.getName() + " deleted succesfully!");
@@ -95,13 +96,13 @@ public class TileBasedFinal {
         else {
         	System.out.println("Cannot delete: " + masterTiff.getName());
         }
-        if (slaveDim.exists()) {
-        	slaveDim.delete();
-        	System.out.println(slaveDim.getName() + " deleted succesfully!");
-        }
-        else {
-        	System.out.println("Cannot delete: " + slaveDim.getName());
-        }
+//        if (slaveDim.exists()) {
+//        	slaveDim.delete();
+//        	System.out.println(slaveDim.getName() + " deleted succesfully!");
+//        }
+//        else {
+//        	System.out.println("Cannot delete: " + slaveDim.getName());
+//        }
         if (slaveTiff.exists()) {
         	slaveTiff.delete();
         	System.out.println(slaveTiff.getName() + " deleted succesfully!");
@@ -205,7 +206,7 @@ public class TileBasedFinal {
 		myChangeDetection.setSourceProduct(myWarp.getTargetProduct());
 		myChangeDetection.setId("changeD");
 		sp.initOperator(myChangeDetection);
-		File targetFile = new File(targetPath, "changeD-tile-based-tiledImage");
+		File targetFile = new File(targetPath, "SparkChangeDetResult");
 		MyWrite writeOp = new MyWrite(myChangeDetection.getTargetProduct(), targetFile, "BEAM-DIMAP");
 		writeOp.setId("write");
 		sp.initOperator(writeOp);
@@ -361,7 +362,7 @@ public class TileBasedFinal {
 		}
 		
 		// compute the warp function
-		long startWarpTime = System.currentTimeMillis(); //Efi's time-counter
+		//long startWarpTime = System.currentTimeMillis(); //Efi's time-counter
 		//System.out.println("start computing warp function");
 		myWarp.getWarpData();
 		Map<String, WarpData> warpdataMap = new HashMap<String, WarpData>();
@@ -490,6 +491,7 @@ public class TileBasedFinal {
 			Band targetBand = writeOp.getTargetProduct().getBand(changeResults.get(i)._1._2);
 			write.storeTile(targetBand, changeResults.get(i)._2);
 		}
-
+		
+		//sc.close();
 	}
 }
