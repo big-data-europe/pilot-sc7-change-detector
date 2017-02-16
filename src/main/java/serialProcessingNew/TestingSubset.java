@@ -50,9 +50,9 @@ public class TestingSubset {
 		File targetFile = new File(outputFilePath);
 		
 		SerialProcessor processor = new SerialProcessor();
-		String[] selectedPolarisations = null;
+		//String[] selectedPolarisations = null;
 		//String[] selectedPolarisations = {"VH"};
-		//String[] selectedPolarisations= {"VV"};
+		String[] selectedPolarisations= {"VV"};
 		
 		MyRead myRead = new MyRead(sourceFile, "read");
 		processor.getBufferedImage(myRead,selectedPolarisations);
@@ -84,7 +84,7 @@ public class TestingSubset {
 		long startTime = System.currentTimeMillis();
 		
 		MySubset test = new MySubset(readProduct,polygon,"subset");
-		getBufferedImage(test,selectedPolarisations);
+		getBufferedImage(test, selectedPolarisations);
 		
 		long stopTime = System.currentTimeMillis();
 		long executionTime = stopTime - startTime;
@@ -93,12 +93,14 @@ public class TestingSubset {
 		MyWrite writeOp = new MyWrite(test.getTargetProduct(), targetFile, "BEAM-DIMAP");
         writeOp.setId("write");
         processor.initOperatorForMultipleBands(writeOp);
-        processor.storeResult(writeOp);
+        //processor.storeResult(writeOp);
+        processor.myStoreResult(writeOp, selectedPolarisations);
         
         MyWrite writeOp2 = new MyWrite(test.getTargetProduct(), targetFile, "GeoTIFF");
         writeOp2.setId("write");
         processor.initOperatorForMultipleBands(writeOp2);
-        processor.storeResult(writeOp2);
+        //processor.storeResult(writeOp2);
+        processor.myStoreResult(writeOp2, selectedPolarisations);
         
         //Deleting input and unwanted output
         if (sourceFile.exists()) {

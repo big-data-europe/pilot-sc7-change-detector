@@ -398,6 +398,30 @@ public class SerialProcessor {
 			}
 		}
 	}
+	
+	public void myStoreResult(AbstractOperator operator, String[] selectedPolarisations) {
+		Product targetProduct = operator.getTargetProduct();
+		LoopLimits limits = new LoopLimits(targetProduct);
+		int noOfBands = targetProduct.getNumBands();
+		for (int i = 0; i < noOfBands; i++) {
+			Band band = targetProduct.getBandAt(i);
+			if (selectedPolarisations != null) {
+				Set<String> selectedPols = new HashSet(Arrays.asList(Arrays.stream(selectedPolarisations).map(s -> s.toLowerCase()).toArray(String[]::new)));
+				String pol = OperatorUtils.getPolarizationFromBandName(band.getName());
+				if (!selectedPols.contains(pol.toLowerCase()))
+					continue;
+			}
+			for (int tileY = 0; tileY < limits.getNumYTiles(); tileY++) {
+				for (int tileX = 0; tileX < limits.getNumXTiles(); tileX++) {
+					if (band.getClass() == Band.class && band.isSourceImageSet()) {
+						GetTile getTile = new GetTile(band, operator);
+						getTile.computeTile(tileX, tileY);
+					}
+				}
+			}
+		}
+	}
+	
 	public Map<String,List<Tuple2<Point, Tile>>> processTiles2(AbstractOperator operator) {
 		Map<String,List<Tuple2<Point, Tile>>> bandsMap = new HashMap<String,List<Tuple2<Point, Tile>>>();
 
