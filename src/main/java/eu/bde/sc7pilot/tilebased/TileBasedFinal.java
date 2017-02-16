@@ -132,7 +132,8 @@ public class TileBasedFinal {
 		Object2ObjectMap<String, Object2ObjectMap<Point, ObjectList<Tuple2<Point, Rectangle>>>> dependRects = new Object2ObjectOpenHashMap<String, Object2ObjectMap<Point, ObjectList<Tuple2<Point, Rectangle>>>>();
 		
 		SerialProcessor sp = new SerialProcessor();
-		String[] selectedPolarisations = null;
+		//String[] selectedPolarisations = null;
+		String[] selectedPolarisations= {"VV"};
 		Product masterTargetProduct = null;
 		Product slaveTargetProduct = null;
 
