@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import java.awt.image.ColorModel;
 import java.awt.image.SampleModel;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -66,7 +67,27 @@ import scala.Tuple2;
 import scala.Tuple3;
 
 public class TileBasedFinal {
+	
 	public static void main(String[] args) throws Exception {
+		// args[0]: dir in HDFS to store .tiff(s)
+		// args[1]: .dim (master image) local filepath
+		// args[2]: .tiff (master image) local filepath
+		// args[3]: .dim (slave image) local filepath
+		// args[4]: .tiff (slave image) local filepath
+		// args[5]: dir local filepath to write the final result
+		// args[6]: integer defining partition number (8 - 36, preferavly 24)
+		if (args.length < 7) {
+			System.out.println("args[0]: dir in HDFS to store .tiff(s)");
+			System.out.println("args[1]: .dim (master image) local filepath");
+			System.out.println("args[2]: .tiff (master image) local filepath");
+			System.out.println("args[3]: .dim (slave image) local filepath");
+			System.out.println("args[4]: .tiff (slave image) local filepath");
+			System.out.println("args[5]: dir local filepath to write the final result");
+			System.out.println("args[6]: integer defining partition number (8 - 36, preferably 24)");
+			throw new IOException("Error: Invalid Args");
+			
+		}
+		
 		TileBasedFinal parallelTiles = new TileBasedFinal();
 		
 		long startAll = System.currentTimeMillis();
