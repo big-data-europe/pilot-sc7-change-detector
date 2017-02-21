@@ -7,35 +7,34 @@ import org.esa.snap.core.datamodel.Band;
 import org.esa.snap.core.datamodel.Product;
 import org.esa.snap.core.datamodel.VirtualBand;
 import org.esa.snap.core.gpf.OperatorException;
-import org.esa.snap.core.gpf.OperatorSpi;
 import org.esa.snap.core.util.ProductUtils;
 import org.esa.snap.engine_utilities.gpf.OperatorUtils;
 
-public class MyBandSelect extends AbstractOperator{
+public class MyBandSelect extends AbstractOperator {
+	
     private Product sourceProduct;
     private String[] selectedPolarisations;
     private String[] sourceBandNames;
-
     private String bandNamePattern;
 
   public MyBandSelect(String[] selectedPolarisations,String[] sourceBandNames) {
-	this.selectedPolarisations=selectedPolarisations;
-	this.sourceBandNames=sourceBandNames;
-}
+	  
+	this.selectedPolarisations = selectedPolarisations;
+	this.sourceBandNames = sourceBandNames;
+  }
+  
     @Override
     public void initialize() throws OperatorException {
 
         try {
-            targetProduct = new Product(sourceProduct.getName(),
-                    sourceProduct.getProductType(),
-                    sourceProduct.getSceneRasterWidth(),
-                    sourceProduct.getSceneRasterHeight());
-
+            targetProduct = new Product(sourceProduct.getName(), 
+            		sourceProduct.getProductType(),
+            		sourceProduct.getSceneRasterWidth(),
+            		sourceProduct.getSceneRasterHeight());
             ProductUtils.copyProductNodes(sourceProduct, targetProduct);
-
             addSelectedBands();
-
-        } catch (Throwable e) {
+        } 
+        catch (Throwable e) {
             OperatorUtils.catchOperatorException(getId(), e);
         }
     }

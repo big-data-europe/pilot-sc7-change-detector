@@ -70,8 +70,7 @@ public class MyCalibration extends AbstractOperator {
             ((MyBaseCalibrator) calibrator).setOriginalImages(originalImages);
             if (calibrator instanceof MySentinel1Calibrator) {
                 MySentinel1Calibrator cal = (MySentinel1Calibrator) calibrator;
-                cal.setUserSelections(sourceProduct,
-                        selectedPolarisations, outputSigmaBand, outputGammaBand, outputBetaBand, outputDNBand);
+                cal.setUserSelections(sourceProduct, selectedPolarisations, outputSigmaBand, outputGammaBand, outputBetaBand, outputDNBand);
             }
             targetProduct = calibrator.createTargetProduct(sourceProduct, sourceBandNames);
             calibrator.initialize(this, sourceProduct, targetProduct, false, true);

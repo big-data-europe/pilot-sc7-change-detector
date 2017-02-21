@@ -63,7 +63,7 @@ public class SerialProcessor {
 
     public void processImages(File masterFile, File slaveFile, File targetFile) throws IOException {
 
-        String[] selectedPolarisations = null;
+    	String[] selectedPolarisations= {"VV"};
         MyRead myRead1 = new MyRead(masterFile, "read1");
         getBufferedImage(myRead1, selectedPolarisations);
 

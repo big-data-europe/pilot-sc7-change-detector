@@ -84,7 +84,7 @@ public class ZipHandler2 {
     }
 
     public Product findTargetProduct(String zipLocalFilePath) {
-        System.out.println("~~~ Initiating Extract TP ~~~");
+        System.out.println("Extracting TargetProduct...");
         File zipFile = new File(zipLocalFilePath);
         MyRead myRead = null;
         Product targetProduct = null;

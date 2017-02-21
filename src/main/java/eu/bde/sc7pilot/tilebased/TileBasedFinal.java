@@ -31,6 +31,7 @@ import org.esa.snap.core.datamodel.Product;
 import org.esa.snap.core.datamodel.ProductNodeGroup;
 import org.esa.snap.core.image.ImageManager;
 import org.esa.snap.core.util.ImageUtils;
+import org.esa.snap.engine_utilities.gpf.OperatorUtils;
 import org.esa.snap.engine_utilities.gpf.StackUtils;
 
 import com.google.common.collect.Lists;
@@ -161,6 +162,13 @@ public class TileBasedFinal {
 		masterTargetProduct = zipHandler.findTargetProduct(masterDimFilePath);
 		for (int i = 0; i < masterTargetProduct.getNumBands(); i++) {
 			Band band = masterTargetProduct.getBandAt(i);
+			if (selectedPolarisations != null) {
+                Set<String> selectedPols = new HashSet(Arrays.asList(Arrays.stream(selectedPolarisations).map(s -> s.toLowerCase()).toArray(String[]::new)));
+                String pol = OperatorUtils.getPolarizationFromBandName(band.getName());
+                if (!selectedPols.contains(pol.toLowerCase())) {
+                	continue;
+                }
+			}
 			if (band.getClass() == Band.class) {
 				BandInfo bandInfo = new BandInfo(masterTiffInHDFS, i, 0);
 				bandInfos.put(band.getName() + "_read1", bandInfo);
@@ -171,6 +179,13 @@ public class TileBasedFinal {
 		slaveTargetProduct = zipHandler.findTargetProduct(slaveDimFilePath);
 		for (int i = 0; i < slaveTargetProduct.getNumBands(); i++) {
 			Band band = slaveTargetProduct.getBandAt(i);
+			if (selectedPolarisations != null) {
+                Set<String> selectedPols = new HashSet(Arrays.asList(Arrays.stream(selectedPolarisations).map(s -> s.toLowerCase()).toArray(String[]::new)));
+                String pol = OperatorUtils.getPolarizationFromBandName(band.getName());
+                if (!selectedPols.contains(pol.toLowerCase())) {
+                	continue;
+                }
+			}
 			if (band.getClass() == Band.class) {
 				BandInfo bandInfo = new BandInfo(slaveTiffInHDFS, i, 0);
 				bandInfos.put(band.getName() + "_read2", bandInfo);
@@ -185,13 +200,13 @@ public class TileBasedFinal {
 		bandselect2.setSourceProduct(slaveTargetProduct);
 		sp.initOperator(bandselect2);
 
-		Boolean[] bParams1 = { false, false, false, false, true, false, false, false };
-		MyCalibration myCalibration1 = new MyCalibration(null, bParams1, null);
+		Boolean[] bParams1 = {false, false, false, false, true, false, false, false};
+		MyCalibration myCalibration1 = new MyCalibration(null, bParams1, selectedPolarisations);
 		myCalibration1.setSourceProduct(bandselect1.getTargetProduct());
 		myCalibration1.setId("cal1");
 		sp.initOperator(myCalibration1);
 
-		MyCalibration myCalibration2 = new MyCalibration(null, bParams1, null);
+		MyCalibration myCalibration2 = new MyCalibration(null, bParams1, selectedPolarisations);
 		myCalibration2.setSourceProduct(bandselect2.getTargetProduct());
 		myCalibration2.setId("cal2");
 		sp.initOperator(myCalibration2);
@@ -206,10 +221,10 @@ public class TileBasedFinal {
 		myCreateStack.setId("stack");
 		sp.initOperator(myCreateStack);
 
-		boolean[] bParams = { false, false, false, false };
-		int[] iParams = { 2000, 10, 3 };
-		double[] dParams = { 0.25, 0.6 };
-		String[] sParams = { "128", "128", "4", "4", "32", "32" };
+		boolean[] bParams = {false, false, false, false};
+		int[] iParams = {2000, 10, 3};
+		double[] dParams = {0.25, 0.6};
+		String[] sParams = {"128", "128", "4", "4", "32", "32"};
 		GCPMetadata GCPMetadata = new GCPMetadata(bParams, dParams, iParams, sParams);
 		MyGCPSelection myGCPSelection = new MyGCPSelection(bParams, dParams, iParams, sParams);
 		myGCPSelection.setSourceProduct(myCreateStack.getTargetProduct());
@@ -228,6 +243,7 @@ public class TileBasedFinal {
 		myChangeDetection.setSourceProduct(myWarp.getTargetProduct());
 		myChangeDetection.setId("changeD");
 		sp.initOperator(myChangeDetection);
+		
 		File targetFile = new File(targetPath, "SparkChangeDetResult");
 		MyWrite writeOp = new MyWrite(myChangeDetection.getTargetProduct(), targetFile, "BEAM-DIMAP");
 		writeOp.setId("write");
@@ -296,28 +312,28 @@ public class TileBasedFinal {
 					return CalibrationMappers.calibrationMaster(iterator, bandInfosB.getValue(),
 							imgMetadataB.getValue(), calMetadataB.getValue());
 				}).cache();
+		
 		JavaPairRDD<String, MyTile> slaveRastersCal = slaveRastersRdd
 				.mapPartitionsToPair((Iterator<Tuple2<String, Point>> iterator) -> {
 					return CalibrationMappers.calibrationSlave(iterator, bandInfosB.getValue(), imgMetadataB.getValue(),
 							calMetadataB.getValue());
 				});
+		
 		JavaPairRDD<Tuple3<Point, String, Rectangle>, MyTile> dependentPairs = slaveRastersCal
 				.flatMapToPair((Tuple2<String, MyTile> pair) -> {
 					ImageMetadata srcImgMetadataStack = imgMetadataB.getValue().get(pair._1 + "_" + "stack");
 					List<Tuple2<Tuple3<Point, String, Rectangle>, MyTile>> pairs = new ArrayList<Tuple2<Tuple3<Point, String, Rectangle>, MyTile>>();
-					Object2ObjectMap<String, Object2ObjectMap<Point, ObjectList<Tuple2<Point, Rectangle>>>> dependRectsMap = dependRectsB
-							.getValue();
-					Object2ObjectMap<Point, ObjectList<Tuple2<Point, Rectangle>>> dependRectangles = dependRectsMap
-							.get(pair._1);
+					Object2ObjectMap<String, Object2ObjectMap<Point, ObjectList<Tuple2<Point, Rectangle>>>> dependRectsMap = dependRectsB.getValue();
+					Object2ObjectMap<Point, ObjectList<Tuple2<Point, Rectangle>>> dependRectangles = dependRectsMap.get(pair._1);
 					Point sourcePoint = srcImgMetadataStack.getTileIndices(pair._2.getMinX(), pair._2.getMinY());
 					List<Tuple2<Point, Rectangle>> tuples = dependRectangles.get(sourcePoint);
-					if(tuples!=null){
+					if(tuples!=null) {
 					for (Tuple2<Point, Rectangle> tuple : tuples)
-						pairs.add(new Tuple2<Tuple3<Point, String, Rectangle>, MyTile>(
-								new Tuple3<Point, String, Rectangle>(tuple._1(), pair._1(), tuple._2()), pair._2));
+						pairs.add(new Tuple2<Tuple3<Point, String, Rectangle>, MyTile>(new Tuple3<Point, String, Rectangle>(tuple._1(), pair._1(), tuple._2()), pair._2));
 					}
 					return pairs;
 				});
+		
 		JavaPairRDD<Tuple2<Point, String>, MyTile> createstackResults = dependentPairs.groupByKey()
 				.mapToPair((Tuple2<Tuple3<Point, String, Rectangle>, Iterable<MyTile>> pair) -> {
 					return CreateStackMappers.createStack(pair, imgMetadataB.getValue());
