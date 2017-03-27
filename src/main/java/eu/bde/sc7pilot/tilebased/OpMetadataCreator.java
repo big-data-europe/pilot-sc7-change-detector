@@ -11,6 +11,7 @@ import org.esa.snap.core.datamodel.Band;
 import org.esa.snap.core.datamodel.Product;
 import org.esa.snap.core.datamodel.TiePointGeoCoding;
 import org.esa.snap.engine_utilities.datamodel.Unit;
+import org.esa.snap.engine_utilities.gpf.OperatorUtils;
 import org.esa.snap.engine_utilities.gpf.StackUtils;
 
 import eu.bde.sc7pilot.taskbased.AbstractOperator;
@@ -36,9 +37,17 @@ public class OpMetadataCreator {
 	public void createOpImgMetadata(Map<String, ImageMetadata> imageMetadata,AbstractOperator operator){
 		createOpImgMetadata(imageMetadata,operator,false);
 	}
-	public void createProdImgMetadata(Map<String, ImageMetadata> imageMetadata,Product targetProduct,String id){
+	public void createProdImgMetadata(Map<String, ImageMetadata> imageMetadata, Product targetProduct, String id, String[] selectedPolarisations) {
+		int numOfBands = targetProduct.getNumBands();
 		for (int i = 0; i < targetProduct.getNumBands(); i++) {
 			Band targetBand = targetProduct.getBandAt(i);
+            if (selectedPolarisations != null) {
+                Set<String> selectedPols = new HashSet(Arrays.asList(Arrays.stream(selectedPolarisations).map(s -> s.toLowerCase()).toArray(String[]::new)));
+                String pol = OperatorUtils.getPolarizationFromBandName(targetBand.getName());
+                if (!selectedPols.contains(pol.toLowerCase())) {
+                    continue;
+                }
+            }
 			if(targetBand.getClass()!=Band.class)
 				continue;
 			ImageMetadata trgImageMetadata = getImageMetadata(targetBand,null);
@@ -53,6 +62,7 @@ public class OpMetadataCreator {
 		Map<Product, int[]> slaveOffsetMap =null;
 		if(slaveOffsetIsNeeded)
 			slaveOffsetMap = ((MyCreateStack) operator).getSlaveOffsettMap();
+		int numOfBands = targetProduct.getNumBands();
 		for (int i = 0; i < targetProduct.getNumBands(); i++) {
 			Band targetBand = targetProduct.getBandAt(i);
 			if (masterBands.contains(targetBand.getName())) {
@@ -89,13 +99,11 @@ public class OpMetadataCreator {
 	public void createCalImgMetadata(Map<String, ImageMetadata> imageMetadata,MyCalibration myCalibration,Map<String, CalibrationMetadata> calMetadata,Boolean[] bParams1) {
 		Product targetProduct = myCalibration.getTargetProduct();
 		Product sourceProduct = myCalibration.getSourceProduct();
+		int numOfBands = targetProduct.getNumBands();
 		for (int i = 0; i < targetProduct.getNumBands(); i++) {
-			HashMap<String, String[]> targetBandNameToSourceBandName = ((MySentinel1Calibrator) myCalibration
-					.getCalibrator()).getTargetBandNameToSourceBandName();
+			HashMap<String, String[]> targetBandNameToSourceBandName = ((MySentinel1Calibrator) myCalibration.getCalibrator()).getTargetBandNameToSourceBandName();
 			Band targetBandCal = targetProduct.getBandAt(i);
-
-			Band sourceBandCal = sourceProduct
-					.getBand(targetBandNameToSourceBandName.get(targetBandCal.getName())[0]);
+			Band sourceBandCal = sourceProduct.getBand(targetBandNameToSourceBandName.get(targetBandCal.getName())[0]);
 			ImageMetadata trgImageMetadataCal = getImageMetadata(targetBandCal,sourceBandCal.getName());
 			ImageMetadata srcImageMetadataCal = getImageMetadata(sourceBandCal,targetBandCal.getName());
 

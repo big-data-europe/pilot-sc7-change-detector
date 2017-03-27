@@ -90,29 +90,30 @@ private synchronized void createDEM() {
     dem = demDescriptor.createDem(ResamplingFactory.createResampling(ResamplingFactory.NEAREST_NEIGHBOUR_NAME));
 }
 
-	public Placemark computeSlaveGCP(Placemark mPin, PixelPos sGCPPixelPos)
-			{
-
+	public Placemark computeSlaveGCP(Placemark mPin, PixelPos sGCPPixelPos) {
 		final GeoPos mGCPGeoPos = mPin.getGeoPos();
 		final PixelPos mGCPPixelPos = mPin.getPixelPos();
 		Boolean getSlaveGCP = getCoarseSlaveGCPPosition(mGCPPixelPos, sGCPPixelPos);
-		 Placemark sPin = null;
-		 if (!getSlaveGCP)
-			sPin =null;
-		else{
-			sPin = Placemark.createPointPlacemark(GcpDescriptor.getInstance(), mPin.getName(),
-					mPin.getLabel(), mPin.getDescription(), sGCPPixelPos, mGCPGeoPos, tgtGeoCoding);
+		Placemark sPin = null;
+		if (!getSlaveGCP)
+			sPin = null;
+		else {
+			sPin = Placemark.createPointPlacemark(GcpDescriptor.getInstance(),
+												mPin.getName(),
+												mPin.getLabel(),
+												mPin.getDescription(),
+												sGCPPixelPos,
+												mGCPGeoPos,
+												tgtGeoCoding);
 			if (!checkSlaveGCPValidity(sGCPPixelPos)) {
 	            //System.out.println("GCP(" + i + ") is outside slave image.");
-				sPin =null;
+				sPin = null;
 	        }
 			
 		}
 		return sPin;
-//		else{
 //			System.out.println("gcp "+sPin.getPixelPos()+" out of bounds!!!");
-//		}
-		
+	
 	}
 
 	private Boolean getCoarseSlaveGCPPosition(final PixelPos mGCPPixelPos, final PixelPos sGCPPixelPos) {

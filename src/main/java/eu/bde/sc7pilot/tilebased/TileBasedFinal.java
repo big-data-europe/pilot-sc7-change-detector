@@ -76,7 +76,7 @@ public class TileBasedFinal {
 		// args[3]: .dim (slave image) local filepath
 		// args[4]: .tiff (slave image) local filepath
 		// args[5]: dir local filepath to write the final result
-		// args[6]: integer defining partition number (8 - 36, preferavly 24)
+		// args[6]: integer defining partition number (8 - 36, preferably 24)
 		if (args.length < 7) {
 			System.out.println("args[0]: dir in HDFS to store .tiff(s)");
 			System.out.println("args[1]: .dim (master image) local filepath");
@@ -112,7 +112,7 @@ public class TileBasedFinal {
 //        	System.out.println("Cannot delete: " + masterDim.getName());
 //        }
         if (masterTiff.exists()) {
-        	masterTiff.delete();
+        	//masterTiff.delete();
         	System.out.println(masterTiff.getName() + " deleted succesfully!");
         }
         else {
@@ -126,7 +126,7 @@ public class TileBasedFinal {
 //        	System.out.println("Cannot delete: " + slaveDim.getName());
 //        }
         if (slaveTiff.exists()) {
-        	slaveTiff.delete();
+        	//slaveTiff.delete();
         	System.out.println(slaveTiff.getName() + " deleted succesfully!");
         }
         else {
@@ -139,10 +139,12 @@ public class TileBasedFinal {
 			throws Exception {
 		//***Storing tiffs to HDFS***
 		ZipHandler2 zipHandler = new ZipHandler2();
-		String masterTiffInHDFS = zipHandler.tiffLocalToHDFS(masterTiffFilePath, hdfsPath);
-		System.out.println(masterTiffInHDFS);
-		String slaveTiffInHDFS = zipHandler.tiffLocalToHDFS(slaveTiffFilePath, hdfsPath);
-		System.out.println(slaveTiffInHDFS);
+//		String masterTiffInHDFS = zipHandler.tiffLocalToHDFS(masterTiffFilePath, hdfsPath);
+//		System.out.println(masterTiffInHDFS);
+//		String slaveTiffInHDFS = zipHandler.tiffLocalToHDFS(slaveTiffFilePath, hdfsPath);
+//		System.out.println(slaveTiffInHDFS);
+		String masterTiffInHDFS = "/media/indiana/data/imgs/subseting/subsets-for-ttesting-cd/subset_of_S1A_S6_GRDH_1SDV_20160815T214331_20160815T214400_012616_013C9D_2495.tif";
+		String slaveTiffInHDFS = "/media/indiana/data/imgs/subseting/subsets-for-ttesting-cd/subset_of_S1A_S6_GRDH_1SDV_20160908T214332_20160908T214401_012966_014840_ABDC.tif";
 		
 		System.out.println("Serial Processing to acquire metadata...");
 		long startProcessing = System.currentTimeMillis();
@@ -254,8 +256,8 @@ public class TileBasedFinal {
 		OpMetadataCreator opMetadataCreator = new OpMetadataCreator();
 		Object2ObjectMap<String, CalibrationMetadata> calMetadata = new Object2ObjectOpenHashMap<String, CalibrationMetadata>(myCalibration1.getTargetProduct().getNumBands() * 4);
 		// read metadata.
-		opMetadataCreator.createProdImgMetadata(imageMetadata, masterTargetProduct, "read1");
-		opMetadataCreator.createProdImgMetadata(imageMetadata, slaveTargetProduct, "read2");
+		opMetadataCreator.createProdImgMetadata(imageMetadata, masterTargetProduct, "read1", selectedPolarisations);
+		opMetadataCreator.createProdImgMetadata(imageMetadata, slaveTargetProduct, "read2", selectedPolarisations);
 		// calibration1 metadata.
 		opMetadataCreator.createCalImgMetadata(imageMetadata, myCalibration1, calMetadata, bParams1);
 		// calibration2 metadata.
@@ -281,7 +283,8 @@ public class TileBasedFinal {
 		System.out.println("Parallel Processing using Spark...");		
 
 		//***Parallel Processing using Spark***
-		SparkConf conf = new SparkConf().set("spark.driver.maxResultSize", "5g").setAppName("Parallelized Operators in Spark");
+		SparkConf conf = new SparkConf().setMaster("local[*]").setAppName("Parallelized at local mode"); //everywhere EXCEPT cluster
+		//SparkConf conf = new SparkConf().set("spark.driver.maxResultSize", "5g").setAppName("Parallelized Operators in Spark");
 
 		/* configure spark to use Kryo serializer instead of the java serializer. */
 		/* All classes that should be serialized by kryo, are registered in MyRegitration class */
@@ -364,8 +367,7 @@ public class TileBasedFinal {
 		JavaPairRDD<Tuple2<Integer, String>, Iterable<MyTile>> stacktilesRows = createstackResultsRows.groupByKey();
 		List<Tuple2<String, Tuple2<Integer, Placemark>>> slaveGCPs = masterRows.join(stacktilesRows)
 				.flatMap((Tuple2<Tuple2<Integer, String>, Tuple2<Iterable<MyTile>, Iterable<MyTile>>> pair) -> {
-					return GCPMappers.GCPSelection(pair, GCPMetadataBroad.getValue(), imgMetadataB.getValue(),
-							masterGcps.getValue(), rows.getValue());
+					return GCPMappers.GCPSelection(pair, GCPMetadataBroad.getValue(), imgMetadataB.getValue(), masterGcps.getValue(), rows.getValue());
 				}).collect();
 		if(slaveGCPs.isEmpty())
 		{

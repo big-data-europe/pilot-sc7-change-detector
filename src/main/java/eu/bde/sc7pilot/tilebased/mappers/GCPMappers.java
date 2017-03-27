@@ -24,7 +24,11 @@ import scala.Tuple2;
 
 public class GCPMappers {
 
-	public static List<Tuple2<String, Tuple2<Integer, Placemark>>> GCPSelection(Tuple2<Tuple2<Integer, String>, Tuple2<Iterable<MyTile>, Iterable<MyTile>>> pair,GCPMetadata GCPMetadataBroad2,Map<String, ImageMetadata> map,ProductNodeGroup<Placemark> masterGcpGroup,int rowsCount) {
+	public static List<Tuple2<String, Tuple2<Integer, Placemark>>> GCPSelection(Tuple2<Tuple2<Integer, String>, Tuple2<Iterable<MyTile>, Iterable<MyTile>>> pair,
+																				GCPMetadata GCPMetadataBroad2,
+																				Map<String, ImageMetadata> map,
+																				ProductNodeGroup<Placemark> masterGcpGroup,
+																				int rowsCount) {
 		List<MyTile> masterTiles = Lists.newArrayList(pair._2._1.iterator());
 		List<MyTile> slaveTiles = Lists.newArrayList(pair._2._2.iterator());
 		int x = masterTiles.get(0).getMinX();
@@ -50,8 +54,8 @@ public class GCPMappers {
 		WritableRaster masterRaster = Utils.createWritableRaster(new Rectangle(x, y, width, height), type);
 		for (int i = 0; i < masterTiles.size(); i++) {
 			masterRaster.setDataElements(masterTiles.get(i).getMinX(), masterTiles.get(i).getMinY(),
-					masterTiles.get(i).getWidth(), masterTiles.get(i).getHeight(),
-					masterTiles.get(i).getRawSamples().getElems());
+										masterTiles.get(i).getWidth(), masterTiles.get(i).getHeight(),
+										masterTiles.get(i).getRawSamples().getElems());
 		}
 		x = slaveTiles.get(0).getMinX();
 		y = slaveTiles.get(0).getMinY();
@@ -74,14 +78,14 @@ public class GCPMappers {
 		}
 		WritableRaster slaveRaster = Utils.createWritableRaster(new Rectangle(x, y, width, height), type);
 		for (int i = 0; i < slaveTiles.size(); i++) {
-			slaveRaster.setDataElements(slaveTiles.get(i).getMinX(), slaveTiles.get(i).getMinY(),
-					slaveTiles.get(i).getWidth(), slaveTiles.get(i).getHeight(),
-					slaveTiles.get(i).getRawSamples().getElems());
+			slaveRaster.setDataElements(slaveTiles.get(i).getMinX(),
+										slaveTiles.get(i).getMinY(),
+										slaveTiles.get(i).getWidth(),
+										slaveTiles.get(i).getHeight(),
+										slaveTiles.get(i).getRawSamples().getElems());
 		}
-		MyTile masterTile = new MyTile(masterRaster,
-				new Rectangle(x, y, masterRaster.getWidth(), masterRaster.getHeight()), type);
-		MyTile slaveTile = new MyTile(slaveRaster,
-				new Rectangle(x, y, slaveRaster.getWidth(), slaveRaster.getHeight()), type);
+		MyTile masterTile = new MyTile(masterRaster, new Rectangle(x, y, masterRaster.getWidth(), masterRaster.getHeight()), type);
+		MyTile slaveTile = new MyTile(slaveRaster, new Rectangle(x, y, slaveRaster.getWidth(), slaveRaster.getHeight()), type);
 
 		List<Tuple2<String, Tuple2<Integer, Placemark>>> slaveGCPsRes = new ArrayList<Tuple2<String, Tuple2<Integer, Placemark>>>();
 		final int numberOfMasterGCPs = masterGcpGroup.getNodeCount();
@@ -89,14 +93,15 @@ public class GCPMappers {
 		ImageMetadata trgImgMetadataGCP = map.get(pair._1._2 +"_gcp"+ "_target");
 		ImageMetadata srcImgMetadataGCP = map.get(pair._1._2 +"_gcp"+ "_source");
 
-		int[] iParams2 = { Integer.parseInt(GCPMetadataBroad2.getCoarseRegistrationWindowWidth()),
-				Integer.parseInt(GCPMetadataBroad2.getCoarseRegistrationWindowHeight()),
-				GCPMetadataBroad2.getMaxIteration(),
-				Integer.parseInt(GCPMetadataBroad2.getRowInterpFactor()),
-				Integer.parseInt(GCPMetadataBroad2.getColumnInterpFactor()),
-				srcImgMetadataGCP.getImageWidth(), srcImgMetadataGCP.getImageHeight() };
-		double[] dParams3 = { GCPMetadataBroad2.getGcpTolerance(), trgImgMetadataGCP.getNoDataValue(),
-				srcImgMetadataGCP.getNoDataValue() };
+		int[] iParams2 = {Integer.parseInt(GCPMetadataBroad2.getCoarseRegistrationWindowWidth()),
+							Integer.parseInt(GCPMetadataBroad2.getCoarseRegistrationWindowHeight()),
+							GCPMetadataBroad2.getMaxIteration(),
+							Integer.parseInt(GCPMetadataBroad2.getRowInterpFactor()),
+							Integer.parseInt(GCPMetadataBroad2.getColumnInterpFactor()),
+							srcImgMetadataGCP.getImageWidth(),
+							srcImgMetadataGCP.getImageHeight()
+							};
+		double[] dParams3 = {GCPMetadataBroad2.getGcpTolerance(), trgImgMetadataGCP.getNoDataValue(), srcImgMetadataGCP.getNoDataValue()};
 
 		final int[] offset2 = new int[2];
 		// long startgcpTime = System.currentTimeMillis();
@@ -110,35 +115,38 @@ public class GCPMappers {
 			bHeight = bHeight - (int) (2 * tileHeight);
 		else if (pair._1._1 == 1)
 			bHeight = bHeight - (int) tileHeight;
-		Rectangle bounds = new Rectangle((int) masterTile.getRectangle().getMinX(), bMinY,
-				(int) masterTile.getRectangle().getWidth(), bHeight);
+		Rectangle bounds = new Rectangle((int) masterTile.getRectangle().getMinX(), bMinY, (int) masterTile.getRectangle().getWidth(), bHeight);
 		GeoCoding geoCoding=trgImgMetadataGCP.getGeoCoding();
-		if(geoCoding==null)
-			geoCoding=new TiePointGeoCoding(trgImgMetadataGCP.getLatGrid(),trgImgMetadataGCP.getLonGrid());
+		if(geoCoding == null)
+			geoCoding = new TiePointGeoCoding(trgImgMetadataGCP.getLatGrid(),trgImgMetadataGCP.getLonGrid());
+		int fails1 = 0;
+		int fails2 = 0;
+		int iters = 0;
+		
 		for (int i = 0; i < numberOfMasterGCPs; i++) {
+			iters++;
 			final Placemark mPin = masterGcpGroup.get(i);
-
-			final PixelPos sGCPPixelPos = new PixelPos(mPin.getPixelPos().x + offset2[0],
-					mPin.getPixelPos().y + offset2[1]);
-
+			final PixelPos sGCPPixelPos = new PixelPos(mPin.getPixelPos().x + offset2[0], mPin.getPixelPos().y + offset2[1]);
 			if (bounds.contains(new Point((int) sGCPPixelPos.x, (int) sGCPPixelPos.y))) {
-				GCPSelection GCPSelection = new GCPSelection(iParams2, dParams3,
-						geoCoding, masterTile, slaveTile);
+				fails2++;
+				GCPSelection GCPSelection = new GCPSelection(iParams2, dParams3, geoCoding, masterTile, slaveTile);
 				try {
-					if (GCPSelection.checkMasterGCPValidity(mPin)
-							&& GCPSelection.checkSlaveGCPValidity(sGCPPixelPos)) {
+					if (GCPSelection.checkMasterGCPValidity(mPin) && GCPSelection.checkSlaveGCPValidity(sGCPPixelPos)) {
+						fails1++;
 						Placemark sPin = GCPSelection.computeSlaveGCP(mPin, sGCPPixelPos);
 
 						if (sPin != null)
 							slaveGCPsRes.add(new Tuple2<String, Tuple2<Integer, Placemark>>(pair._1._2, new Tuple2<Integer, Placemark>(i, sPin)));
 					}
-				} catch (Exception e) {
+				}
+				catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
 			}
 		}
+		System.out.println(fails1);
 		slaveRaster=null;
 		masterRaster=null;
 		masterTile=null;
