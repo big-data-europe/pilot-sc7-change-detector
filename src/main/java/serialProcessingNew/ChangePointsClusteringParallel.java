@@ -100,8 +100,7 @@ public class ChangePointsClusteringParallel implements Serializable {
 		System.out.println("createArrayTime "+(createArrayTime-bandTime));
 		//threshold, eps, minPTS
 //		SparkConf config = new SparkConf().setMaster("local[2]").setAppName("Img process per node"); //everywhere EXCEPT cluster
-//		SparkConf config = new SparkConf().setMaster("local[2]").setAppName("Img process per node"); //everywhere EXCEPT cluster
-		SparkConf config = new SparkConf().setAppName("Img process per node"); //ONLY in cluster
+		SparkConf config = new SparkConf().setAppName("Parallel DBScan in Spark"); //ONLY in clusters
 		//configure spark to use Kryo serializer instead of the java serializer. 
 		//All classes that should be serialized by kryo, are registered in MyRegitration class .
 		config.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer");
