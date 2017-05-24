@@ -20,8 +20,9 @@ import scala.Tuple2;
 public class CalibrationMappers {
 
 	public static List<Tuple2<Tuple2<Point, String>, MyTile>> calibrationMaster(Iterator<Tuple2<String, Point>> iterator,
-			Map<String, BandInfo> infos, Map<String, ImageMetadata> map,
-			Map<String, CalibrationMetadata> calMetadataMap) {
+																				Map<String, BandInfo> infos,
+																				Map<String, ImageMetadata> map,
+																				Map<String, CalibrationMetadata> calMetadataMap) {
 		List<Tuple2<Tuple2<Point, String>, MyTile>> tiles = new ArrayList<Tuple2<Tuple2<Point, String>, MyTile>>();
 		List<Tuple2<String, Point>> points = Lists.newArrayList(iterator);
 		Map<String, ReadHDFSTile> bands = new HashMap<String, ReadHDFSTile>();
@@ -41,18 +42,59 @@ public class CalibrationMappers {
 
 			ImageMetadata imgMetadataRead = map.get(tuple._1 + "_" + "read1");
 			MyTile readTile = new MyTile(imgMetadataRead.getWritableRaster(tuple._2.x, tuple._2.y),
-					imgMetadataRead.getRectangle(tuple._2.x, tuple._2.y), imgMetadataRead.getDataType());
+												imgMetadataRead.getRectangle(tuple._2.x, tuple._2.y),
+												imgMetadataRead.getDataType());
 			readHDFSTile.readTile(readTile, infos.get(tuple._1 + "_" + "read1"));
 
 			Point targetPoint = tuple._2;
 			CalibrationMetadata calMeatadata = calMetadataMap.get(tuple._1 + "_" + "cal1");
 			Sentinel1Calibrator sentinel1Calibrator = new Sentinel1Calibrator(calMeatadata);
 			MyTile targetTile = new MyTile(trgImgMetadataCal1.getWritableRaster(targetPoint.x, targetPoint.y),
-					trgImgMetadataCal1.getRectangle(targetPoint.x, targetPoint.y), trgImgMetadataCal1.getDataType());
-			sentinel1Calibrator.computeTile(readTile, null, targetTile, srcImgMetadataCal1.getNoDataValue(),
-					trgImgMetadataCal1.getBandName());
-			tiles.add(new Tuple2<Tuple2<Point, String>, MyTile>(
-					new Tuple2<Point, String>(targetPoint, trgImgMetadataCal1.getBandName()), targetTile));
+													trgImgMetadataCal1.getRectangle(targetPoint.x, targetPoint.y),
+													trgImgMetadataCal1.getDataType());
+			
+			//*** Monitoring targetTile before computetile
+			int m = 0;
+			float[] targetTileBufferBefore = targetTile.getDataBufferFloat();
+			for(int j = 0; j < targetTileBufferBefore.length; j++) {
+				if (targetTileBufferBefore[j] == 0.0) {
+					m++;
+				}
+			}
+			System.out.println("\n\n\t\t************************");
+			System.out.println(targetTileBufferBefore.length + "\t\tPixels in targetTileBefore No.:\t" + i);
+			System.out.println("\t" + m + " of them are ZEROW\n\n");
+			//~~~ Monitoring targetTile before computetile
+			
+			sentinel1Calibrator.computeTile(readTile, null, targetTile, srcImgMetadataCal1.getNoDataValue(), trgImgMetadataCal1.getBandName());
+			
+			//*** Monitoring targetTile after computetile
+			int l = 0;
+			float[] targetTileBuffer = targetTile.getDataBufferFloat();
+			for(int j = 0; j < targetTileBuffer.length; j++) {
+				if (targetTileBuffer[j] == 0.0) {
+					l++;
+				}
+			}
+			System.out.println(targetTileBuffer.length + "\t\tPixels in targetTile No.:\t" + i);
+			System.out.println("\t" + l + " of them are ZEROW");
+			System.out.println("***************************************************************\n\n\n");
+			//~~~ Monitoring targetTile after computetile
+			
+			tiles.add(new Tuple2<Tuple2<Point, String>, MyTile>(new Tuple2<Point, String>(targetPoint, trgImgMetadataCal1.getBandName()), targetTile));
+			//int k = 0;
+			
+//			float[] readTileBuffer = readTile.getDataBufferFloat();
+//			if(readTileBuffer == null) {
+//				System.out.println(readTileBuffer + "\tIs the readTileBuffer");
+//			}
+//			else {
+//				for(int m = 0; m < 100; m++) {
+//					System.out.println(readTileBuffer[m]);
+//					System.out.println("are the values of th first 100 pixels");
+//				}
+//			}
+
 		}
 		return tiles;
 	}

@@ -70,9 +70,14 @@ public class MyTile implements Serializable {
     }
 
     public ProductData getDataBuffer() {
+    	// Efi's implementation
         if (dataBuffer == null) {
             dataBuffer = ProductData.createInstance(type, ImageUtils.getPrimitiveArray(writableRaster.getDataBuffer()));
         }
+    	// Meine implementation
+//        if (rawSamples == null) {
+//            dataBuffer = ProductData.createInstance(type, ImageUtils.getPrimitiveArray(writableRaster.getDataBuffer()));
+//        }
         return dataBuffer;
     }
 

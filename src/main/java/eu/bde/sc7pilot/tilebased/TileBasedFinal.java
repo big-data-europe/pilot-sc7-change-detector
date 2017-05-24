@@ -143,8 +143,12 @@ public class TileBasedFinal {
 //		System.out.println(masterTiffInHDFS);
 //		String slaveTiffInHDFS = zipHandler.tiffLocalToHDFS(slaveTiffFilePath, hdfsPath);
 //		System.out.println(slaveTiffInHDFS);
-		String masterTiffInHDFS = "/media/indiana/data/imgs/subseting/subsets-for-ttesting-cd/subset_of_S1A_S6_GRDH_1SDV_20160815T214331_20160815T214400_012616_013C9D_2495.tif";
-		String slaveTiffInHDFS = "/media/indiana/data/imgs/subseting/subsets-for-ttesting-cd/subset_of_S1A_S6_GRDH_1SDV_20160908T214332_20160908T214401_012966_014840_ABDC.tif";
+		// String masterTiffInHDFS = "/media/indiana/data/imgs/subseting/s1a-s6-grd-vv-20160815t214331-20160815t214400-012616-013c9d-001.tiff";
+		// String slaveTiffInHDFS = "/media/indiana/data/imgs/subseting/s1a-s6-grd-vv-20160908t214332-20160908t214401-012966-014840-001.tiff";
+		//String masterTiffInHDFS = "/media/indiana/data/imgs/subseting/subsets-for-ttesting-cd/subset_of_S1A_S6_GRDH_1SDV_20160815T214331_20160815T214400_012616_013C9D_2495.tif";
+		//String slaveTiffInHDFS = "/media/indiana/data/imgs/subseting/subsets-for-ttesting-cd/subset_of_S1A_S6_GRDH_1SDV_20160908T214332_20160908T214401_012966_014840_ABDC.tif";
+		String masterTiffInHDFS = "/media/indiana/data/imgs/subseting/subsets-for-ttesting-cd/la/subset_of_S1A_IW_GRDH_1SSV_20160601T135202_20160601T135227_011518_011929_0EE2.tif";
+		String slaveTiffInHDFS = "/media/indiana/data/imgs/subseting/subsets-for-ttesting-cd/la/subset_of_S1A_IW_GRDH_1SSV_20160905T135207_20160905T135232_012918_0146C0_ECCC.tif";
 		
 		System.out.println("Serial Processing to acquire metadata...");
 		long startProcessing = System.currentTimeMillis();
@@ -252,6 +256,7 @@ public class TileBasedFinal {
 		sp.initOperator(writeOp);
 		
 		/* The imageMetadata class has replaced the band class and contains only the absolutely essential metadata for tile computations */
+		int bandsLeft = myCalibration1.getTargetProduct().getNumBands();
 		Object2ObjectMap<String, ImageMetadata> imageMetadata = new Object2ObjectOpenHashMap<String, ImageMetadata>(myCalibration1.getTargetProduct().getNumBands() * 3);
 		OpMetadataCreator opMetadataCreator = new OpMetadataCreator();
 		Object2ObjectMap<String, CalibrationMetadata> calMetadata = new Object2ObjectOpenHashMap<String, CalibrationMetadata>(myCalibration1.getTargetProduct().getNumBands() * 4);
@@ -304,71 +309,96 @@ public class TileBasedFinal {
 		Broadcast<Integer> rows = sc.broadcast(limits.getNumXTiles());
 		Broadcast<Map<String, BandInfo>> bandInfosB = sc.broadcast(bandInfos);
 
-		LoopLimits limits2 = new LoopLimits(myWarp.getTargetProduct());
 		JavaPairRDD<String, Point> masterRastersRdd = sc.parallelizePairs(masterIndices).partitionBy(new HashPartitioner(partitionsNumber));
 		JavaPairRDD<String, Point> slaveRastersRdd = sc.parallelizePairs(slaveIndices).partitionBy(new HashPartitioner(partitionsNumber));
 
-		long startWithGCPTime = System.currentTimeMillis(); //Efi's time-counter
+		//long startWithGCPTime = System.currentTimeMillis(); //Efi's time-counter
+		
 		// master image calibration
-		JavaPairRDD<Tuple2<Point, String>, MyTile> masterRastersCal = masterRastersRdd
-				.mapPartitionsToPair((Iterator<Tuple2<String, Point>> iterator) -> {
-					return CalibrationMappers.calibrationMaster(iterator, bandInfosB.getValue(),
-							imgMetadataB.getValue(), calMetadataB.getValue());
-				}).cache();
+		JavaPairRDD<Tuple2<Point, String>, MyTile> masterRastersCal = masterRastersRdd.mapPartitionsToPair((Iterator<Tuple2<String, Point>> iterator) -> {
+			return CalibrationMappers.calibrationMaster(iterator, bandInfosB.getValue(), imgMetadataB.getValue(), calMetadataB.getValue());
+			}
+		).cache();
 		
-		JavaPairRDD<String, MyTile> slaveRastersCal = slaveRastersRdd
-				.mapPartitionsToPair((Iterator<Tuple2<String, Point>> iterator) -> {
-					return CalibrationMappers.calibrationSlave(iterator, bandInfosB.getValue(), imgMetadataB.getValue(),
-							calMetadataB.getValue());
-				});
+		JavaPairRDD<String, MyTile> slaveRastersCal = slaveRastersRdd.mapPartitionsToPair((Iterator<Tuple2<String, Point>> iterator) -> {
+			return CalibrationMappers.calibrationSlave(iterator, bandInfosB.getValue(), imgMetadataB.getValue(), calMetadataB.getValue());
+			}
+		);
+		List<Tuple2<Tuple2<Point, String>, MyTile>> debugMasterRastersCal = masterRastersCal.collect();
 		
-		JavaPairRDD<Tuple3<Point, String, Rectangle>, MyTile> dependentPairs = slaveRastersCal
-				.flatMapToPair((Tuple2<String, MyTile> pair) -> {
-					ImageMetadata srcImgMetadataStack = imgMetadataB.getValue().get(pair._1 + "_" + "stack");
-					List<Tuple2<Tuple3<Point, String, Rectangle>, MyTile>> pairs = new ArrayList<Tuple2<Tuple3<Point, String, Rectangle>, MyTile>>();
-					Object2ObjectMap<String, Object2ObjectMap<Point, ObjectList<Tuple2<Point, Rectangle>>>> dependRectsMap = dependRectsB.getValue();
-					Object2ObjectMap<Point, ObjectList<Tuple2<Point, Rectangle>>> dependRectangles = dependRectsMap.get(pair._1);
-					Point sourcePoint = srcImgMetadataStack.getTileIndices(pair._2.getMinX(), pair._2.getMinY());
-					List<Tuple2<Point, Rectangle>> tuples = dependRectangles.get(sourcePoint);
-					if(tuples!=null) {
-					for (Tuple2<Point, Rectangle> tuple : tuples)
-						pairs.add(new Tuple2<Tuple3<Point, String, Rectangle>, MyTile>(new Tuple3<Point, String, Rectangle>(tuple._1(), pair._1(), tuple._2()), pair._2));
-					}
-					return pairs;
-				});
+		JavaPairRDD<Tuple3<Point, String, Rectangle>, MyTile> dependentPairs = slaveRastersCal.flatMapToPair((Tuple2<String, MyTile> pair) -> {
+			ImageMetadata srcImgMetadataStack = imgMetadataB.getValue().get(pair._1 + "_" + "stack");
+			List<Tuple2<Tuple3<Point, String, Rectangle>, MyTile>> pairs = new ArrayList<Tuple2<Tuple3<Point, String, Rectangle>, MyTile>>();
+			Object2ObjectMap<String, Object2ObjectMap<Point, ObjectList<Tuple2<Point, Rectangle>>>> dependRectsMap = dependRectsB.getValue();
+			Object2ObjectMap<Point, ObjectList<Tuple2<Point, Rectangle>>> dependRectangles = dependRectsMap.get(pair._1);
+			Point sourcePoint = srcImgMetadataStack.getTileIndices(pair._2.getMinX(), pair._2.getMinY());
+			List<Tuple2<Point, Rectangle>> tuples = dependRectangles.get(sourcePoint);
+			if(tuples!=null) {
+				for (Tuple2<Point, Rectangle> tuple : tuples)
+					pairs.add(new Tuple2<Tuple3<Point, String, Rectangle>, MyTile>(new Tuple3<Point, String, Rectangle>(tuple._1(), pair._1(), tuple._2()), pair._2));
+			}
+			return pairs;
+			}
+		);
 		
 		JavaPairRDD<Tuple2<Point, String>, MyTile> createstackResults = dependentPairs.groupByKey()
-				.mapToPair((Tuple2<Tuple3<Point, String, Rectangle>, Iterable<MyTile>> pair) -> {
-					return CreateStackMappers.createStack(pair, imgMetadataB.getValue());
-				}).cache();
+																		.mapToPair((Tuple2<Tuple3<Point, String, Rectangle>, Iterable<MyTile>> pair) -> {
+			return CreateStackMappers.createStack(pair, imgMetadataB.getValue());
+			}
+		).cache();
 
 		// split the createstack tiles in groups of rows with a unique key to each group
-		JavaPairRDD<Tuple2<Integer, String>, MyTile> createstackResultsRows = createstackResults
-				.filter((Tuple2<Tuple2<Point, String>, MyTile> pair) -> {
-					Map<String, String> bandsList = bandsListGCPB.getValue();
-					return bandsList.containsKey(pair._1._2);
-				}).flatMapToPair((Tuple2<Tuple2<Point, String>, MyTile> pair) -> {
-					return CreateStackMappers.mapToRows(pair, imgMetadataB.getValue(), rows.getValue());
-				});
+		JavaPairRDD<Tuple2<Integer, String>, MyTile> createstackResultsRows = createstackResults.filter((Tuple2<Tuple2<Point, String>, MyTile> pair) -> {
+			Map<String, String> bandsList = bandsListGCPB.getValue();
+			return bandsList.containsKey(pair._1._2);
+			}
+		).flatMapToPair((Tuple2<Tuple2<Point, String>, MyTile> pair) -> {
+			return CreateStackMappers.mapToRows(pair, imgMetadataB.getValue(), rows.getValue());
+			}
+		);
 
 		// split the master tiles in groups of rows with a unique key to each group
-		JavaPairRDD<Tuple2<Integer, String>, MyTile> masterRastersRdd2 = masterRastersCal
-				.filter((Tuple2<Tuple2<Point, String>, MyTile> pair) -> {
-					String name = imgMetadataB.getValue().get(pair._1._2 + "_stack").getBandPairName();
-					Map<String, String> bandsList = bandsListGCPB.getValue();
-					return bandsList.containsKey(name);
-				}).flatMapToPair((Tuple2<Tuple2<Point, String>, MyTile> pair) -> {
-
-					return CalibrationMappers.mapToRows(pair, imgMetadataB.getValue(), rows.getValue());
-
-				});
+		System.out.println("NOW?");
+		JavaPairRDD<Tuple2<Integer, String>, MyTile> masterRastersRdd2 = masterRastersCal.filter((Tuple2<Tuple2<Point, String>, MyTile> pair) -> {
+			String name = imgMetadataB.getValue().get(pair._1._2 + "_stack").getBandPairName();
+			Map<String, String> bandsList = bandsListGCPB.getValue();
+			return bandsList.containsKey(name);
+			}
+		).flatMapToPair((Tuple2<Tuple2<Point, String>, MyTile> pair) -> {
+			return CalibrationMappers.mapToRows(pair, imgMetadataB.getValue(), rows.getValue());
+			}
+		);
+		System.out.println("OR NOT?");
+		
 		// gcps computation. group by key the groups of rows and and compute the gcps contained to each group. Then, collect the gcps to the master node.
 		JavaPairRDD<Tuple2<Integer, String>, Iterable<MyTile>> masterRows = masterRastersRdd2.groupByKey();
+		List<Tuple2<Tuple2<Integer, String>, Iterable<MyTile>>> debugMasterRows = masterRows.collect();
+		System.out.println("DEBUGMASTERROWS: " + debugMasterRows.toString());
 		JavaPairRDD<Tuple2<Integer, String>, Iterable<MyTile>> stacktilesRows = createstackResultsRows.groupByKey();
+		List<Tuple2<Tuple2<Integer, String>, Iterable<MyTile>>> debugStacktilesRows = stacktilesRows.collect();
+		System.out.println("DEBUGSTACKTILEROWS: " + debugStacktilesRows.toString());
+		List<Tuple2<Tuple2<Integer, String>, Tuple2<Iterable<MyTile>, Iterable<MyTile>>>> debugJoin = masterRows.join(stacktilesRows).collect();
+		System.out.println("DEBUGJOIN:" + debugJoin.toString());
+		System.out.println("GCPMETADATABROAD: " + GCPMetadataBroad.getValue());
+		System.out.println("IMGMETADATAB: " + imgMetadataB.getValue());
+		System.out.println("MASTERGCPS: " + masterGcps.getValue());
+		System.out.println("ROWS: " + rows.getValue());
+		List<Tuple2<String, Tuple2<Integer, Placemark>>> debugSlaveGCPs = null;
+		System.out.println("SIZE OF DEBUGJOIN: " + debugJoin.size());
+		for(int j = 0; j < debugJoin.size(); j++) {
+			System.out.println("FOR i = " + j);
+			List<Tuple2<String, Tuple2<Integer, Placemark>>> listDebugSlaveGCPs = GCPMappers.GCPSelection(debugJoin.get(j), GCPMetadataBroad.getValue(), imgMetadataB.getValue(), masterGcps.getValue(), rows.getValue());
+			System.out.println("listDebugSlaveGCPs is: " + listDebugSlaveGCPs.toString());
+			// listDebugSlaveGCPs.addAll(debugSlaveGCPs); // den leitourgei. Eytyxws h for trexei mono gia mia epanalipsi
+		}
+		//System.out.println("ALL debugSlaveGCPs ARE: " + debugSlaveGCPs.toString());
+		// List<Tuple2<String, Tuple2<Integer, Placemark>>> debugSlaveGCPs = GCPMappers.GCPSelection(debugJoin, GCPMetadataBroad.getValue(), imgMetadataB.getValue(), masterGcps.getValue(), rows.getValue());
+		// List<Tuple2<String, Tuple2<Integer, Placemark>>>
 		List<Tuple2<String, Tuple2<Integer, Placemark>>> slaveGCPs = masterRows.join(stacktilesRows)
-				.flatMap((Tuple2<Tuple2<Integer, String>, Tuple2<Iterable<MyTile>, Iterable<MyTile>>> pair) -> {
-					return GCPMappers.GCPSelection(pair, GCPMetadataBroad.getValue(), imgMetadataB.getValue(), masterGcps.getValue(), rows.getValue());
-				}).collect();
+																.flatMap((Tuple2<Tuple2<Integer, String>, Tuple2<Iterable<MyTile>, Iterable<MyTile>>> pair) -> {
+			return GCPMappers.GCPSelection(pair, GCPMetadataBroad.getValue(), imgMetadataB.getValue(), masterGcps.getValue(), rows.getValue());
+			}
+		).collect();
 		if(slaveGCPs.isEmpty())
 		{
 			System.out.println("not enough GCPs detected");
@@ -385,7 +415,8 @@ public class TileBasedFinal {
 			String bandName = slaveGCPs.get(i)._1;
 			if (gcpsMap.containsKey(bandName)) {
 				gcpsMap.get(bandName).put(slaveGCPs.get(i)._2._1, slaveGCPs.get(i)._2._2);
-			} else {
+			} 
+			else {
 				Map<Integer, Placemark> placemarksMap = new HashMap<Integer, Placemark>();
 				placemarksMap.put(slaveGCPs.get(i)._2._1, slaveGCPs.get(i)._2._2);
 				gcpsMap.put(bandName, placemarksMap);
@@ -393,8 +424,7 @@ public class TileBasedFinal {
 		}
 		System.out.println("GCPs size" + slaveGCPs.size());
 		for (String name : bandsListGCP.keySet()) {
-			final ProductNodeGroup<Placemark> targetGCPGroup = GCPManager.instance()
-					.getGcpGroup(myGCPSelection.getTargetProduct().getBand(name));
+			final ProductNodeGroup<Placemark> targetGCPGroup = GCPManager.instance().getGcpGroup(myGCPSelection.getTargetProduct().getBand(name));
 			Map<Integer, Placemark> map = gcpsMap.get(name);
 			for (Placemark p : map.values()) {
 				targetGCPGroup.add(p);
@@ -403,13 +433,11 @@ public class TileBasedFinal {
 		
 		// compute the warp function
 		//long startWarpTime = System.currentTimeMillis(); //Efi's time-counter
-		//System.out.println("start computing warp function");
 		myWarp.getWarpData();
 		Map<String, WarpData> warpdataMap = new HashMap<String, WarpData>();
 		Product targetProductWarp = myWarp.getTargetProduct();
 		String[] masterBandNamesWarp = StackUtils.getMasterBandNames(targetProductWarp);
 		Set<String> masterBandsWarp = new HashSet(Arrays.asList(masterBandNamesWarp));
-		//System.out.println("start computing warp dependent rectangles");
 		for (int i = 0; i < targetProductWarp.getNumBands(); i++) {
 			if (masterBandsWarp.contains(targetProductWarp.getBandAt(i).getName()))
 				continue;
@@ -421,98 +449,87 @@ public class TileBasedFinal {
 			WarpData warpData = myWarp.getWarpDataMap().get(realSrcBandWarp);
 			warpdataMap.put(targetProductWarp.getBandAt(i).getName(), warpData);
 		}
+		
 		Broadcast<Map<String, WarpData>> warpDataMapB = sc.broadcast(warpdataMap);
-
 		Object2ObjectMap<String, Object2ObjectMap<Point, ObjectSet<Rectangle>>> dependRectsWarp2 = new Object2ObjectOpenHashMap<String, Object2ObjectMap<Point, ObjectSet<Rectangle>>>();
 		Object2ObjectMap<String, Object2ObjectMap<Rectangle, ObjectList<Point>>> dependPointsWarp = new Object2ObjectOpenHashMap<String, Object2ObjectMap<Rectangle, ObjectList<Point>>>();
-
 		TileBasedUtils.getSourceDependWarp(myWarp, warpdataMap, imageMetadata, dependRectsWarp2, dependPointsWarp);
 		Broadcast<Object2ObjectMap<String, Object2ObjectMap<Point, ObjectSet<Rectangle>>>> dependRectsWarpB2 = sc.broadcast(dependRectsWarp2);
 		Broadcast<Object2ObjectMap<String, Object2ObjectMap<Rectangle, ObjectList<Point>>>> dependPointsWarpB = sc.broadcast(dependPointsWarp);
-		//System.out.println("start warp");
 
-		JavaPairRDD<Tuple2<String, Rectangle>, MyTile> dependentPairsWarp = createstackResults
-				.flatMapToPair((Tuple2<Tuple2<Point, String>, MyTile> pair) -> {
-					List<Tuple2<Tuple2<String, Rectangle>, MyTile>> pairs = new ArrayList<Tuple2<Tuple2<String, Rectangle>, MyTile>>();
-					Object2ObjectMap<String, Object2ObjectMap<Point, ObjectSet<Rectangle>>> dependRectsMap = dependRectsWarpB2
-							.getValue();
-					Object2ObjectMap<Point, ObjectSet<Rectangle>> bandRects = dependRectsMap.get(pair._1._2);
-					ImageMetadata srcImgMetadataWarp = imgMetadataB.getValue().get(pair._1._2 + "_warp" + "_source");
-					Point sourcePoint = srcImgMetadataWarp.getTileIndices(pair._2.getMinX(), pair._2.getMinY());
-					Set<Rectangle> tuples = bandRects.get(sourcePoint);
-					if(tuples!=null){
-					for (Rectangle rect : tuples) {
-						pairs.add(new Tuple2<Tuple2<String, Rectangle>, MyTile>(
-								new Tuple2<String, Rectangle>(pair._1._2, rect), pair._2));
-					}
-					}
-					return pairs;
-				});
+		JavaPairRDD<Tuple2<String, Rectangle>, MyTile> dependentPairsWarp = createstackResults.flatMapToPair((Tuple2<Tuple2<Point, String>, MyTile> pair) -> {
+			List<Tuple2<Tuple2<String, Rectangle>, MyTile>> pairs = new ArrayList<Tuple2<Tuple2<String, Rectangle>, MyTile>>();
+			Object2ObjectMap<String, Object2ObjectMap<Point, ObjectSet<Rectangle>>> dependRectsMap = dependRectsWarpB2.getValue();
+			Object2ObjectMap<Point, ObjectSet<Rectangle>> bandRects = dependRectsMap.get(pair._1._2);
+			ImageMetadata srcImgMetadataWarp = imgMetadataB.getValue().get(pair._1._2 + "_warp" + "_source");
+			Point sourcePoint = srcImgMetadataWarp.getTileIndices(pair._2.getMinX(), pair._2.getMinY());
+			Set<Rectangle> tuples = bandRects.get(sourcePoint);
+			if(tuples!=null) {
+				for (Rectangle rect : tuples) {
+					pairs.add(new Tuple2<Tuple2<String, Rectangle>, MyTile>(new Tuple2<String, Rectangle>(pair._1._2, rect), pair._2));
+				}
+			}
+			return pairs;
+			}
+		);
 		createstackResults.unpersist();
+		
 		JavaPairRDD<Tuple2<String, Rectangle>, Iterable<MyTile>> warpResults1 = dependentPairsWarp.groupByKey();
-		JavaPairRDD<Tuple2<Point, String>, MyTile> warpResults = warpResults1
-				.flatMapToPair((Tuple2<Tuple2<String, Rectangle>, Iterable<MyTile>> pair) -> {
-					List<Tuple2<Tuple2<Point, String>, MyTile>> trgtiles = new ArrayList<Tuple2<Tuple2<Point, String>, MyTile>>();
-					Object2ObjectMap<String, Object2ObjectMap<Rectangle, ObjectList<Point>>> dependRectsMap = dependPointsWarpB
-							.getValue();
-					Object2ObjectMap<Rectangle, ObjectList<Point>> pointsRect = dependRectsMap.get(pair._1._1);
-					ImageMetadata srcImgMetadataWarp = imgMetadataB.getValue().get(pair._1._1() + "_warp" + "_source");
-
-					int bufferType = ImageManager.getDataBufferType(srcImgMetadataWarp.getDataType());
-					final SampleModel sampleModel = ImageUtils.createSingleBandedSampleModel(bufferType,
-							srcImgMetadataWarp.getTileSize().width, srcImgMetadataWarp.getTileSize().height);
-					final ColorModel cm = PlanarImage.createColorModel(sampleModel);
-
-					TiledImage img = new TiledImage(0, 0, srcImgMetadataWarp.getImageWidth(),
-							srcImgMetadataWarp.getImageHeight(), 0, 0, sampleModel, cm);
-
-					List<MyTile> tiles = Lists.newArrayList(pair._2.iterator());
-					List<Point> targetPoints = pointsRect.get(pair._1._2);
-					for (MyTile myTile : tiles) {
-						img.setData(myTile.getWritableRaster());
-					}
-					tiles = null;
-					Map<String, WarpData> map = warpDataMapB.getValue();
-					WarpData w = map.get(pair._1._1());
-					Warp warp = new Warp(warpMetadataB.getValue().getInterp(), w,
-							warpMetadataB.getValue().getInterpTable());
-					// get warped image
-					ImageMetadata trgImgMetadataWarp = imgMetadataB.getValue().get(pair._1._1() + "_warp" + "_target");
-					Map<String, ImageMetadata> map2 = imgMetadataB.getValue();
-					ImageMetadata stackImgMetadata = map2.get(pair._1._1() + "_" + "stack");
-					RenderedOp warpedImage = warp.createWarpImage(warp.getWarpData().jaiWarp, img);
-					for (Point p : targetPoints) {
-						long startWarpPoint = System.currentTimeMillis();
-						MyTile targetTile = new MyTile(trgImgMetadataWarp.getWritableRaster(p.x, p.y),
-								trgImgMetadataWarp.getRectangle(p.x, p.y), trgImgMetadataWarp.getDataType());
-
-						warp.computeTile(targetTile, warpedImage);
-
-						trgtiles.add(new Tuple2<Tuple2<Point, String>, MyTile>(
-								new Tuple2<Point, String>(p, stackImgMetadata.getBandPairName()), targetTile));
-						System.out.println(System.currentTimeMillis() - startWarpPoint + " ends warp for point " + p);
-					}
-					return trgtiles;
-				});
+		JavaPairRDD<Tuple2<Point, String>, MyTile> warpResults = warpResults1.flatMapToPair((Tuple2<Tuple2<String, Rectangle>, Iterable<MyTile>> pair) -> {
+			List<Tuple2<Tuple2<Point, String>, MyTile>> trgtiles = new ArrayList<Tuple2<Tuple2<Point, String>, MyTile>>();
+			Object2ObjectMap<String, Object2ObjectMap<Rectangle, ObjectList<Point>>> dependRectsMap = dependPointsWarpB.getValue();
+			Object2ObjectMap<Rectangle, ObjectList<Point>> pointsRect = dependRectsMap.get(pair._1._1);
+			ImageMetadata srcImgMetadataWarp = imgMetadataB.getValue().get(pair._1._1() + "_warp" + "_source");
+			int bufferType = ImageManager.getDataBufferType(srcImgMetadataWarp.getDataType());
+			final SampleModel sampleModel = ImageUtils.createSingleBandedSampleModel(bufferType,
+														srcImgMetadataWarp.getTileSize().width,
+														srcImgMetadataWarp.getTileSize().height);
+			final ColorModel cm = PlanarImage.createColorModel(sampleModel);
+			TiledImage img = new TiledImage(0, 0, srcImgMetadataWarp.getImageWidth(), srcImgMetadataWarp.getImageHeight(), 0, 0, sampleModel, cm);
+			List<MyTile> tiles = Lists.newArrayList(pair._2.iterator());
+			List<Point> targetPoints = pointsRect.get(pair._1._2);
+			for (MyTile myTile : tiles) {
+				img.setData(myTile.getWritableRaster());
+			}
+			tiles = null;
+			Map<String, WarpData> map = warpDataMapB.getValue();
+			WarpData w = map.get(pair._1._1());
+			Warp warp = new Warp(warpMetadataB.getValue().getInterp(), w, warpMetadataB.getValue().getInterpTable());
+			// get warped image
+			ImageMetadata trgImgMetadataWarp = imgMetadataB.getValue().get(pair._1._1() + "_warp" + "_target");
+			Map<String, ImageMetadata> map2 = imgMetadataB.getValue();
+			ImageMetadata stackImgMetadata = map2.get(pair._1._1() + "_" + "stack");
+			RenderedOp warpedImage = warp.createWarpImage(warp.getWarpData().jaiWarp, img);
+			for (Point p : targetPoints) {
+				long startWarpPoint = System.currentTimeMillis();
+				MyTile targetTile = new MyTile(trgImgMetadataWarp.getWritableRaster(p.x, p.y),
+													trgImgMetadataWarp.getRectangle(p.x, p.y),
+													trgImgMetadataWarp.getDataType());
+				warp.computeTile(targetTile, warpedImage);
+				trgtiles.add(new Tuple2<Tuple2<Point, String>, MyTile>(new Tuple2<Point, String>(p, stackImgMetadata.getBandPairName()), targetTile));
+				//System.out.println(System.currentTimeMillis() - startWarpPoint + " ends warp for point " + p); //Efi's time-counter
+				}
+			return trgtiles;
+			}
+		);
+		
 		JavaPairRDD<Tuple2<Point, String>, MyTile> changeDResults = masterRastersCal.join(warpResults)
-				.mapToPair((Tuple2<Tuple2<Point, String>, Tuple2<MyTile, MyTile>> pair) -> {
-					ChangeDetectionMetadata metadata = changeDMetadataB.getValue();
-					ChangeDetection changeDetection = new ChangeDetection(metadata.isOutputLogRatio(),
-							metadata.getNoDataValueN(), metadata.getNoDataValueD());
-					ImageMetadata trgImgMetadata = imgMetadataB.getValue().get("ratio_changeD");
-					MyTile targetTile = new MyTile(trgImgMetadata.getWritableRaster(pair._1._1.x, pair._1._1.y),
-							trgImgMetadata.getRectangle(pair._1._1.x, pair._1._1.y), trgImgMetadata.getDataType());
-					try {
-						changeDetection.computeTile(pair._2._1, pair._2._2, targetTile, targetTile.getRectangle());
-					} catch (ArrayIndexOutOfBoundsException e) {
-
-						System.out.println("key: " + pair._1);
-						System.out.println("");
-					}
-
-					return new Tuple2<Tuple2<Point, String>, MyTile>(new Tuple2<Point, String>(pair._1._1, "ratio"),
-							targetTile);
-				});
+																	.mapToPair((Tuple2<Tuple2<Point, String>, Tuple2<MyTile, MyTile>> pair) -> {
+			ChangeDetectionMetadata metadata = changeDMetadataB.getValue();
+			ChangeDetection changeDetection = new ChangeDetection(metadata.isOutputLogRatio(), metadata.getNoDataValueN(), metadata.getNoDataValueD());
+			ImageMetadata trgImgMetadata = imgMetadataB.getValue().get("ratio_changeD");
+			MyTile targetTile = new MyTile(trgImgMetadata.getWritableRaster(pair._1._1.x, pair._1._1.y),
+												trgImgMetadata.getRectangle(pair._1._1.x, pair._1._1.y),
+												trgImgMetadata.getDataType());
+			try {
+				changeDetection.computeTile(pair._2._1, pair._2._2, targetTile, targetTile.getRectangle());
+			}
+			catch (ArrayIndexOutOfBoundsException e) {
+				System.out.println("key: " + pair._1 + "\n");
+			}
+			return new Tuple2<Tuple2<Point, String>, MyTile>(new Tuple2<Point, String>(pair._1._1, "ratio"), targetTile);
+			}
+		);
 		List<Tuple2<Tuple2<Point, String>, MyTile>> changeResults = changeDResults.collect();
 		System.out.println("result tiles " + changeResults.size());
 		
@@ -534,4 +551,5 @@ public class TileBasedFinal {
 		
 		//sc.close();
 	}
+	
 }

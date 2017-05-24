@@ -47,8 +47,7 @@ public class ReadHDFSTile {
         ProductData dataBuffer = tile.getRawSamples();
         Rectangle rectangle = tile.getRectangle();
         try {
-            reader.readBandRasterData(bandInfo, rectangle.x, rectangle.y, rectangle.width, rectangle.height, dataBuffer,
-                    null);
+            reader.readBandRasterData(bandInfo, rectangle.x, rectangle.y, rectangle.width, rectangle.height, dataBuffer,null);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

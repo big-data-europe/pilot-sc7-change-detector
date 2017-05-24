@@ -198,6 +198,14 @@ public class SerialProcessor {
     private Dimension getPreferredTileSize(Product product) {
         return JAIUtils.computePreferredTileSize(product.getSceneRasterWidth(), product.getSceneRasterHeight(), 4);
     }
+    
+    public void initOperator(AbstractOperator operator) {
+        operator.initialize();
+        Product targetProduct = operator.getTargetProduct();
+        if (targetProduct.getPreferredTileSize() == null) {
+            targetProduct.setPreferredTileSize(getPreferredTileSize(targetProduct));
+        }
+    }
 
     public void initOperatorForMultipleBands(AbstractOperator operator) {
         operator.initialize();
@@ -357,14 +365,6 @@ public class SerialProcessor {
 
         }
         return tiles;
-    }
-
-    public void initOperator(AbstractOperator operator) {
-        operator.initialize();
-        Product targetProduct = operator.getTargetProduct();
-        if (targetProduct.getPreferredTileSize() == null) {
-            targetProduct.setPreferredTileSize(getPreferredTileSize(targetProduct));
-        }
     }
 
     private void storeResult(AbstractOperator operator) {

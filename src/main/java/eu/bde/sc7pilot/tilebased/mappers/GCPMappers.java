@@ -52,10 +52,22 @@ public class GCPMappers {
 				width += masterTile.getWidth();
 		}
 		WritableRaster masterRaster = Utils.createWritableRaster(new Rectangle(x, y, width, height), type);
+		System.out.println(masterTiles.size() + "\t\tare the MasterMyTiles");
 		for (int i = 0; i < masterTiles.size(); i++) {
-			masterRaster.setDataElements(masterTiles.get(i).getMinX(), masterTiles.get(i).getMinY(),
-										masterTiles.get(i).getWidth(), masterTiles.get(i).getHeight(),
+			masterRaster.setDataElements(masterTiles.get(i).getMinX(),
+										masterTiles.get(i).getMinY(),
+										masterTiles.get(i).getWidth(),
+										masterTiles.get(i).getHeight(),
 										masterTiles.get(i).getRawSamples().getElems());
+			int k = 0;
+			float[] masterBuffer = masterTiles.get(i).getDataBufferFloat();
+			for(int j = 0; j < masterBuffer.length; j++) {
+				if (masterBuffer[j] == 0.0) {
+					k++;
+				}
+			}
+			System.out.println(masterBuffer.length + "\t\tPixels in MasterMyTile No.:\t\t" + i);
+			System.out.println(k + " of them are ZEROW");
 		}
 		x = slaveTiles.get(0).getMinX();
 		y = slaveTiles.get(0).getMinY();
@@ -85,7 +97,27 @@ public class GCPMappers {
 										slaveTiles.get(i).getRawSamples().getElems());
 		}
 		MyTile masterTile = new MyTile(masterRaster, new Rectangle(x, y, masterRaster.getWidth(), masterRaster.getHeight()), type);
+		int j = 0;
+		int masterPixels = masterTile.getDataBufferFloat().length;
+		for(int i = 0; i < masterPixels; i++) {
+			if(masterTile.getDataBufferFloat()[i] == 0.0) {
+				j++;
+			}
+		}
+		System.out.println(j + "\t\tZEROW masterPixels");
+		System.out.println(masterPixels -j + "\t\tnon-Zerow masterPixels");
+		System.out.println(masterPixels + "\t\tAll masterPixels\n");
 		MyTile slaveTile = new MyTile(slaveRaster, new Rectangle(x, y, slaveRaster.getWidth(), slaveRaster.getHeight()), type);
+		int k = 0;
+		int slavePixels = slaveTile.getDataBufferFloat().length;
+		for(int i = 0; i < slavePixels; i++) {
+			if(slaveTile.getDataBufferFloat()[i] == 0.0) {
+				k++;
+			}
+		}
+		System.out.println(k + "\t\tZEROW slavePixels");
+		System.out.println(slavePixels -k + "\t\tnon-Zerow slavePixels");
+		System.out.println(slavePixels + "\t\tAll slavePixels\n");
 
 		List<Tuple2<String, Tuple2<Integer, Placemark>>> slaveGCPsRes = new ArrayList<Tuple2<String, Tuple2<Integer, Placemark>>>();
 		final int numberOfMasterGCPs = masterGcpGroup.getNodeCount();
@@ -122,6 +154,7 @@ public class GCPMappers {
 		int fails1 = 0;
 		int fails2 = 0;
 		int iters = 0;
+		int added = 0;
 		
 		for (int i = 0; i < numberOfMasterGCPs; i++) {
 			iters++;
@@ -135,8 +168,10 @@ public class GCPMappers {
 						fails1++;
 						Placemark sPin = GCPSelection.computeSlaveGCP(mPin, sGCPPixelPos);
 
-						if (sPin != null)
+						if (sPin != null) {
 							slaveGCPsRes.add(new Tuple2<String, Tuple2<Integer, Placemark>>(pair._1._2, new Tuple2<Integer, Placemark>(i, sPin)));
+							added++;
+						}
 					}
 				}
 				catch (Exception e) {
@@ -146,7 +181,10 @@ public class GCPMappers {
 
 			}
 		}
-		System.out.println(fails1);
+		System.out.println(iters + " times, I entered for. Equal to numberOfMasterGCPs");
+		System.out.println(fails2 + " times, passed the 1st IF");
+		System.out.println(fails1 + " times, passed the 2nd IF");
+		System.out.println(added + " of the sPin(S) weren't null and so the tuple was added to slaveGCPsRes, the PRECIOUSES!");
 		slaveRaster=null;
 		masterRaster=null;
 		masterTile=null;

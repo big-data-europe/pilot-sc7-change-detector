@@ -17,7 +17,7 @@ public class MyBandSelect extends AbstractOperator {
     private String[] sourceBandNames;
     private String bandNamePattern;
 
-  public MyBandSelect(String[] selectedPolarisations,String[] sourceBandNames) {
+  public MyBandSelect(String[] selectedPolarisations, String[] sourceBandNames) {
 	  
 	this.selectedPolarisations = selectedPolarisations;
 	this.sourceBandNames = sourceBandNames;
@@ -28,9 +28,9 @@ public class MyBandSelect extends AbstractOperator {
 
         try {
             targetProduct = new Product(sourceProduct.getName(), 
-            		sourceProduct.getProductType(),
-            		sourceProduct.getSceneRasterWidth(),
-            		sourceProduct.getSceneRasterHeight());
+            							sourceProduct.getProductType(),
+            							sourceProduct.getSceneRasterWidth(),
+            							sourceProduct.getSceneRasterHeight());
             ProductUtils.copyProductNodes(sourceProduct, targetProduct);
             addSelectedBands();
         } 

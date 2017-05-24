@@ -27,34 +27,48 @@ import eu.bde.sc7pilot.tilebased.metadata.ImageMetadata;
 import eu.bde.sc7pilot.tilebased.metadata.WarpMetadata;
 
 public class OpMetadataCreator {
+	
+	public void createCalImgMetadata(Map<String, ImageMetadata> imageMetadata, MyCalibration myCalibration, Map<String, CalibrationMetadata> calMetadata, Boolean[] bParams1) {
+		Product targetProduct = myCalibration.getTargetProduct();
+		Product sourceProduct = myCalibration.getSourceProduct();
+		int numOfBands = targetProduct.getNumBands();
+		for (int i = 0; i < targetProduct.getNumBands(); i++) {
+			HashMap<String, String[]> targetBandNameToSourceBandName = ((MySentinel1Calibrator) myCalibration.getCalibrator()).getTargetBandNameToSourceBandName();
+			Band targetBandCal = targetProduct.getBandAt(i);
+			Band sourceBandCal = sourceProduct.getBand(targetBandNameToSourceBandName.get(targetBandCal.getName())[0]);
+			ImageMetadata trgImageMetadataCal = getImageMetadata(targetBandCal,sourceBandCal.getName());
+			ImageMetadata srcImageMetadataCal = getImageMetadata(sourceBandCal,targetBandCal.getName());
+
+			CalibrationMetadata calibrationMetadata = new CalibrationMetadata(bParams1,
+														Unit.getUnitType(targetBandCal),
+														Unit.getUnitType(sourceBandCal),
+														((MySentinel1Calibrator) myCalibration.getCalibrator()).getTargetBandToCalInfo());
+			
+			imageMetadata.put(sourceBandCal.getName()+"_"+myCalibration.getId(), srcImageMetadataCal);
+			imageMetadata.put(targetBandCal.getName()+"_"+myCalibration.getId(), trgImageMetadataCal);
+			calMetadata.put(sourceBandCal.getName()+"_"+myCalibration.getId(), calibrationMetadata);
+		}
+	}
+	
+	public ChangeDetectionMetadata createChangeDMetadata(MyChangeDetection mychangeDetection,boolean[] bParams3) {
+		 double[] dParams2 = {mychangeDetection.getSourceProduct().getBandAt(0).getGeophysicalNoDataValue(),mychangeDetection.getSourceProduct().getBandAt(1).getGeophysicalNoDataValue() };
+		 return new ChangeDetectionMetadata(bParams3, dParams2);
+
+	}
 
 	public void createGCPMetadata() {
 		
 	}
+	
 	public WarpMetadata createWarpMetadata(MyWarp warpOp) {
 		return new WarpMetadata(warpOp.getInterp(), warpOp.getInterpTable());
 	}
+	
 	public void createOpImgMetadata(Map<String, ImageMetadata> imageMetadata,AbstractOperator operator){
 		createOpImgMetadata(imageMetadata,operator,false);
 	}
-	public void createProdImgMetadata(Map<String, ImageMetadata> imageMetadata, Product targetProduct, String id, String[] selectedPolarisations) {
-		int numOfBands = targetProduct.getNumBands();
-		for (int i = 0; i < targetProduct.getNumBands(); i++) {
-			Band targetBand = targetProduct.getBandAt(i);
-            if (selectedPolarisations != null) {
-                Set<String> selectedPols = new HashSet(Arrays.asList(Arrays.stream(selectedPolarisations).map(s -> s.toLowerCase()).toArray(String[]::new)));
-                String pol = OperatorUtils.getPolarizationFromBandName(targetBand.getName());
-                if (!selectedPols.contains(pol.toLowerCase())) {
-                    continue;
-                }
-            }
-			if(targetBand.getClass()!=Band.class)
-				continue;
-			ImageMetadata trgImageMetadata = getImageMetadata(targetBand,null);
-			imageMetadata.put(targetBand.getName()+"_"+id, trgImageMetadata);
-	}
-	}
-	public void createOpImgMetadata(Map<String, ImageMetadata> imageMetadata,AbstractOperator operator,boolean slaveOffsetIsNeeded){
+	
+	public void createOpImgMetadata(Map<String, ImageMetadata> imageMetadata,AbstractOperator operator, boolean slaveOffsetIsNeeded){
 		Product targetProduct = operator.getTargetProduct();
 		String[] masterBandNames = StackUtils.getMasterBandNames(targetProduct);
 		Map<Band, Band> sourceRasterMap = operator.getSourceRasterMap();
@@ -96,31 +110,25 @@ public class OpMetadataCreator {
 				
 		}
 	}
-	public void createCalImgMetadata(Map<String, ImageMetadata> imageMetadata,MyCalibration myCalibration,Map<String, CalibrationMetadata> calMetadata,Boolean[] bParams1) {
-		Product targetProduct = myCalibration.getTargetProduct();
-		Product sourceProduct = myCalibration.getSourceProduct();
+	
+	public void createProdImgMetadata(Map<String, ImageMetadata> imageMetadata, Product targetProduct, String id, String[] selectedPolarisations) {
 		int numOfBands = targetProduct.getNumBands();
 		for (int i = 0; i < targetProduct.getNumBands(); i++) {
-			HashMap<String, String[]> targetBandNameToSourceBandName = ((MySentinel1Calibrator) myCalibration.getCalibrator()).getTargetBandNameToSourceBandName();
-			Band targetBandCal = targetProduct.getBandAt(i);
-			Band sourceBandCal = sourceProduct.getBand(targetBandNameToSourceBandName.get(targetBandCal.getName())[0]);
-			ImageMetadata trgImageMetadataCal = getImageMetadata(targetBandCal,sourceBandCal.getName());
-			ImageMetadata srcImageMetadataCal = getImageMetadata(sourceBandCal,targetBandCal.getName());
-
-			CalibrationMetadata calibrationMetadata = new CalibrationMetadata(bParams1,
-					Unit.getUnitType(targetBandCal), Unit.getUnitType(sourceBandCal),
-					((MySentinel1Calibrator) myCalibration.getCalibrator()).getTargetBandToCalInfo());
-			
-			imageMetadata.put(sourceBandCal.getName()+"_"+myCalibration.getId(), srcImageMetadataCal);
-			imageMetadata.put(targetBandCal.getName()+"_"+myCalibration.getId(), trgImageMetadataCal);
-			calMetadata.put(sourceBandCal.getName()+"_"+myCalibration.getId(), calibrationMetadata);
+			Band targetBand = targetProduct.getBandAt(i);
+            if (selectedPolarisations != null) {
+                Set<String> selectedPols = new HashSet(Arrays.asList(Arrays.stream(selectedPolarisations).map(s -> s.toLowerCase()).toArray(String[]::new)));
+                String pol = OperatorUtils.getPolarizationFromBandName(targetBand.getName());
+                if (!selectedPols.contains(pol.toLowerCase())) {
+                    continue;
+                }
+            }
+			if(targetBand.getClass()!=Band.class)
+				continue;
+			ImageMetadata trgImageMetadata = getImageMetadata(targetBand,null);
+			imageMetadata.put(targetBand.getName()+"_"+id, trgImageMetadata);
 		}
 	}
-	public ChangeDetectionMetadata createChangeDMetadata(MyChangeDetection mychangeDetection,boolean[] bParams3) {
-		 double[] dParams2 = {mychangeDetection.getSourceProduct().getBandAt(0).getGeophysicalNoDataValue(),mychangeDetection.getSourceProduct().getBandAt(1).getGeophysicalNoDataValue() };
-		 return new ChangeDetectionMetadata(bParams3, dParams2);
-
-	}
+	
 	private ImageMetadata getImageMetadata(Band band,String sourceBandName) {
 		//band.getSourceImage().ge
 		return new ImageMetadata(band.getDataType(), band.getProduct().getSceneRasterWidth(),

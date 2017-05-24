@@ -60,43 +60,47 @@ public class GCPSelection {
     private int sourceImageWidth;
     private int sourceImageHeight;
 	private ElevationModel dem = null;
-public GCPSelection(int[] iParams,double[] dParams,GeoCoding tgtGeoCoding,MyTile masterTile,MyTile slaveTile) {
-	this.masterTile=masterTile;
-	this.slaveTile=slaveTile;
-	this.cWindowWidth=iParams[0];
-	this.cWindowHeight=iParams[1];
-    this.maxIteration = iParams[2];
-	this.rowUpSamplingFactor= iParams[3];
-	this.colUpSamplingFactor= iParams[4];
-    this.sourceImageWidth = iParams[5];
-    this.sourceImageHeight = iParams[6];
-	this.cHalfWindowWidth= this.cWindowWidth/2;
-	this.cHalfWindowHeight= this.cWindowHeight/2;
-    this.gcpTolerance = dParams[0];
-    this.masterNoDataValue = dParams[1];
-    this.slaveNoDataValue = dParams[2];
-    this.tgtGeoCoding=tgtGeoCoding;
-    if (onlyGCPsOnLand && dem == null) {
-        createDEM();
-    }
-}
-private synchronized void createDEM() {
-    if (dem != null) {
-        return;
-    }
 
-    final ElevationModelRegistry elevationModelRegistry = ElevationModelRegistry.getInstance();
-    final ElevationModelDescriptor demDescriptor = elevationModelRegistry.getDescriptor("SRTM 3Sec");
-    dem = demDescriptor.createDem(ResamplingFactory.createResampling(ResamplingFactory.NEAREST_NEIGHBOUR_NAME));
-}
+	public GCPSelection(int[] iParams,double[] dParams,GeoCoding tgtGeoCoding,MyTile masterTile,MyTile slaveTile) {
+		this.masterTile=masterTile;
+		this.slaveTile=slaveTile;
+		this.cWindowWidth=iParams[0];
+		this.cWindowHeight=iParams[1];
+		this.maxIteration = iParams[2];
+		this.rowUpSamplingFactor= iParams[3];
+		this.colUpSamplingFactor= iParams[4];
+		this.sourceImageWidth = iParams[5];
+		this.sourceImageHeight = iParams[6];
+		this.cHalfWindowWidth= this.cWindowWidth/2;
+		this.cHalfWindowHeight= this.cWindowHeight/2;
+		this.gcpTolerance = dParams[0];
+		this.masterNoDataValue = dParams[1];
+		this.slaveNoDataValue = dParams[2];
+		this.tgtGeoCoding=tgtGeoCoding;
+		if (onlyGCPsOnLand && dem == null) {
+			createDEM();
+		}
+		
+	}
+	
+	private synchronized void createDEM() {
+		if (dem != null) {
+			return;
+		}
+		final ElevationModelRegistry elevationModelRegistry = ElevationModelRegistry.getInstance();
+		final ElevationModelDescriptor demDescriptor = elevationModelRegistry.getDescriptor("SRTM 3Sec");
+		dem = demDescriptor.createDem(ResamplingFactory.createResampling(ResamplingFactory.NEAREST_NEIGHBOUR_NAME));
+	}
 
 	public Placemark computeSlaveGCP(Placemark mPin, PixelPos sGCPPixelPos) {
 		final GeoPos mGCPGeoPos = mPin.getGeoPos();
 		final PixelPos mGCPPixelPos = mPin.getPixelPos();
 		Boolean getSlaveGCP = getCoarseSlaveGCPPosition(mGCPPixelPos, sGCPPixelPos);
 		Placemark sPin = null;
-		if (!getSlaveGCP)
+		if (!getSlaveGCP) {
 			sPin = null;
+			//System.out.println("getSlaveGCP is FALSE");
+		}		
 		else {
 			sPin = Placemark.createPointPlacemark(GcpDescriptor.getInstance(),
 												mPin.getName(),
@@ -108,6 +112,7 @@ private synchronized void createDEM() {
 			if (!checkSlaveGCPValidity(sGCPPixelPos)) {
 	            //System.out.println("GCP(" + i + ") is outside slave image.");
 				sPin = null;
+				//System.out.println("checkSlaveGCPValidity is FALSE");
 	        }
 			
 		}
@@ -126,6 +131,7 @@ private synchronized void createDEM() {
 			if(getMISuccess==null)
 				return null;
 			else if (!getMISuccess) {
+				//System.out.println("getMISuccess is FALSE");
 				return false;
 			}
 			// System.out.println("Master imagette:");
@@ -179,22 +185,26 @@ private synchronized void createDEM() {
 		final int xul = x0 - cHalfWindowWidth + 1;
 		final int yul = y0 - cHalfWindowHeight + 1;
 		final Rectangle masterImagetteRectangle = new Rectangle(xul, yul, cWindowWidth, cWindowHeight);
-		if(!masterTile.getRectangle().contains(masterImagetteRectangle))
-		{	System.out.println(gcpPixelPos+ " is out of bounds -- master");
+		if(!masterTile.getRectangle().contains(masterImagetteRectangle)) {
+			System.out.println(gcpPixelPos + " is out of bounds -- master");
 			return false;
 		}
 		try {
 			
 			WritableRaster masterRaster = Utils.createWritableRaster(masterImagetteRectangle, masterTile.getType());
 			Object dataBuffer = ImageUtils.createDataBufferArray(masterTile.getWritableRaster().getTransferType(),
-					(int) masterImagetteRectangle.getWidth() * (int) masterImagetteRectangle.getHeight());
-			masterTile.getWritableRaster().getDataElements(masterImagetteRectangle.x, masterImagetteRectangle.y,
-					masterImagetteRectangle.width, masterImagetteRectangle.height, dataBuffer);
+															(int) masterImagetteRectangle.getWidth() * (int) masterImagetteRectangle.getHeight());
+			masterTile.getWritableRaster().getDataElements(masterImagetteRectangle.x,
+															masterImagetteRectangle.y,
+															masterImagetteRectangle.width,
+															masterImagetteRectangle.height,
+															dataBuffer);
 			masterRaster.setDataElements((int) masterImagetteRectangle.getMinX(),
-					(int) masterImagetteRectangle.getMinY(), (int) masterImagetteRectangle.getWidth(),
-					(int) masterImagetteRectangle.getHeight(), dataBuffer);
-			final MyTile masterImagetteRaster1 = new MyTile(masterRaster, masterImagetteRectangle,
-					masterTile.getType());
+										(int) masterImagetteRectangle.getMinY(),
+										(int) masterImagetteRectangle.getWidth(),
+										(int) masterImagetteRectangle.getHeight(),
+										dataBuffer);
+			final MyTile masterImagetteRaster1 = new MyTile(masterRaster, masterImagetteRectangle, masterTile.getType());
 			final ProductData masterData1 = masterImagetteRaster1.getDataBuffer();
 
 			ProductData masterData2 = null;
@@ -209,21 +219,25 @@ private synchronized void createDEM() {
 			final MyTileIndex mstIndex = new MyTileIndex(masterImagetteRaster1);
 
 			int k = 0;
+			//int valueTimes = 0;
+			//System.out.println("masterNoDataValue is: " + "\n" + masterNoDataValue);
 			int numInvalidPixels = 0;
 			for (int j = 0; j < cWindowHeight; j++) {
 				final int offset = mstIndex.calculateStride(yul + j);
 				for (int i = 0; i < cWindowWidth; i++) {
 					final int index = xul + i - offset;
-					if (complexCoregistration) {
+					if (complexCoregistration) {	// To complexCoregistration exei tethei false, ara sth sygkekrimenh ylopoihsh pame sto else
 						final double v1 = masterData1.getElemDoubleAt(index);
 						final double v2 = masterData2.getElemDoubleAt(index);
 						if (v1 == masterNoDataValue && v2 == noDataValue2) {
 							numInvalidPixels++;
 						}
 						mI[k++] = v1 * v1 + v2 * v2;
-					} else {
+					}
+					else {
 						final double v = masterData1.getElemDoubleAt(index);
 						if (v == masterNoDataValue) {
+							//valueTimes++;
 							numInvalidPixels++;
 						}
 						mI[k++] = v;
@@ -237,13 +251,18 @@ private synchronized void createDEM() {
 			}
 
 			if (numInvalidPixels > MaxInvalidPixelPercentage * cWindowHeight * cWindowWidth) {
+//				System.out.println("Problem with numInvalidPixels");
+//				System.out.println(numInvalidPixels);
+//				System.out.println(MaxInvalidPixelPercentage * cWindowHeight * cWindowWidth + "\n");
 				return false;
 			}
+			System.out.println("How many times will I be printed; pt1");
 			return true;
 
 		} catch (Throwable e) {
 			OperatorUtils.catchOperatorException("getMasterImagette", e);
 		}
+		System.out.println("How many times will I be printed; pt2");
 		return false;
 	}
 
