@@ -42,11 +42,11 @@ public class ChangePointsClusteringParallel implements Serializable {
 
 	public static void main(String[] args) throws IOException {
 		String filesPath = args[0];
-		String inputFileName=args[1];
-		String outputFileName=args[2];
-		File inputFile=new File(filesPath,inputFileName);
-		File outputFile=new File(filesPath,outputFileName);
-		ChangePointsClusteringParallel chalgo=new ChangePointsClusteringParallel();
+		String inputFileName = args[1];
+		String outputFileName = args[2];
+		File inputFile = new File(filesPath,inputFileName);
+		File outputFile = new File(filesPath,outputFileName);
+		ChangePointsClusteringParallel chalgo = new ChangePointsClusteringParallel();
 		chalgo.clusterChanges(inputFile, outputFile);
 //		String filesPath = "/home/ethanos/Desktop/BDEimages/VH";
 //		String inputFileName="changeD-tile-based-tiledImage.dim";
@@ -99,7 +99,7 @@ public class ChangePointsClusteringParallel implements Serializable {
 		long createArrayTime=System.currentTimeMillis();
 		System.out.println("createArrayTime "+(createArrayTime-bandTime));
 		//threshold, eps, minPTS
-//		SparkConf config = new SparkConf().setMaster("local[2]").setAppName("Img process per node"); //everywhere EXCEPT cluster
+//		SparkConf config = new SparkConf().setMaster("local[*]").setAppName("Parallel DBScan in Spark"); //everywhere EXCEPT cluster
 		SparkConf config = new SparkConf().setAppName("Parallel DBScan in Spark"); //ONLY in clusters
 		//configure spark to use Kryo serializer instead of the java serializer. 
 		//All classes that should be serialized by kryo, are registered in MyRegitration class .
@@ -126,12 +126,12 @@ public class ChangePointsClusteringParallel implements Serializable {
 			Point location = new Point(0,0);
 			WritableRaster outraster = WritableRaster.createPackedRaster(1, inputImg.getMaxX(), inputImg.getMaxY(), 1, 1, location);
 			numPolygons+=ClustersRDD.size();
-			System.out.println("PolygonNums: "+ClustersRDD.size());
+			System.out.println("PolygonNums: "+ ClustersRDD.size());
 			for (Set<Point> cl : ClustersRDD)
 			{
 				Polygon polygon = new Polygon();
 				String polygonCoords = "POLYGON((";
-				System.out.println("polygon points:"+cl.size());
+//				System.out.println("polygon points:"+cl.size());
 				int xmax=0;
 				int xmin=Integer.MAX_VALUE;
 				int ymax=0;
@@ -139,7 +139,7 @@ public class ChangePointsClusteringParallel implements Serializable {
 				for (Point pi : cl)
 				{
 					totalPointsPar++;
-					System.out.print("- "+"\t"+(pi.x+nodeCnt*(w/numNodes))+"\t"+pi.y+"\t"); //add node array width (nodeCnt*numNodes) to x coordinates 
+//					System.out.print("- "+"\t"+(pi.x+nodeCnt*(w/numNodes))+"\t"+pi.y+"\t"); //add node array width (nodeCnt*numNodes) to x coordinates 
 					polygon.addPoint((int) (pi.getX()+nodeCnt*(w/numNodes)), (int) pi.getY());
 //					polygonCoords+=(pi.x+nodeCnt*(w/numNodes))+" "+pi.y+", ";
 					if (pi.x<xmin) xmin=pi.x;
@@ -153,8 +153,8 @@ public class ChangePointsClusteringParallel implements Serializable {
 				polygonCoords+=(MyUtils.pixelToGeoLocation(myRead.getTargetProduct(), xmin+nodeCnt*(w/numNodes), ymax)+", ");
 				polygonCoords+=(MyUtils.pixelToGeoLocation(myRead.getTargetProduct(), xmin+nodeCnt*(w/numNodes), ymin));
 				polygonCoords+="))";
-				System.out.println();
-				System.out.println(polygonCoords);
+//				System.out.println();
+//				System.out.println(polygonCoords);
 				coords[coordsCnt++]=polygonCoords;
 				ClustersAsPolygon.add(polygon);
 				Rectangle rect = polygon.getBounds();
