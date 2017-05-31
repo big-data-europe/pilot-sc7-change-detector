@@ -92,10 +92,10 @@ public class Sentinel1Calibrator extends MyBaseCalibrator {
     			trgIdx = trgIndex.getIndex(x);
     			if (srcData1.getElemDoubleAt(srcIdx) == noDataValue) {
     				continues++;
-        			if(m < samplingPercentage) {
-        				System.out.println("\nsrcData1.getElemDoubleAt(srcIdx) =\t" + srcData1.getElemDoubleAt(srcIdx) + "\tat srcIdx: " + srcIdx);
-        				System.out.println("\t\t\tnoDataValue =\t" + noDataValue + "\n");
-        			}
+//        			if(m < samplingPercentage) {
+//        				System.out.println("\nsrcData1.getElemDoubleAt(srcIdx) =\t" + srcData1.getElemDoubleAt(srcIdx) + "\tat srcIdx: " + srcIdx);
+//        				System.out.println("\t\t\tnoDataValue =\t" + noDataValue + "\n");
+//        			}
     				continue;
     				// Every time the pixels are Zerow, is because we enter in this black-hole here!!!
     			}
@@ -135,21 +135,21 @@ public class Sentinel1Calibrator extends MyBaseCalibrator {
     			}
 
     			calValue = dn2 * calibrationFactor;
-    			if(m < samplingPercentage) {
-    				System.out.println("\tcalValue = dn2 * calibrationFactor");
-    				System.out.println("dn2 =\t\t\t" + dn2);
-    				System.out.println("calibrationFactor =\t" + calibrationFactor);
-    				System.out.println("calValue =\t\t" + calValue + "\n");
-    			}
+//    			if(m < samplingPercentage) {
+//    				System.out.println("\tcalValue = dn2 * calibrationFactor");
+//    				System.out.println("dn2 =\t\t\t" + dn2);
+//    				System.out.println("calibrationFactor =\t" + calibrationFactor);
+//    				System.out.println("calValue =\t\t" + calValue + "\n");
+//    			}
 
     			if (isComplex && outputImageInComplex) {
     				ifTimes++;
     				calValue = Math.sqrt(calValue)*phaseTerm;
-        			if(m < samplingPercentage) {
-        				System.out.println("\tcalValue = Math.sqrt(calValue)*phaseTerm");
-        				System.out.println("phaseTerm =\t" + phaseTerm);
-        				System.out.println("calValue =\t" + calValue + "\n");
-        			}
+//        			if(m < samplingPercentage) {
+//        				System.out.println("\tcalValue = Math.sqrt(calValue)*phaseTerm");
+//        				System.out.println("phaseTerm =\t" + phaseTerm);
+//        				System.out.println("calValue =\t" + calValue + "\n");
+//        			}
     			}
             
     			tgtData.setElemDoubleAt(trgIdx, calValue);
@@ -169,10 +169,10 @@ public class Sentinel1Calibrator extends MyBaseCalibrator {
     	System.out.println("\n" + xTimes + "\ttimes entered in X.");
     	System.out.println(yTimes + "\ttimes entered in Y.");
     	System.out.println(continues + "\ttimes Continued.\n\n");
-    	System.out.println("RESULTS:");
-    	System.out.println("\n" + prints + "\tsamples out of:\t" + total + "\tare printed");
-    	System.out.println(ifTimes + "\ttimes entere in IF (isComplex && outputImageInComplex)");
-    	System.out.println(zerows + "\tcalValue are ZEROW\n");
+//    	System.out.println("RESULTS:");
+//    	System.out.println("\n" + prints + "\tsamples out of:\t" + total + "\tare printed");
+//    	System.out.println(ifTimes + "\ttimes entere in IF (isComplex && outputImageInComplex)");
+//    	System.out.println(zerows + "\tcalValue are ZEROW\n");
     }
     
     public static float[] getVector(final CalibrationMetadata.CALTYPE calType, final Sentinel1Utils.CalibrationVector vec) {

@@ -184,7 +184,7 @@ public class GCPMappers {
 		System.out.println(iters + " times, I entered for. Equal to numberOfMasterGCPs");
 		System.out.println(fails2 + " times, passed the 1st IF");
 		System.out.println(fails1 + " times, passed the 2nd IF");
-		System.out.println(added + " of the sPin(S) weren't null and so the tuple was added to slaveGCPsRes, the PRECIOUSES!");
+		System.out.println(added + " of the sPin(s) weren't null and so the tuple was added to slaveGCPsRes, the PRECIOUSES!");
 		slaveRaster=null;
 		masterRaster=null;
 		masterTile=null;

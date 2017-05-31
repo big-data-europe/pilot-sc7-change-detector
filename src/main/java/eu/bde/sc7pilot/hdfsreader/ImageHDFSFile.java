@@ -48,13 +48,21 @@ public class ImageHDFSFile {
             else {
             	int n = 0;
                 final double[] dArray = new double[destWidth * destHeight];
+                final double[] dArray2 = new double[destWidth * destHeight];
+                final double[] dArray3 = new double[destWidth * destHeight];
+                int halfDataBuffer = dataBuffer.getSize() / 2;
                 //*** Checking dArray before getting values
                 System.out.println("\ndArrayBeforeSIZE =\t" + dArray.length);
                 System.out.println("dataBufferSIZE =\t" + dataBuffer.getSize());
+                System.out.println("@@@ halfDataBufferSIZE =\t" + halfDataBuffer);
                 System.out.println("dataBufferBANKS =\t" + dataBuffer.getNumBanks() + "\n");
                 for(int i = 0; i < 10; i++) {
+                	int j = halfDataBuffer + i;
                 	System.out.println("dArrayBefore[" + i + "] =\t" + dArray[i]);
-                	System.out.println("dataBufferFLOAT[" + i + "] =\t" + dataBuffer.getElemFloat(i) + "\n");
+                	System.out.println("dataBufferFLOAT[" + i + "] =\t" + dataBuffer.getElemFloat(i));
+                	System.out.println("\t~~~~~~~~~~~~~~~~~~~~~~");
+                	System.out.println("@@@ dArray2Before[" + i + "] =\t" + dArray2[i]);
+                	System.out.println("dataBufferFLOAT_HALF[" + j + "] =\t" + dataBuffer.getElemFloat(j) + "\n");
                 }
                 System.out.println("\n");
                 //~~~END OF Checking dArray before getting values
@@ -67,10 +75,36 @@ public class ImageHDFSFile {
                 	sampleModel.getSamples(0, 0, data.getWidth(), data.getHeight(), sampleOffset, dArray, dataBuffer);
                 }
                 else {
+                	int mySasmpleOffset = 1;
+                	sampleModel.getSamples(0, 0, data.getWidth(), data.getHeight(), mySasmpleOffset, dArray3, dataBuffer);
+                	System.out.println("halfDataBuffer =\t" + halfDataBuffer);
                 	System.out.println("\n\n\tI THINK WE ARE IN MULTI-TIFF IMAGE\n\n");
                 	for(int i = 0; i < dArray.length; i++) {
+                		int j = halfDataBuffer + i;
                 		dArray[i] = dataBuffer.getElemDouble(i);
+                		dArray2[i] = dataBuffer.getElemDouble(j);
                 	}
+                	for(int i = 0; i < 10; i++) {
+                		System.out.println("dataBufferFLOAT[" + i + "] =\t" + dataBuffer.getElemFloat(i));                		
+                	}
+                	System.out.println("\n");
+                	for(int i = 0; i < 10; i++) {
+                		System.out.println("dArrayAfter[" + i + "] =\t" + dArray[i]);                		
+                	}
+                	System.out.println("\n");
+                	for(int i = 0; i < 10; i++) {
+                		System.out.println("@@@ dArray2After[" + i + "] =\t" + dArray2[i]);                		
+                	}
+                	System.out.println("\n");
+                	for(int i = 0; i < 10; i++) {
+                		System.out.println("&&& dArray3After[" + i + "] =\t" + dArray3[i]);                		
+                	}
+                	System.out.println("\n");
+                	for(int i = 0; i < 10; i++) {
+                		int j = halfDataBuffer + i;
+                		System.out.println("dataBufferFLOAT_HALF[" + j + "] =\t" + dataBuffer.getElemFloat(j));        
+                	}
+                	System.out.println("\n");
                 }
                 //~~~ END OF My Implementation
                 
@@ -78,10 +112,16 @@ public class ImageHDFSFile {
                 System.out.println("\n\tdArrayAfterSIZE \t= " + dArray.length);
                 System.out.println("\tdataBufferSIZE \t\t= " + dataBuffer.getSize());
                 System.out.println("\tdataBufferBANKS \t= " + dataBuffer.getNumBanks() + "\n");
-                for(int i = 0; i < 10; i++) {
-                	System.out.println("dArrayAfter[" + i + "] =\t" + dArray[i]);
-                	System.out.println("dataBufferFLOAT[" + i + "] =\t" + dataBuffer.getElemFloat(i) + "\n");
-                }
+//                for(int i = 0; i < 10; i++) {
+//                	int j = halfDataBuffer + i;
+//                	System.out.println("dArrayAfter[" + i + "] =\t" + dArray[i]);
+//                	System.out.println("dataBufferFLOAT[" + i + "] =\t" + dataBuffer.getElemFloat(i));
+//                	System.out.println("\t~~~~~~~~~~~~~~~~~~~~~~");
+//                	System.out.println("@@@ dArray2After[" + i + "] =\t" + dArray2[i]);
+//                	System.out.println("dataBufferFLOAT_HALF[" + j + "] =\t" + dataBuffer.getElemFloat(j));
+//                	System.out.println("\t~~~~~~~~~~~~~~~~~~~~~~");
+//                	System.out.println("%%% dArray3After[" + i + "] =\t" + dArray3[i] + "\n");
+//                }
                 System.out.println("\n");
                 //~~~END OF Checking dArray after getting values
                 

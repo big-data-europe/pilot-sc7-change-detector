@@ -145,10 +145,10 @@ public class TileBasedFinal {
 //		System.out.println(slaveTiffInHDFS);
 		// String masterTiffInHDFS = "/media/indiana/data/imgs/subseting/s1a-s6-grd-vv-20160815t214331-20160815t214400-012616-013c9d-001.tiff";
 		// String slaveTiffInHDFS = "/media/indiana/data/imgs/subseting/s1a-s6-grd-vv-20160908t214332-20160908t214401-012966-014840-001.tiff";
-		//String masterTiffInHDFS = "/media/indiana/data/imgs/subseting/subsets-for-ttesting-cd/subset_of_S1A_S6_GRDH_1SDV_20160815T214331_20160815T214400_012616_013C9D_2495.tif";
-		//String slaveTiffInHDFS = "/media/indiana/data/imgs/subseting/subsets-for-ttesting-cd/subset_of_S1A_S6_GRDH_1SDV_20160908T214332_20160908T214401_012966_014840_ABDC.tif";
-		String masterTiffInHDFS = "/media/indiana/data/imgs/subseting/subsets-for-ttesting-cd/la/subset_of_S1A_IW_GRDH_1SSV_20160601T135202_20160601T135227_011518_011929_0EE2.tif";
-		String slaveTiffInHDFS = "/media/indiana/data/imgs/subseting/subsets-for-ttesting-cd/la/subset_of_S1A_IW_GRDH_1SSV_20160905T135207_20160905T135232_012918_0146C0_ECCC.tif";
+		String masterTiffInHDFS = "/media/indiana/data/imgs/subseting/subsets-for-ttesting-cd/subset_of_S1A_S6_GRDH_1SDV_20160815T214331_20160815T214400_012616_013C9D_2495.tif";
+		String slaveTiffInHDFS = "/media/indiana/data/imgs/subseting/subsets-for-ttesting-cd/subset_of_S1A_S6_GRDH_1SDV_20160908T214332_20160908T214401_012966_014840_ABDC.tif";
+		//String masterTiffInHDFS = "/media/indiana/data/imgs/subseting/subsets-for-ttesting-cd/la/subset_of_S1A_IW_GRDH_1SSV_20160601T135202_20160601T135227_011518_011929_0EE2.tif";
+		//String slaveTiffInHDFS = "/media/indiana/data/imgs/subseting/subsets-for-ttesting-cd/la/subset_of_S1A_IW_GRDH_1SSV_20160905T135207_20160905T135232_012918_0146C0_ECCC.tif";
 		
 		System.out.println("Serial Processing to acquire metadata...");
 		long startProcessing = System.currentTimeMillis();
@@ -324,7 +324,7 @@ public class TileBasedFinal {
 			return CalibrationMappers.calibrationSlave(iterator, bandInfosB.getValue(), imgMetadataB.getValue(), calMetadataB.getValue());
 			}
 		);
-		List<Tuple2<Tuple2<Point, String>, MyTile>> debugMasterRastersCal = masterRastersCal.collect();
+//		List<Tuple2<Tuple2<Point, String>, MyTile>> debugMasterRastersCal = masterRastersCal.collect();
 		
 		JavaPairRDD<Tuple3<Point, String, Rectangle>, MyTile> dependentPairs = slaveRastersCal.flatMapToPair((Tuple2<String, MyTile> pair) -> {
 			ImageMetadata srcImgMetadataStack = imgMetadataB.getValue().get(pair._1 + "_" + "stack");
@@ -358,7 +358,7 @@ public class TileBasedFinal {
 		);
 
 		// split the master tiles in groups of rows with a unique key to each group
-		System.out.println("NOW?");
+//		System.out.println("NOW?");
 		JavaPairRDD<Tuple2<Integer, String>, MyTile> masterRastersRdd2 = masterRastersCal.filter((Tuple2<Tuple2<Point, String>, MyTile> pair) -> {
 			String name = imgMetadataB.getValue().get(pair._1._2 + "_stack").getBandPairName();
 			Map<String, String> bandsList = bandsListGCPB.getValue();
@@ -368,32 +368,32 @@ public class TileBasedFinal {
 			return CalibrationMappers.mapToRows(pair, imgMetadataB.getValue(), rows.getValue());
 			}
 		);
-		System.out.println("OR NOT?");
+//		System.out.println("OR NOT?");
 		
 		// gcps computation. group by key the groups of rows and and compute the gcps contained to each group. Then, collect the gcps to the master node.
 		JavaPairRDD<Tuple2<Integer, String>, Iterable<MyTile>> masterRows = masterRastersRdd2.groupByKey();
-		List<Tuple2<Tuple2<Integer, String>, Iterable<MyTile>>> debugMasterRows = masterRows.collect();
-		System.out.println("DEBUGMASTERROWS: " + debugMasterRows.toString());
+//		List<Tuple2<Tuple2<Integer, String>, Iterable<MyTile>>> debugMasterRows = masterRows.collect();
+//		System.out.println("DEBUGMASTERROWS: " + debugMasterRows.toString());
 		JavaPairRDD<Tuple2<Integer, String>, Iterable<MyTile>> stacktilesRows = createstackResultsRows.groupByKey();
-		List<Tuple2<Tuple2<Integer, String>, Iterable<MyTile>>> debugStacktilesRows = stacktilesRows.collect();
-		System.out.println("DEBUGSTACKTILEROWS: " + debugStacktilesRows.toString());
-		List<Tuple2<Tuple2<Integer, String>, Tuple2<Iterable<MyTile>, Iterable<MyTile>>>> debugJoin = masterRows.join(stacktilesRows).collect();
-		System.out.println("DEBUGJOIN:" + debugJoin.toString());
-		System.out.println("GCPMETADATABROAD: " + GCPMetadataBroad.getValue());
-		System.out.println("IMGMETADATAB: " + imgMetadataB.getValue());
-		System.out.println("MASTERGCPS: " + masterGcps.getValue());
-		System.out.println("ROWS: " + rows.getValue());
-		List<Tuple2<String, Tuple2<Integer, Placemark>>> debugSlaveGCPs = null;
-		System.out.println("SIZE OF DEBUGJOIN: " + debugJoin.size());
-		for(int j = 0; j < debugJoin.size(); j++) {
-			System.out.println("FOR i = " + j);
-			List<Tuple2<String, Tuple2<Integer, Placemark>>> listDebugSlaveGCPs = GCPMappers.GCPSelection(debugJoin.get(j), GCPMetadataBroad.getValue(), imgMetadataB.getValue(), masterGcps.getValue(), rows.getValue());
-			System.out.println("listDebugSlaveGCPs is: " + listDebugSlaveGCPs.toString());
-			// listDebugSlaveGCPs.addAll(debugSlaveGCPs); // den leitourgei. Eytyxws h for trexei mono gia mia epanalipsi
-		}
-		//System.out.println("ALL debugSlaveGCPs ARE: " + debugSlaveGCPs.toString());
-		// List<Tuple2<String, Tuple2<Integer, Placemark>>> debugSlaveGCPs = GCPMappers.GCPSelection(debugJoin, GCPMetadataBroad.getValue(), imgMetadataB.getValue(), masterGcps.getValue(), rows.getValue());
-		// List<Tuple2<String, Tuple2<Integer, Placemark>>>
+//		List<Tuple2<Tuple2<Integer, String>, Iterable<MyTile>>> debugStacktilesRows = stacktilesRows.collect();
+//		System.out.println("DEBUGSTACKTILEROWS: " + debugStacktilesRows.toString());
+//		List<Tuple2<Tuple2<Integer, String>, Tuple2<Iterable<MyTile>, Iterable<MyTile>>>> debugJoin = masterRows.join(stacktilesRows).collect();
+//		System.out.println("DEBUGJOIN:" + debugJoin.toString());
+//		System.out.println("GCPMETADATABROAD: " + GCPMetadataBroad.getValue());
+//		System.out.println("IMGMETADATAB: " + imgMetadataB.getValue());
+//		System.out.println("MASTERGCPS: " + masterGcps.getValue());
+//		System.out.println("ROWS: " + rows.getValue());
+//		List<Tuple2<String, Tuple2<Integer, Placemark>>> debugSlaveGCPs = null;
+//		System.out.println("SIZE OF DEBUGJOIN: " + debugJoin.size());
+//		for(int j = 0; j < debugJoin.size(); j++) {
+//			System.out.println("FOR i = " + j);
+//			List<Tuple2<String, Tuple2<Integer, Placemark>>> listDebugSlaveGCPs = GCPMappers.GCPSelection(debugJoin.get(j), GCPMetadataBroad.getValue(), imgMetadataB.getValue(), masterGcps.getValue(), rows.getValue());
+//			System.out.println("listDebugSlaveGCPs is: " + listDebugSlaveGCPs.toString());
+//			// listDebugSlaveGCPs.addAll(debugSlaveGCPs); // den leitourgei. Eytyxws h for trexei mono gia mia epanalipsi
+//		}
+			//System.out.println("ALL debugSlaveGCPs ARE: " + debugSlaveGCPs.toString());
+			// List<Tuple2<String, Tuple2<Integer, Placemark>>> debugSlaveGCPs = GCPMappers.GCPSelection(debugJoin, GCPMetadataBroad.getValue(), imgMetadataB.getValue(), masterGcps.getValue(), rows.getValue());
+			// List<Tuple2<String, Tuple2<Integer, Placemark>>>
 		List<Tuple2<String, Tuple2<Integer, Placemark>>> slaveGCPs = masterRows.join(stacktilesRows)
 																.flatMap((Tuple2<Tuple2<Integer, String>, Tuple2<Iterable<MyTile>, Iterable<MyTile>>> pair) -> {
 			return GCPMappers.GCPSelection(pair, GCPMetadataBroad.getValue(), imgMetadataB.getValue(), masterGcps.getValue(), rows.getValue());
@@ -422,7 +422,7 @@ public class TileBasedFinal {
 				gcpsMap.put(bandName, placemarksMap);
 			}
 		}
-		System.out.println("GCPs size" + slaveGCPs.size());
+		System.out.println("GCPs size:\t" + slaveGCPs.size());
 		for (String name : bandsListGCP.keySet()) {
 			final ProductNodeGroup<Placemark> targetGCPGroup = GCPManager.instance().getGcpGroup(myGCPSelection.getTargetProduct().getBand(name));
 			Map<Integer, Placemark> map = gcpsMap.get(name);

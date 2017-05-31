@@ -256,13 +256,13 @@ public class GCPSelection {
 //				System.out.println(MaxInvalidPixelPercentage * cWindowHeight * cWindowWidth + "\n");
 				return false;
 			}
-			System.out.println("How many times will I be printed; pt1");
+//			System.out.println("How many times will I be printed; pt1");
 			return true;
 
 		} catch (Throwable e) {
 			OperatorUtils.catchOperatorException("getMasterImagette", e);
 		}
-		System.out.println("How many times will I be printed; pt2");
+//		System.out.println("How many times will I be printed; pt2");
 		return false;
 	}
 
