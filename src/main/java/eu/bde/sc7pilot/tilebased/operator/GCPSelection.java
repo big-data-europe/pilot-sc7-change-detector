@@ -99,7 +99,7 @@ public class GCPSelection {
 		Placemark sPin = null;
 		if (!getSlaveGCP) {
 			sPin = null;
-			//System.out.println("getSlaveGCP is FALSE");
+			System.out.println("getSlaveGCP is FALSE");
 		}		
 		else {
 			sPin = Placemark.createPointPlacemark(GcpDescriptor.getInstance(),
@@ -112,7 +112,7 @@ public class GCPSelection {
 			if (!checkSlaveGCPValidity(sGCPPixelPos)) {
 	            //System.out.println("GCP(" + i + ") is outside slave image.");
 				sPin = null;
-				//System.out.println("checkSlaveGCPValidity is FALSE");
+				System.out.println("checkSlaveGCPValidity is FALSE");
 	        }
 			
 		}

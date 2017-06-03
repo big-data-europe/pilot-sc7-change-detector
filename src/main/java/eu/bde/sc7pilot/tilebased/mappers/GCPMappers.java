@@ -36,7 +36,7 @@ public class GCPMappers {
 		int width = 0;
 		int height = 0;
 		int type = 0;
-		for (int i = 1; i < masterTiles.size(); i++) {
+		for (int i = 0; i < masterTiles.size(); i++) {
 			MyTile masterTile = masterTiles.get(i);
 			if (masterTile.getMinX() < x)
 				x = masterTile.getMinX();
@@ -46,13 +46,17 @@ public class GCPMappers {
 		}
 		for (int i = 0; i < masterTiles.size(); i++) {
 			MyTile masterTile = masterTiles.get(i);
-			if (masterTile.getMinX() == x)
+			if (masterTile.getMinX() == x) {
+				System.out.println(height + "\t\tis the CURRENT-HEIGHT OF MASTER-RASTER!\n");
 				height += masterTile.getHeight();
+			}
 			if (masterTile.getMinY() == y)
 				width += masterTile.getWidth();
 		}
-		WritableRaster masterRaster = Utils.createWritableRaster(new Rectangle(x, y, width, height), type);
 		System.out.println(masterTiles.size() + "\t\tare the MasterMyTiles");
+		System.out.println(type + "\t\tis the type!");
+		System.out.println(height + "\t\tis the HEIGHT OF MASTER-RASTER!\n");
+		WritableRaster masterRaster = Utils.createWritableRaster(new Rectangle(x, y, width, height), type);
 		for (int i = 0; i < masterTiles.size(); i++) {
 			masterRaster.setDataElements(masterTiles.get(i).getMinX(),
 										masterTiles.get(i).getMinY(),
@@ -67,13 +71,13 @@ public class GCPMappers {
 				}
 			}
 			System.out.println(masterBuffer.length + "\t\tPixels in MasterMyTile No.:\t\t" + i);
-			System.out.println(k + " of them are ZEROW");
+			System.out.println(k + " of them are ZEROW\n");
 		}
 		x = slaveTiles.get(0).getMinX();
 		y = slaveTiles.get(0).getMinY();
 		width = 0;
 		height = 0;
-		for (int i = 1; i < slaveTiles.size(); i++) {
+		for (int i = 0; i < slaveTiles.size(); i++) {
 			MyTile slaveTile = slaveTiles.get(i);
 			if (slaveTile.getMinX() < x)
 				x = slaveTile.getMinX();
@@ -140,14 +144,26 @@ public class GCPMappers {
 		int nOfKeys = (int) Math.ceil((float) rowsCount / (float) 4);
 		int bMinY = (int) masterTile.getRectangle().getMinY();
 		int bHeight = (int) masterTile.getRectangle().getHeight();
+		System.out.println(bHeight + " The initial bHeight");
+		System.out.println(pair._1._1 + " :EINAI POTE TO pair._1._1 DIAFORETIKO APO TIMH '1'??? THA ME TRELANEIS???");
 		double tileHeight = masterTiles.get(0).getHeight();
-		if (pair._1._1 != 1)
+		if (pair._1._1 != 1) 
 			bMinY = bMinY + (int) tileHeight;
-		if (pair._1._1 != nOfKeys && pair._1._1 != 1)
+		if (pair._1._1 != nOfKeys && pair._1._1 != 1) {
 			bHeight = bHeight - (int) (2 * tileHeight);
-		else if (pair._1._1 == 1)
+			System.out.println(bHeight + " is the bHeight after IF");
+		}
+		else if (pair._1._1 == 1) {
+			int initialBHeight = bHeight;
 			bHeight = bHeight - (int) tileHeight;
+			System.out.println(bHeight + " is the bHeight after ELSE-IF");
+			if(bHeight == 0) {
+				bHeight = initialBHeight;
+			}
+		}
 		Rectangle bounds = new Rectangle((int) masterTile.getRectangle().getMinX(), bMinY, (int) masterTile.getRectangle().getWidth(), bHeight);
+		System.out.println("Embado tou Orthogwniou bounds: " + bounds.width + " X " + bounds.height + "\n");
+		//Rectangle bounds2 = new Rectangle
 		GeoCoding geoCoding=trgImgMetadataGCP.getGeoCoding();
 		if(geoCoding == null)
 			geoCoding = new TiePointGeoCoding(trgImgMetadataGCP.getLatGrid(),trgImgMetadataGCP.getLonGrid());
