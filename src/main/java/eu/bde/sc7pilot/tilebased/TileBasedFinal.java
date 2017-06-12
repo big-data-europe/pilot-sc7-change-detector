@@ -161,8 +161,11 @@ public class TileBasedFinal {
 		//String masterTiffInHDFS = "/media/indiana/data/imgs/subseting/subset04_Zaatari/subset_of_S1A_IW_GRDH_1SDV_20161101T033537_20161101T033602_013743_0160ED_EBD6.tif";
 		//String slaveTiffInHDFS = "/media/indiana/data/imgs/subseting/subset04_Zaatari/subset_of_S1A_IW_GRDH_1SDV_20160130T033528_20160130T033553_009718_00E305_A298.tif";
 		// SAN-FRAN-SUBSET
-		String masterTiffInHDFS = "/media/indiana/data/imgs/subseting/subset05_SanFran/subset_of_S1B_IW_GRDH_1SDV_20170219T015829_20170219T015854_004363_007958_2E9A.tif";
-		String slaveTiffInHDFS = "/media/indiana/data/imgs/subseting/subset05_SanFran/subset_of_S1A_IW_GRDH_1SSV_20160922T015912_20160922T015937_013159_014E98_9960.tif";
+		//String masterTiffInHDFS = "/media/indiana/data/imgs/subseting/subset05_SanFran/subset_of_S1B_IW_GRDH_1SDV_20170219T015829_20170219T015854_004363_007958_2E9A.tif";
+		//String slaveTiffInHDFS = "/media/indiana/data/imgs/subseting/subset05_SanFran/subset_of_S1A_IW_GRDH_1SSV_20160922T015912_20160922T015937_013159_014E98_9960.tif";
+		// ZAATARI-ORIGINAL-SUBSET
+		String masterTiffInHDFS = "/media/indiana/data/imgs/subseting/subset06_ZaatariOriginal/subset_of_S1A_IW_GRDH_1SDV_20160129T153207_20160129T153232_009711_00E2D2_2F5A.tif";
+		String slaveTiffInHDFS = "/media/indiana/data/imgs/subseting/subset06_ZaatariOriginal/subset_of_S1A_IW_GRDH_1SDV_20161031T153214_20161031T153239_013736_0160B3_82A5.tif";
 		//  ROTTERDAM-SUBSET
 		//String masterTiffInHDFS = "/media/indiana/data/imgs/subseting/subset04_Roterdam/subset_of_S1B_IW_GRDH_1SDV_20161217T172403_20161217T172428_003439_005DFD_56E8.tif";
 		//String slaveTiffInHDFS = "/media/indiana/data/imgs/subseting/subset04_Roterdam/subset_of_S1A_IW_GRDH_1SDV_20160915T055007_20160915T055032_013059_014B3E_D9C8.tif";
