@@ -29,6 +29,7 @@ public class GCPMappers {
 																				Map<String, ImageMetadata> map,
 																				ProductNodeGroup<Placemark> masterGcpGroup,
 																				int rowsCount) {
+		String devsMSG = "[Dev's MSG]\t";
 		List<MyTile> masterTiles = Lists.newArrayList(pair._2._1.iterator());
 		List<MyTile> slaveTiles = Lists.newArrayList(pair._2._2.iterator());
 		int x = masterTiles.get(0).getMinX();
@@ -47,15 +48,11 @@ public class GCPMappers {
 		for (int i = 0; i < masterTiles.size(); i++) {
 			MyTile masterTile = masterTiles.get(i);
 			if (masterTile.getMinX() == x) {
-				System.out.println(height + "\t\tis the CURRENT-HEIGHT OF MASTER-RASTER!\n");
 				height += masterTile.getHeight();
 			}
 			if (masterTile.getMinY() == y)
 				width += masterTile.getWidth();
 		}
-		System.out.println(masterTiles.size() + "\t\tare the MasterMyTiles");
-		System.out.println(type + "\t\tis the type!");
-		System.out.println(height + "\t\tis the HEIGHT OF MASTER-RASTER!\n");
 		WritableRaster masterRaster = Utils.createWritableRaster(new Rectangle(x, y, width, height), type);
 		for (int i = 0; i < masterTiles.size(); i++) {
 			masterRaster.setDataElements(masterTiles.get(i).getMinX(),
@@ -63,15 +60,6 @@ public class GCPMappers {
 										masterTiles.get(i).getWidth(),
 										masterTiles.get(i).getHeight(),
 										masterTiles.get(i).getRawSamples().getElems());
-			int k = 0;
-			float[] masterBuffer = masterTiles.get(i).getDataBufferFloat();
-			for(int j = 0; j < masterBuffer.length; j++) {
-				if (masterBuffer[j] == 0.0) {
-					k++;
-				}
-			}
-			System.out.println(masterBuffer.length + "\t\tPixels in MasterMyTile No.:\t\t" + i);
-			System.out.println(k + " of them are ZEROW\n");
 		}
 		x = slaveTiles.get(0).getMinX();
 		y = slaveTiles.get(0).getMinY();
@@ -108,9 +96,10 @@ public class GCPMappers {
 				j++;
 			}
 		}
-		System.out.println(j + "\t\tZEROW masterPixels");
-		System.out.println(masterPixels -j + "\t\tnon-Zerow masterPixels");
-		System.out.println(masterPixels + "\t\tAll masterPixels\n");
+		int nonZerowsMaster = masterPixels -j;
+		System.out.println("\n" + devsMSG + j + "\t\tZEROW masterPixels");
+		System.out.println(devsMSG + nonZerowsMaster + "\t\tnon-Zerow masterPixels");
+		System.out.println(devsMSG + masterPixels + "\t\tAll masterPixels\n");
 		MyTile slaveTile = new MyTile(slaveRaster, new Rectangle(x, y, slaveRaster.getWidth(), slaveRaster.getHeight()), type);
 		int k = 0;
 		int slavePixels = slaveTile.getDataBufferFloat().length;
@@ -119,9 +108,10 @@ public class GCPMappers {
 				k++;
 			}
 		}
-		System.out.println(k + "\t\tZEROW slavePixels");
-		System.out.println(slavePixels -k + "\t\tnon-Zerow slavePixels");
-		System.out.println(slavePixels + "\t\tAll slavePixels\n");
+		int nonZerowsSlave = slavePixels -j;
+		System.out.println("\n" + devsMSG + k + "\t\tZEROW slavePixels");
+		System.out.println(devsMSG + nonZerowsSlave + "\t\tnon-Zerow slavePixels");
+		System.out.println(devsMSG + slavePixels + "\t\tAll slavePixels\n");
 
 		List<Tuple2<String, Tuple2<Integer, Placemark>>> slaveGCPsRes = new ArrayList<Tuple2<String, Tuple2<Integer, Placemark>>>();
 		final int numberOfMasterGCPs = masterGcpGroup.getNodeCount();
@@ -140,48 +130,38 @@ public class GCPMappers {
 		double[] dParams3 = {GCPMetadataBroad2.getGcpTolerance(), trgImgMetadataGCP.getNoDataValue(), srcImgMetadataGCP.getNoDataValue()};
 
 		final int[] offset2 = new int[2];
-		// long startgcpTime = System.currentTimeMillis();
 		int nOfKeys = (int) Math.ceil((float) rowsCount / (float) 4);
 		int bMinY = (int) masterTile.getRectangle().getMinY();
 		int bHeight = (int) masterTile.getRectangle().getHeight();
-		System.out.println(bHeight + " The initial bHeight");
-		System.out.println(pair._1._1 + " :EINAI POTE TO pair._1._1 DIAFORETIKO APO TIMH '1'??? THA ME TRELANEIS???");
 		double tileHeight = masterTiles.get(0).getHeight();
 		if (pair._1._1 != 1) 
 			bMinY = bMinY + (int) tileHeight;
 		if (pair._1._1 != nOfKeys && pair._1._1 != 1) {
 			bHeight = bHeight - (int) (2 * tileHeight);
-			System.out.println(bHeight + " is the bHeight after IF");
 		}
 		else if (pair._1._1 == 1) {
 			int initialBHeight = bHeight;
 			bHeight = bHeight - (int) tileHeight;
-			System.out.println(bHeight + " is the bHeight after ELSE-IF");
 			if(bHeight == 0) {
 				bHeight = initialBHeight;
 			}
 		}
+		
 		Rectangle bounds = new Rectangle((int) masterTile.getRectangle().getMinX(), bMinY, (int) masterTile.getRectangle().getWidth(), bHeight);
-		System.out.println("Embado tou Orthogwniou bounds: " + bounds.width + " X " + bounds.height + "\n");
-		//Rectangle bounds2 = new Rectangle
+		System.out.println(devsMSG + "Final bounds:\t" + bounds.width + " X " + bounds.height + "\n\n");
+		
 		GeoCoding geoCoding=trgImgMetadataGCP.getGeoCoding();
 		if(geoCoding == null)
 			geoCoding = new TiePointGeoCoding(trgImgMetadataGCP.getLatGrid(),trgImgMetadataGCP.getLonGrid());
-		int fails1 = 0;
-		int fails2 = 0;
-		int iters = 0;
-		int added = 0;
-		
+
+		int added = 0;		
 		for (int i = 0; i < numberOfMasterGCPs; i++) {
-			iters++;
 			final Placemark mPin = masterGcpGroup.get(i);
 			final PixelPos sGCPPixelPos = new PixelPos(mPin.getPixelPos().x + offset2[0], mPin.getPixelPos().y + offset2[1]);
 			if (bounds.contains(new Point((int) sGCPPixelPos.x, (int) sGCPPixelPos.y))) {
-				fails2++;
 				GCPSelection GCPSelection = new GCPSelection(iParams2, dParams3, geoCoding, masterTile, slaveTile);
 				try {
 					if (GCPSelection.checkMasterGCPValidity(mPin) && GCPSelection.checkSlaveGCPValidity(sGCPPixelPos)) {
-						fails1++;
 						Placemark sPin = GCPSelection.computeSlaveGCP(mPin, sGCPPixelPos);
 
 						if (sPin != null) {
@@ -197,14 +177,11 @@ public class GCPMappers {
 
 			}
 		}
-		System.out.println(iters + " times, I entered for. Equal to numberOfMasterGCPs");
-		System.out.println(fails2 + " times, passed the 1st IF");
-		System.out.println(fails1 + " times, passed the 2nd IF");
-		System.out.println(added + " of the sPin(s) weren't null and so the tuple was added to slaveGCPsRes, the PRECIOUSES!");
-		slaveRaster=null;
-		masterRaster=null;
-		masterTile=null;
-		slaveTile=null;
+		System.out.println("\n" + devsMSG + added + " of the sPin(s) weren't null. Tuple was added to slaveGCPsRes. We got the PRECIOUSES!\n");
+		slaveRaster = null;
+		masterRaster = null;
+		masterTile = null;
+		slaveTile = null;
 		return slaveGCPsRes;
 	}
 }

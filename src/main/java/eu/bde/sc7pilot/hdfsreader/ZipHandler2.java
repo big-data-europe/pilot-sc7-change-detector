@@ -27,11 +27,7 @@ public class ZipHandler2 {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        //System.out.println("THE LOCAL PATH OF TIFF IS:");
-        //System.out.println(tiffLocalFilePath);
         tiffInHDFS = tiffLocalToHDFS(tiffLocalFilePath, dirHDFS);
-        //System.out.println("THE HDFS-PATH OF THE TIFF IS:");
-        //System.out.println(tiffInHDFS);
         return tiffInHDFS;
 
     }
@@ -78,7 +74,7 @@ public class ZipHandler2 {
 		}
         long endTime = System.currentTimeMillis();
         long duration = endTime - startTime;
-        System.out.println(duration + " ms, for storing " + tiffLocalFilePath + " to HDFS");
+        System.out.println("\n[Dev's MSG]\t" + duration + " ms, for storing " + tiffLocalFilePath + " to HDFS\n");
         return tiffInHDFS;
 
     }

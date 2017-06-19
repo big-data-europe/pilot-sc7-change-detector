@@ -23,6 +23,7 @@ public class CalibrationMappers {
 																				Map<String, BandInfo> infos,
 																				Map<String, ImageMetadata> map,
 																				Map<String, CalibrationMetadata> calMetadataMap) {
+		String devsMSG = "[Dev's MSG]\t";
 		List<Tuple2<Tuple2<Point, String>, MyTile>> tiles = new ArrayList<Tuple2<Tuple2<Point, String>, MyTile>>();
 		List<Tuple2<String, Point>> points = Lists.newArrayList(iterator);
 		Map<String, ReadHDFSTile> bands = new HashMap<String, ReadHDFSTile>();
@@ -53,51 +54,25 @@ public class CalibrationMappers {
 													trgImgMetadataCal1.getRectangle(targetPoint.x, targetPoint.y),
 													trgImgMetadataCal1.getDataType());
 			
-			//*** Monitoring targetTile before computetile
-			int m = 0;
-			float[] targetTileBufferBefore = targetTile.getDataBufferFloat();
-			for(int j = 0; j < targetTileBufferBefore.length; j++) {
-				if (targetTileBufferBefore[j] == 0.0) {
-					m++;
-				}
-			}
-			System.out.println("\n\n\t\t************************");
-			System.out.println(targetTileBufferBefore.length + "\t\tPixels in targetTileBefore No.:\t" + i);
-			System.out.println("\t" + m + " of them are ZEROW\n\n");
-			//~~~ Monitoring targetTile before computetile
-			
 			sentinel1Calibrator.computeTile(readTile, null, targetTile, srcImgMetadataCal1.getNoDataValue(), trgImgMetadataCal1.getBandName());
 			
-			//*** Monitoring targetTile after computetile
-			int l = 0;
-			float[] targetTileBuffer = targetTile.getDataBufferFloat();
-			for(int j = 0; j < targetTileBuffer.length; j++) {
-				if (targetTileBuffer[j] == 0.0) {
-					l++;
-				}
-			}
-			System.out.println(targetTileBuffer.length + "\t\tPixels in targetTile No.:\t" + i);
-			System.out.println("\t" + l + " of them are ZEROW");
-			System.out.println("***************************************************************\n\n\n");
+			//*** Monitoring targetTile after computetile	// Activate this to see the implementation
+//			int l = 0;
+//			float[] targetTileBuffer = targetTile.getDataBufferFloat();
+//			for(int j = 0; j < targetTileBuffer.length; j++) {
+//				if (targetTileBuffer[j] == 0.0) {
+//					l++;
+//				}
+//			}
+//			System.out.println("\n" + devsMSG + targetTileBuffer.length + "\t\tPixels in targetTile No.: " + i);
+//			System.out.println(devsMSG + l + "\t\tof them are ZEROW\n");
 			//~~~ Monitoring targetTile after computetile
 			
 			tiles.add(new Tuple2<Tuple2<Point, String>, MyTile>(new Tuple2<Point, String>(targetPoint, trgImgMetadataCal1.getBandName()), targetTile));
-			//int k = 0;
-			
-//			float[] readTileBuffer = readTile.getDataBufferFloat();
-//			if(readTileBuffer == null) {
-//				System.out.println(readTileBuffer + "\tIs the readTileBuffer");
-//			}
-//			else {
-//				for(int m = 0; m < 100; m++) {
-//					System.out.println(readTileBuffer[m]);
-//					System.out.println("are the values of th first 100 pixels");
-//				}
-//			}
-
 		}
 		return tiles;
 	}
+	
 	public static List<Tuple2<String,  MyTile>> calibrationSlave(Iterator<Tuple2<String, Point>> iterator,
 			Map<String, BandInfo> infos, Map<String, ImageMetadata> map,
 			Map<String, CalibrationMetadata> calMetadataMap) {

@@ -88,6 +88,7 @@ public class TileBasedFinal {
 			throw new IOException("Error: Invalid Args");
 			
 		}
+		String devsMSG = "[Dev's MSG]\t";
 		
 		TileBasedFinal parallelTiles = new TileBasedFinal();
 		
@@ -97,85 +98,44 @@ public class TileBasedFinal {
 		
 		long endAll = System.currentTimeMillis();
 		long totalAll = endAll - startAll;
-        System.out.println("\n" + totalAll + " ms, for storing to HDFS and running all operators including Write.\n");
+        System.out.println(devsMSG + totalAll + " ms [time4], for storing to HDFS and running all operators including Write (except deleting unwanted files).\n");
         
         //***Deleting unnecessary files***
-//        File masterDim = new File(args[1]);
         File masterTiff = new File(args[2]);
-//        File slaveDim = new File(args[3]);
         File slaveTiff = new File(args[4]);
-//        if (masterDim.exists()) {
-//        	masterDim.delete();
-//        	System.out.println(masterDim.getName() + " deleted succesfully!");
-//        }
-//        else {
-//        	System.out.println("Cannot delete: " + masterDim.getName());
-//        }
         if (masterTiff.exists()) {
-        	//masterTiff.delete();
-        	System.out.println(masterTiff.getName() + " deleted succesfully!");
+        	masterTiff.delete();
+        	System.out.println(devsMSG + masterTiff.getName() + " deleted succesfully!");
         }
         else {
-        	System.out.println("Cannot delete: " + masterTiff.getName());
+        	System.out.println(devsMSG + "Cannot delete: " + masterTiff.getName());
         }
-//        if (slaveDim.exists()) {
-//        	slaveDim.delete();
-//        	System.out.println(slaveDim.getName() + " deleted succesfully!");
-//        }
-//        else {
-//        	System.out.println("Cannot delete: " + slaveDim.getName());
-//        }
         if (slaveTiff.exists()) {
-        	//slaveTiff.delete();
-        	System.out.println(slaveTiff.getName() + " deleted succesfully!");
+        	slaveTiff.delete();
+        	System.out.println(devsMSG + slaveTiff.getName() + " deleted succesfully!\n");
         }
         else {
-        	System.out.println("Cannot delete: " + slaveTiff.getName());
+        	System.out.println(devsMSG + "Cannot delete: " + slaveTiff.getName() + "\n");
         }
         
 	}
 
 	public void processTiles(String hdfsPath, String masterDimFilePath, String masterTiffFilePath, String slaveDimFilePath, String slaveTiffFilePath, String targetPath, int partitionsNumber)
 			throws Exception {
+		String devsMSG = "[Dev's MSG]\t";
 		//***Storing tiffs to HDFS***
 		ZipHandler2 zipHandler = new ZipHandler2();
+		String masterTiffInHDFS = "/media/indiana/data/imgs/subseting/subset03_SaoPaulo/subset_of_S1A_S6_GRDH_1SDV_20160815T214331_20160815T214400_012616_013C9D_2495.tif";
 //		String masterTiffInHDFS = zipHandler.tiffLocalToHDFS(masterTiffFilePath, hdfsPath);
-//		System.out.println(masterTiffInHDFS);
+		System.out.println(devsMSG + "Master's tiff HDFS-URI: " + masterTiffInHDFS);
+		String slaveTiffInHDFS = "/media/indiana/data/imgs/subseting/subset03_SaoPaulo/subset_of_S1A_S6_GRDH_1SDV_20160908T214332_20160908T214401_012966_014840_ABDC.tif";
 //		String slaveTiffInHDFS = zipHandler.tiffLocalToHDFS(slaveTiffFilePath, hdfsPath);
-//		System.out.println(slaveTiffInHDFS);
-		//  SP-WHOLE_SUBSET
-		//String masterTiffInHDFS = "/media/indiana/data/imgs/subseting/s1a-s6-grd-vv-20160815t214331-20160815t214400-012616-013c9d-001.tiff";
-		//String slaveTiffInHDFS = "/media/indiana/data/imgs/subseting/s1a-s6-grd-vv-20160908t214332-20160908t214401-012966-014840-001.tiff";
-		//String masterTiffInHDFS = "/media/indiana/data/imgs/subseting/subsets-for-ttesting-cd/la/subset_of_S1A_IW_GRDH_1SSV_20160601T135202_20160601T135227_011518_011929_0EE2.tif";
-		//String slaveTiffInHDFS = "/media/indiana/data/imgs/subseting/subsets-for-ttesting-cd/la/subset_of_S1A_IW_GRDH_1SSV_20160905T135207_20160905T135232_012918_0146C0_ECCC.tif";
-		// LARISSA-SUBSETS
-		//String masterTiffInHDFS = "/media/indiana/data/imgs/subseting/subset01_Larisa/subset_of_S1A_IW_GRDH_1SDV_20170330T162335_20170330T162400_015924_01A408_8894.tif";
-		//String slaveTiffInHDFS = "/media/indiana/data/imgs/subseting/subset01_Larisa/subset_of_S1B_IW_GRDH_1SDV_20170228T162251_20170228T162316_004503_007D66_2D84.tif";
-		// PEIRAEUS-SUBSETS
-		//String masterTiffInHDFS = "/media/indiana/data/imgs/subseting/subset02_Peiraeus/subset_of_S1B_IW_GRDH_1SDV_20170301T042242_20170301T042307_004510_007DA0_F2AB.tif";
-		//String slaveTiffInHDFS = "/media/indiana/data/imgs/subseting/subset02_Peiraeus/subset_of_S1B_IW_GRDH_1SDV_20161101T042246_20161101T042311_002760_004ABE_2A88.tif";
-		// SAO-PAULO-SUBSETS
-		//String masterTiffInHDFS = "/media/indiana/data/imgs/subseting/subset03_SaoPaulo/subset_of_S1A_S6_GRDH_1SDV_20160815T214331_20160815T214400_012616_013C9D_2495.tif";
-		//String slaveTiffInHDFS = "/media/indiana/data/imgs/subseting/subset03_SaoPaulo/subset_of_S1A_S6_GRDH_1SDV_20160908T214332_20160908T214401_012966_014840_ABDC.tif";
-		// ZAATARI-SUBSET
-		//String masterTiffInHDFS = "/media/indiana/data/imgs/subseting/subset04_Zaatari/subset_of_S1A_IW_GRDH_1SDV_20161101T033537_20161101T033602_013743_0160ED_EBD6.tif";
-		//String slaveTiffInHDFS = "/media/indiana/data/imgs/subseting/subset04_Zaatari/subset_of_S1A_IW_GRDH_1SDV_20160130T033528_20160130T033553_009718_00E305_A298.tif";
-		// SAN-FRAN-SUBSET
-		//String masterTiffInHDFS = "/media/indiana/data/imgs/subseting/subset05_SanFran/subset_of_S1B_IW_GRDH_1SDV_20170219T015829_20170219T015854_004363_007958_2E9A.tif";
-		//String slaveTiffInHDFS = "/media/indiana/data/imgs/subseting/subset05_SanFran/subset_of_S1A_IW_GRDH_1SSV_20160922T015912_20160922T015937_013159_014E98_9960.tif";
-		// ZAATARI-ORIGINAL-SUBSET
-		String masterTiffInHDFS = "/media/indiana/data/imgs/subseting/subset06_ZaatariOriginal/subset_of_S1A_IW_GRDH_1SDV_20160129T153207_20160129T153232_009711_00E2D2_2F5A.tif";
-		String slaveTiffInHDFS = "/media/indiana/data/imgs/subseting/subset06_ZaatariOriginal/subset_of_S1A_IW_GRDH_1SDV_20161031T153214_20161031T153239_013736_0160B3_82A5.tif";
-		//  ROTTERDAM-SUBSET
-		//String masterTiffInHDFS = "/media/indiana/data/imgs/subseting/subset04_Roterdam/subset_of_S1B_IW_GRDH_1SDV_20161217T172403_20161217T172428_003439_005DFD_56E8.tif";
-		//String slaveTiffInHDFS = "/media/indiana/data/imgs/subseting/subset04_Roterdam/subset_of_S1A_IW_GRDH_1SDV_20160915T055007_20160915T055032_013059_014B3E_D9C8.tif";
+		System.out.println(devsMSG + "Slave's tiff HDFS-URI: " + slaveTiffInHDFS + "\n");	
 		
-		
-		
-		System.out.println("Serial Processing to acquire metadata...");
+		System.out.println(devsMSG + "Serial Processing to acquire metadata...\n\n");
 		long startProcessing = System.currentTimeMillis();
 		
-		//***Extracting metadata through serial processing***
+		/* Extracting metadata through serial processing */
 		List<Tuple2<String, Point>> slaveIndices = null;
 		List<Tuple2<String, Point>> masterIndices = null;
 		Map<String, BandInfo> bandInfos = new HashMap<>(2);
@@ -243,7 +203,7 @@ public class TileBasedFinal {
 		sourcesForCreateStack[0] = myCalibration1.getTargetProduct();
 		sourcesForCreateStack[1] = myCalibration2.getTargetProduct();
 
-		String[] parameters = { "NONE", "Master", "Orbit" };
+		String[] parameters = {"NONE", "Master", "Orbit"};
 		MyCreateStack myCreateStack = new MyCreateStack(parameters);
 		myCreateStack.setSourceProduct(sourcesForCreateStack);
 		myCreateStack.setId("stack");
@@ -278,7 +238,6 @@ public class TileBasedFinal {
 		sp.initOperator(writeOp);
 		
 		/* The imageMetadata class has replaced the band class and contains only the absolutely essential metadata for tile computations */
-		int bandsLeft = myCalibration1.getTargetProduct().getNumBands();
 		Object2ObjectMap<String, ImageMetadata> imageMetadata = new Object2ObjectOpenHashMap<String, ImageMetadata>(myCalibration1.getTargetProduct().getNumBands() * 3);
 		OpMetadataCreator opMetadataCreator = new OpMetadataCreator();
 		Object2ObjectMap<String, CalibrationMetadata> calMetadata = new Object2ObjectOpenHashMap<String, CalibrationMetadata>(myCalibration1.getTargetProduct().getNumBands() * 4);
@@ -305,13 +264,13 @@ public class TileBasedFinal {
 
 		long endSerialProcessing = System.currentTimeMillis();
 		long durationSerialProcessing = endSerialProcessing - startProcessing;
-		System.out.println(durationSerialProcessing + " ms, for extracting metadata through Serial Processing");
+		System.out.println("\n" + devsMSG + durationSerialProcessing + " ms [time1], for extracting metadata through Serial Processing");
 		
-		System.out.println("Parallel Processing using Spark...");		
+		System.out.println("\n" + devsMSG + "Parallel Processing using Spark...\n\n");		
 
-		//***Parallel Processing using Spark***
+		/* Parallel Processing using Spark */
 		SparkConf conf = new SparkConf().setMaster("local[*]").setAppName("Parallelized at local mode"); //everywhere EXCEPT cluster
-		//SparkConf conf = new SparkConf().set("spark.driver.maxResultSize", "5g").setAppName("Parallelized Operators in Spark");
+//		SparkConf conf = new SparkConf().set("spark.driver.maxResultSize", "5g").setAppName("Parallel Change-Detector in Spark");
 
 		/* configure spark to use Kryo serializer instead of the java serializer. */
 		/* All classes that should be serialized by kryo, are registered in MyRegitration class */
@@ -333,8 +292,6 @@ public class TileBasedFinal {
 
 		JavaPairRDD<String, Point> masterRastersRdd = sc.parallelizePairs(masterIndices).partitionBy(new HashPartitioner(partitionsNumber));
 		JavaPairRDD<String, Point> slaveRastersRdd = sc.parallelizePairs(slaveIndices).partitionBy(new HashPartitioner(partitionsNumber));
-
-		//long startWithGCPTime = System.currentTimeMillis(); //Efi's time-counter
 		
 		// master image calibration
 		JavaPairRDD<Tuple2<Point, String>, MyTile> masterRastersCal = masterRastersRdd.mapPartitionsToPair((Iterator<Tuple2<String, Point>> iterator) -> {
@@ -346,7 +303,6 @@ public class TileBasedFinal {
 			return CalibrationMappers.calibrationSlave(iterator, bandInfosB.getValue(), imgMetadataB.getValue(), calMetadataB.getValue());
 			}
 		);
-//		List<Tuple2<Tuple2<Point, String>, MyTile>> debugMasterRastersCal = masterRastersCal.collect();
 		
 		JavaPairRDD<Tuple3<Point, String, Rectangle>, MyTile> dependentPairs = slaveRastersCal.flatMapToPair((Tuple2<String, MyTile> pair) -> {
 			ImageMetadata srcImgMetadataStack = imgMetadataB.getValue().get(pair._1 + "_" + "stack");
@@ -380,7 +336,6 @@ public class TileBasedFinal {
 		);
 
 		// split the master tiles in groups of rows with a unique key to each group
-//		System.out.println("NOW?");
 		JavaPairRDD<Tuple2<Integer, String>, MyTile> masterRastersRdd2 = masterRastersCal.filter((Tuple2<Tuple2<Point, String>, MyTile> pair) -> {
 			String name = imgMetadataB.getValue().get(pair._1._2 + "_stack").getBandPairName();
 			Map<String, String> bandsList = bandsListGCPB.getValue();
@@ -390,32 +345,10 @@ public class TileBasedFinal {
 			return CalibrationMappers.mapToRows(pair, imgMetadataB.getValue(), rows.getValue());
 			}
 		);
-//		System.out.println("OR NOT?");
 		
 		// gcps computation. group by key the groups of rows and and compute the gcps contained to each group. Then, collect the gcps to the master node.
 		JavaPairRDD<Tuple2<Integer, String>, Iterable<MyTile>> masterRows = masterRastersRdd2.groupByKey();
-//		List<Tuple2<Tuple2<Integer, String>, Iterable<MyTile>>> debugMasterRows = masterRows.collect();
-//		System.out.println("DEBUGMASTERROWS: " + debugMasterRows.toString());
 		JavaPairRDD<Tuple2<Integer, String>, Iterable<MyTile>> stacktilesRows = createstackResultsRows.groupByKey();
-//		List<Tuple2<Tuple2<Integer, String>, Iterable<MyTile>>> debugStacktilesRows = stacktilesRows.collect();
-//		System.out.println("DEBUGSTACKTILEROWS: " + debugStacktilesRows.toString());
-//		List<Tuple2<Tuple2<Integer, String>, Tuple2<Iterable<MyTile>, Iterable<MyTile>>>> debugJoin = masterRows.join(stacktilesRows).collect();
-//		System.out.println("DEBUGJOIN:" + debugJoin.toString());
-//		System.out.println("GCPMETADATABROAD: " + GCPMetadataBroad.getValue());
-//		System.out.println("IMGMETADATAB: " + imgMetadataB.getValue());
-//		System.out.println("MASTERGCPS: " + masterGcps.getValue());
-//		System.out.println("ROWS: " + rows.getValue());
-//		List<Tuple2<String, Tuple2<Integer, Placemark>>> debugSlaveGCPs = null;
-//		System.out.println("SIZE OF DEBUGJOIN: " + debugJoin.size());
-//		for(int j = 0; j < debugJoin.size(); j++) {
-//			System.out.println("FOR i = " + j);
-//			List<Tuple2<String, Tuple2<Integer, Placemark>>> listDebugSlaveGCPs = GCPMappers.GCPSelection(debugJoin.get(j), GCPMetadataBroad.getValue(), imgMetadataB.getValue(), masterGcps.getValue(), rows.getValue());
-//			System.out.println("listDebugSlaveGCPs is: " + listDebugSlaveGCPs.toString());
-//			// listDebugSlaveGCPs.addAll(debugSlaveGCPs); // den leitourgei. Eytyxws h for trexei mono gia mia epanalipsi
-//		}
-			//System.out.println("ALL debugSlaveGCPs ARE: " + debugSlaveGCPs.toString());
-			// List<Tuple2<String, Tuple2<Integer, Placemark>>> debugSlaveGCPs = GCPMappers.GCPSelection(debugJoin, GCPMetadataBroad.getValue(), imgMetadataB.getValue(), masterGcps.getValue(), rows.getValue());
-			// List<Tuple2<String, Tuple2<Integer, Placemark>>>
 		List<Tuple2<String, Tuple2<Integer, Placemark>>> slaveGCPs = masterRows.join(stacktilesRows)
 																.flatMap((Tuple2<Tuple2<Integer, String>, Tuple2<Iterable<MyTile>, Iterable<MyTile>>> pair) -> {
 			return GCPMappers.GCPSelection(pair, GCPMetadataBroad.getValue(), imgMetadataB.getValue(), masterGcps.getValue(), rows.getValue());
@@ -423,13 +356,9 @@ public class TileBasedFinal {
 		).collect();
 		if(slaveGCPs.isEmpty())
 		{
-			System.out.println("not enough GCPs detected");
+			System.out.println("\n" + devsMSG + "not enough GCPs detected");
 			return;
 		}
-
-//		long endWithGCPTime = System.currentTimeMillis(); //Efi's time-counter
-//		long totalwithGCPTime = endWithGCPTime - startProcessing; //Efi's time-counter
-//		System.out.println(" GCP " + totalwithGCPTime); //Efi's time-counter
 		
 		// process put the gcps into a hashmap to eliminate some duplicates
 		Map<String, Map<Integer, Placemark>> gcpsMap = new HashMap<String, Map<Integer, Placemark>>();
@@ -444,7 +373,6 @@ public class TileBasedFinal {
 				gcpsMap.put(bandName, placemarksMap);
 			}
 		}
-		System.out.println("GCPs size:\t" + slaveGCPs.size());
 		for (String name : bandsListGCP.keySet()) {
 			final ProductNodeGroup<Placemark> targetGCPGroup = GCPManager.instance().getGcpGroup(myGCPSelection.getTargetProduct().getBand(name));
 			Map<Integer, Placemark> map = gcpsMap.get(name);
@@ -454,7 +382,6 @@ public class TileBasedFinal {
 		}
 		
 		// compute the warp function
-		//long startWarpTime = System.currentTimeMillis(); //Efi's time-counter
 		myWarp.getWarpData();
 		Map<String, WarpData> warpdataMap = new HashMap<String, WarpData>();
 		Product targetProductWarp = myWarp.getTargetProduct();
@@ -503,9 +430,7 @@ public class TileBasedFinal {
 			Object2ObjectMap<Rectangle, ObjectList<Point>> pointsRect = dependRectsMap.get(pair._1._1);
 			ImageMetadata srcImgMetadataWarp = imgMetadataB.getValue().get(pair._1._1() + "_warp" + "_source");
 			int bufferType = ImageManager.getDataBufferType(srcImgMetadataWarp.getDataType());
-			final SampleModel sampleModel = ImageUtils.createSingleBandedSampleModel(bufferType,
-														srcImgMetadataWarp.getTileSize().width,
-														srcImgMetadataWarp.getTileSize().height);
+			final SampleModel sampleModel = ImageUtils.createSingleBandedSampleModel(bufferType, srcImgMetadataWarp.getTileSize().width, srcImgMetadataWarp.getTileSize().height);
 			final ColorModel cm = PlanarImage.createColorModel(sampleModel);
 			TiledImage img = new TiledImage(0, 0, srcImgMetadataWarp.getImageWidth(), srcImgMetadataWarp.getImageHeight(), 0, 0, sampleModel, cm);
 			List<MyTile> tiles = Lists.newArrayList(pair._2.iterator());
@@ -517,6 +442,7 @@ public class TileBasedFinal {
 			Map<String, WarpData> map = warpDataMapB.getValue();
 			WarpData w = map.get(pair._1._1());
 			Warp warp = new Warp(warpMetadataB.getValue().getInterp(), w, warpMetadataB.getValue().getInterpTable());
+			
 			// get warped image
 			ImageMetadata trgImgMetadataWarp = imgMetadataB.getValue().get(pair._1._1() + "_warp" + "_target");
 			Map<String, ImageMetadata> map2 = imgMetadataB.getValue();
@@ -529,7 +455,6 @@ public class TileBasedFinal {
 													trgImgMetadataWarp.getDataType());
 				warp.computeTile(targetTile, warpedImage);
 				trgtiles.add(new Tuple2<Tuple2<Point, String>, MyTile>(new Tuple2<Point, String>(p, stackImgMetadata.getBandPairName()), targetTile));
-				//System.out.println(System.currentTimeMillis() - startWarpPoint + " ends warp for point " + p); //Efi's time-counter
 				}
 			return trgtiles;
 			}
@@ -553,23 +478,26 @@ public class TileBasedFinal {
 			}
 		);
 		List<Tuple2<Tuple2<Point, String>, MyTile>> changeResults = changeDResults.collect();
-		System.out.println("result tiles " + changeResults.size());
 		
 		long endParallelProcessing = System.currentTimeMillis();
-		long durationParallelProcessing = endParallelProcessing - endSerialProcessing;
-		System.out.println(durationParallelProcessing + " ms, for all parallelized procedures.");
-		long durationImageProcessing = endParallelProcessing - startProcessing;
-        System.out.println(durationImageProcessing + " ms, for running all operators serial and parallel. No HDFS. No Write");
-
-//    	long endTime = System.currentTimeMillis(); //Efi's time-counter
-//    	long totalTime = endTime - startProcessing; //Efi's time-counter
-//		System.out.println("total time " + totalTime); //Efi's time-counter
 		
 		Write write = new Write(myChangeDetection.getTargetProduct(), targetFile, "BEAM-DIMAP");
 		for (int i = 0; i < changeResults.size(); i++) {
 			Band targetBand = writeOp.getTargetProduct().getBand(changeResults.get(i)._1._2);
 			write.storeTile(targetBand, changeResults.get(i)._2);
 		}
+		
+		// Final Messages!
+		System.out.println("\n" + devsMSG + "Result Tiles: " + changeResults.size());
+		
+		long durationParallelProcessing = endParallelProcessing - endSerialProcessing;
+		System.out.println("\n" + devsMSG + durationParallelProcessing + " ms [time2], for all parallelized procedures.");
+		
+		long durationImageProcessing = endParallelProcessing - startProcessing;
+        System.out.println("\n" + devsMSG + durationImageProcessing + " ms [time3], for running all operators serial and parallel. No HDFS. No Write\n");
+
+
+
 		
 		//sc.close();
 	}

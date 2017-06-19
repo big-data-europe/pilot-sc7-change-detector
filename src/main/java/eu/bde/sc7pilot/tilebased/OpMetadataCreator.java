@@ -31,7 +31,7 @@ public class OpMetadataCreator {
 	public void createCalImgMetadata(Map<String, ImageMetadata> imageMetadata, MyCalibration myCalibration, Map<String, CalibrationMetadata> calMetadata, Boolean[] bParams1) {
 		Product targetProduct = myCalibration.getTargetProduct();
 		Product sourceProduct = myCalibration.getSourceProduct();
-		int numOfBands = targetProduct.getNumBands();
+//		int numOfBands = targetProduct.getNumBands();
 		for (int i = 0; i < targetProduct.getNumBands(); i++) {
 			HashMap<String, String[]> targetBandNameToSourceBandName = ((MySentinel1Calibrator) myCalibration.getCalibrator()).getTargetBandNameToSourceBandName();
 			Band targetBandCal = targetProduct.getBandAt(i);
@@ -76,7 +76,7 @@ public class OpMetadataCreator {
 		Map<Product, int[]> slaveOffsetMap =null;
 		if(slaveOffsetIsNeeded)
 			slaveOffsetMap = ((MyCreateStack) operator).getSlaveOffsettMap();
-		int numOfBands = targetProduct.getNumBands();
+//		int numOfBands = targetProduct.getNumBands();
 		for (int i = 0; i < targetProduct.getNumBands(); i++) {
 			Band targetBand = targetProduct.getBandAt(i);
 			if (masterBands.contains(targetBand.getName())) {
@@ -103,8 +103,6 @@ public class OpMetadataCreator {
 			if(sourceBand!=null)
 				imageMetadata.put(srcName, srcImageMetadata);
 			imageMetadata.put(trgName, trgImageMetadata);
-//			if(sourceTargetMap!=null)
-//				sourceTargetMap.put(sourceBand.getName()+"_"+operator.getId(), targetBand.getName());
 			if(slaveOffsetIsNeeded)
 				srcImageMetadata.setOffsetMap(slaveOffsetMap.get(sourceBand.getProduct()));
 				
@@ -112,7 +110,7 @@ public class OpMetadataCreator {
 	}
 	
 	public void createProdImgMetadata(Map<String, ImageMetadata> imageMetadata, Product targetProduct, String id, String[] selectedPolarisations) {
-		int numOfBands = targetProduct.getNumBands();
+//		int numOfBands = targetProduct.getNumBands();
 		for (int i = 0; i < targetProduct.getNumBands(); i++) {
 			Band targetBand = targetProduct.getBandAt(i);
             if (selectedPolarisations != null) {
@@ -130,7 +128,6 @@ public class OpMetadataCreator {
 	}
 	
 	private ImageMetadata getImageMetadata(Band band,String sourceBandName) {
-		//band.getSourceImage().ge
 		return new ImageMetadata(band.getDataType(), band.getProduct().getSceneRasterWidth(),
 				band.getProduct().getSceneRasterHeight(), (float) band.getGeophysicalNoDataValue(), 0, 0,
 				((TiePointGeoCoding)band.getGeoCoding()).getLatGrid(),((TiePointGeoCoding)band.getGeoCoding()).getLonGrid(),band.getName(),sourceBandName);

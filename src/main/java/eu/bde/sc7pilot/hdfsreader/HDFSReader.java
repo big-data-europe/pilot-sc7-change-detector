@@ -55,13 +55,8 @@ public class HDFSReader {
         int sourceHeight = sourceStepY * (destHeight - 1) + 1;
 
         //*** Implementation of readBandRasterDataImpl()
-//        bandInfo.img.readImageIORasterBand(sourceOffsetX, sourceOffsetY, sourceStepX, sourceStepY,
-//                                                   destBuffer, destOffsetX, destOffsetY, destWidth, destHeight,
-//                                                   bandInfo.imageID, bandInfo.bandSampleOffset);
         ImageHDFSFile imgHDFS = new ImageHDFSFile();
         imgHDFS.setImageReader(tiffImageReader);
-        //Suppose that:
-
         //SOS imageID & bandSampleOffset are taken from BandInfo bandinfo!!! Einai int(s) kai xrhsimopoiountai se arketa shmeia sthn readImageIORasterBand
         imgHDFS.readImageIORasterBand(sourceOffsetX, sourceOffsetY, sourceStepX, sourceStepY, destBuffer, destOffsetX, destOffsetY, destWidth, destHeight, bandInfo.imageID, bandInfo.bandSampleOffset);
         //~~~ Implementation of readBandRasterDataImpl()

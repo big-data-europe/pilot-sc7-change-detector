@@ -39,33 +39,26 @@ public class Sentinel1Calibrator extends MyBaseCalibrator {
     	final int y0 = targetTileRectangle.y;
     	final int w = targetTileRectangle.width;
     	final int h = targetTileRectangle.height;
-    	//System.out.println("x0 = " + x0 + ", y0 = " + y0 + ", w = " + w + ", h = " + h + ", target band = " + targetBand.getName());
+    	
     	ProductData srcData1 = null;
     	ProductData srcData2 = null;
+    	
     	srcData1 = sourceRaster1.getDataBuffer();
     	if(sourceRaster2 != null)
     		srcData2 = sourceRaster2.getDataBuffer();
     	
     	final ProductData tgtData = targetTile.getDataBuffer();
-    	
-    	//CHECK tgtData
-    	//tgtData.
-    	
     	final MyTileIndex srcIndex = new MyTileIndex(sourceRaster1);
     	final MyTileIndex trgIndex = new MyTileIndex(targetTile);
     	final int maxY = y0 + h;
     	final int maxX = x0 + w;
+    	
     	final CalibrationInfo calInfo = targetBandToCalInfo.get(targetBandName);
     	final CALTYPE calType = getCalibrationType(targetBandName);
+    	
     	double dn = 0.0, dn2, i, q, muX, lutVal, retroLutVal = 1.0, calValue, calibrationFactor, phaseTerm = 0.0;
-    	int srcIdx, trgIdx;
-    	int zerows = 0, prints = 0, total = 0, ifTimes = 0, xTimes = 0, yTimes = 0, continues = 0;		// Debugging variables!
-    	double samplingPercentage = 0.00008;
-    	System.out.println("x0 =\t" + x0 + "\t\ty0 =\t" + y0);
-    	System.out.println("w =\t" + w + "\t\th =\t" + h);
-    	System.out.println("maxX =\t" + maxX + "\t\tmaxY =\t" + maxY + "\n");
+    	int srcIdx, trgIdx;    	
     	for (int y = y0; y < maxY; ++y) {
-    		yTimes++;
     		srcIndex.calculateStride(y);
     		trgIndex.calculateStride(y);
     		final int calVecIdx = calInfo.getCalibrationVectorIndex(y);
@@ -81,21 +74,13 @@ public class Sentinel1Calibrator extends MyBaseCalibrator {
     			retroVec0LUT = getVector(dataType, vec0);
     			retroVec1LUT = getVector(dataType, vec1);
     		}
+    		
     		final double azTime = calInfo.firstLineTime + y * calInfo.lineTimeInterval;
     		final double muY = (azTime - vec0.timeMJD) / (vec1.timeMJD - vec0.timeMJD);
-    		for (int x = x0; x < maxX; ++x) {
-    			xTimes++;
-    			// variable for sampling
-    			double m = Math.random();
-    			
+    		for (int x = x0; x < maxX; ++x) {    			
     			srcIdx = srcIndex.getIndex(x);
     			trgIdx = trgIndex.getIndex(x);
     			if (srcData1.getElemDoubleAt(srcIdx) == noDataValue) {
-    				continues++;
-//        			if(m < samplingPercentage) {
-//        				System.out.println("\nsrcData1.getElemDoubleAt(srcIdx) =\t" + srcData1.getElemDoubleAt(srcIdx) + "\tat srcIdx: " + srcIdx);
-//        				System.out.println("\t\t\tnoDataValue =\t" + noDataValue + "\n");
-//        			}
     				continue;
     				// Every time the pixels are Zerow, is because we enter in this black-hole here!!!
     			}
@@ -135,44 +120,12 @@ public class Sentinel1Calibrator extends MyBaseCalibrator {
     			}
 
     			calValue = dn2 * calibrationFactor;
-//    			if(m < samplingPercentage) {
-//    				System.out.println("\tcalValue = dn2 * calibrationFactor");
-//    				System.out.println("dn2 =\t\t\t" + dn2);
-//    				System.out.println("calibrationFactor =\t" + calibrationFactor);
-//    				System.out.println("calValue =\t\t" + calValue + "\n");
-//    			}
-
-    			if (isComplex && outputImageInComplex) {
-    				ifTimes++;
+    			if (isComplex && outputImageInComplex)
     				calValue = Math.sqrt(calValue)*phaseTerm;
-//        			if(m < samplingPercentage) {
-//        				System.out.println("\tcalValue = Math.sqrt(calValue)*phaseTerm");
-//        				System.out.println("phaseTerm =\t" + phaseTerm);
-//        				System.out.println("calValue =\t" + calValue + "\n");
-//        			}
-    			}
-            
-    			tgtData.setElemDoubleAt(trgIdx, calValue);
     			
-    			// Check how many calValue(s) are Zerow
-    			// Print samples of trgIdx and calValue
-    			total++;
-    			if(calValue == 0.0)
-    				zerows++;
-    			if(m < samplingPercentage) {
-    				prints++;
-    				System.out.println("trgIdx: " + trgIdx + "\tHas calValue: " + calValue);
-    				System.out.println("\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-    			}
+    			tgtData.setElemDoubleAt(trgIdx, calValue);
     		}
     	}
-    	System.out.println("\n" + xTimes + "\ttimes entered in X.");
-    	System.out.println(yTimes + "\ttimes entered in Y.");
-    	System.out.println(continues + "\ttimes Continued.\n\n");
-//    	System.out.println("RESULTS:");
-//    	System.out.println("\n" + prints + "\tsamples out of:\t" + total + "\tare printed");
-//    	System.out.println(ifTimes + "\ttimes entere in IF (isComplex && outputImageInComplex)");
-//    	System.out.println(zerows + "\tcalValue are ZEROW\n");
     }
     
     public static float[] getVector(final CalibrationMetadata.CALTYPE calType, final Sentinel1Utils.CalibrationVector vec) {

@@ -53,9 +53,5 @@ public class ReadHDFSTile {
             e.printStackTrace();
         }
         tile.setRawSamples(dataBuffer);
-        //ProductData dataBuffer2 = tile.getRawSamples();
-        //System.out.println(dataBuffer2.getClass());
-        // tile.setRawSamples(dataBuffer);
-        // System.out.println("whatever");
     }
 }

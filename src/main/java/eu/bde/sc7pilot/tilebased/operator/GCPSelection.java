@@ -99,7 +99,7 @@ public class GCPSelection {
 		Placemark sPin = null;
 		if (!getSlaveGCP) {
 			sPin = null;
-			System.out.println("getSlaveGCP is FALSE");
+//			System.out.println("getSlaveGCP is FALSE");
 		}		
 		else {
 			sPin = Placemark.createPointPlacemark(GcpDescriptor.getInstance(),
@@ -112,7 +112,7 @@ public class GCPSelection {
 			if (!checkSlaveGCPValidity(sGCPPixelPos)) {
 	            //System.out.println("GCP(" + i + ") is outside slave image.");
 				sPin = null;
-				System.out.println("checkSlaveGCPValidity is FALSE");
+//				System.out.println("checkSlaveGCPValidity is FALSE");
 	        }
 			
 		}
@@ -186,7 +186,7 @@ public class GCPSelection {
 		final int yul = y0 - cHalfWindowHeight + 1;
 		final Rectangle masterImagetteRectangle = new Rectangle(xul, yul, cWindowWidth, cWindowHeight);
 		if(!masterTile.getRectangle().contains(masterImagetteRectangle)) {
-			System.out.println(gcpPixelPos + " is out of bounds -- master");
+//			System.out.println(gcpPixelPos + " is out of bounds -- master");
 			return false;
 		}
 		try {
@@ -209,12 +209,6 @@ public class GCPSelection {
 
 			ProductData masterData2 = null;
 			double noDataValue2 = 0.0;
-			// if (complexCoregistration) {
-			// final Tile masterImagetteRaster2 = getSourceTile(masterBand2,
-			// masterImagetteRectangle);
-			// masterData2 = masterImagetteRaster2.getDataBuffer();
-			// noDataValue2 = masterBand2.getNoDataValue();
-			// }
 
 			final MyTileIndex mstIndex = new MyTileIndex(masterImagetteRaster1);
 
@@ -251,18 +245,13 @@ public class GCPSelection {
 			}
 
 			if (numInvalidPixels > MaxInvalidPixelPercentage * cWindowHeight * cWindowWidth) {
-//				System.out.println("Problem with numInvalidPixels");
-//				System.out.println(numInvalidPixels);
-//				System.out.println(MaxInvalidPixelPercentage * cWindowHeight * cWindowWidth + "\n");
 				return false;
 			}
-//			System.out.println("How many times will I be printed; pt1");
 			return true;
 
 		} catch (Throwable e) {
 			OperatorUtils.catchOperatorException("getMasterImagette", e);
 		}
-//		System.out.println("How many times will I be printed; pt2");
 		return false;
 	}
 
