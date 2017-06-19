@@ -269,8 +269,8 @@ public class TileBasedFinal {
 		System.out.println("\n" + devsMSG + "Parallel Processing using Spark...\n\n");		
 
 		/* Parallel Processing using Spark */
-		SparkConf conf = new SparkConf().setMaster("local[*]").setAppName("Parallelized at local mode"); //everywhere EXCEPT cluster
-//		SparkConf conf = new SparkConf().set("spark.driver.maxResultSize", "5g").setAppName("Parallel Change-Detector in Spark");
+//		SparkConf conf = new SparkConf().setMaster("local[*]").setAppName("Parallelized at local mode"); //everywhere EXCEPT cluster
+		SparkConf conf = new SparkConf().set("spark.driver.maxResultSize", "5g").setAppName("Parallel Change-Detector in Spark");
 
 		/* configure spark to use Kryo serializer instead of the java serializer. */
 		/* All classes that should be serialized by kryo, are registered in MyRegitration class */
