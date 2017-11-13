@@ -32,10 +32,10 @@ import org.esa.snap.core.dataio.dimap.DimapProductWriter;
 public class ChangePointsClustering {
 
 	public static void main(String[] args) throws IOException {
-		String filesPath = "/home/ethanos/Desktop/BDEimages/";
-		String inputFileName="changeD-subsSerial.dim";
-		File inputFile=new File(filesPath,inputFileName);
-		File outputFile=new File(filesPath,"CLUSTERS600"+inputFileName);
+		String filesPath = "/media/indiana/data/imgs/subseting/subset01_Larisa/Larisa_ncsr_result/";
+		String inputFileName = "SparkChangeDetResult.dim";
+		File inputFile = new File(filesPath, inputFileName);
+		File outputFile = new File("/media/indiana/data/imgs/subseting/subset01_Larisa/Larisa_ncsr_result/", "CLUSTERS600" + inputFileName);
 		long startTime = System.currentTimeMillis();
 		ChangePointsClustering chalgo=new ChangePointsClustering();
 		chalgo.clusterChanges(inputFile, outputFile);
@@ -59,26 +59,24 @@ public class ChangePointsClustering {
 //		GeoCoding geoc =targetBand.getGeoCoding();
 		Raster raster = inputImg.getData(new Rectangle(0, 0, 600, 600));//give dimensions 
 		//threshold, eps, minPTS
-		List<Set<Point>> Clusters = this.dbScanClusters(raster, 2.0, 4, 10);
+		List<Set<Point>> Clusters = this.dbScanClusters(raster, 1.0, 4, 10);
 		List<Polygon> ClustersAsPolygon = new ArrayList<Polygon>();
-		int cnt=0;
+		int cnt = 0;
 		Point location = new Point(0,0);
 		WritableRaster outraster = WritableRaster.createPackedRaster(1, inputImg.getMaxX(), inputImg.getMaxY(), 1, 1, location);
-
-		System.out.println("PolygonNums: "+Clusters.size());
 		for (Set<Point> cl : Clusters)
 		{
 			Polygon polygon = new Polygon();
 			String polygonCoords = "POLYGON((";
 			for (Point pi : cl)
 			{
-				System.out.print("- "+"\t"+pi.x+"\t"+pi.y+"\t");
+//				System.out.print("- " + "\t" + pi.x + "\t" + pi.y + "\t");
 				polygon.addPoint((int) pi.getX(), (int) pi.getY());
 				polygonCoords+=pi.x+" "+pi.y+", ";
 			}
 			polygonCoords+="))";
-			System.out.println();
-			System.out.println(polygonCoords);
+//			System.out.println();
+//			System.out.println(polygonCoords);
 			ClustersAsPolygon.add(polygon);
 			Rectangle rect = polygon.getBounds();
 			for (Point pi : cl)
@@ -88,36 +86,90 @@ public class ChangePointsClustering {
 			}
 			cnt++;
 		}
-		System.out.println("PolygonNums: "+Clusters.size());
-			TiledImage outImg=new TiledImage(inputImg, raster.getWidth(), raster.getWidth());
-			outImg.setData(outraster);
-			Band tb = myRead.getTargetProduct().getBandAt(0);
-			tb.setSourceImage(outImg);
-			Product prod = myRead.getTargetProduct();
-			prod.removeBand(targetBand);
-			prod.addBand(tb);
-			prod.setFileLocation(outputFile);
-			MyWrite mywrite = new MyWrite(prod, outputFile, "BEAM-DIMAP");
-			mywrite.setId("write");
-			sp.initOperatorForMultipleBands(mywrite);
-			Product targetProduct = mywrite.getTargetProduct();
-			LoopLimits limits = new LoopLimits(targetProduct);
-			int noOfBands = targetProduct.getNumBands();
-			for (int i = 0; i < noOfBands; i++) {
-				Band band = targetProduct.getBandAt(i);
-				for (int tileY = 0; tileY < limits.getNumYTiles(); tileY++) {
-					for (int tileX = 0; tileX < limits.getNumXTiles(); tileX++) {
-						if (band.getClass() == Band.class && band.isSourceImageSet()) {
-							GetTile getTile = new GetTile(band, mywrite);
-							getTile.computeTile(tileX, tileY);
-						}
-					}
-				}
-			}
-
-
+		System.out.println("\nEO Original code. Manos Thanos' printing:\n");
 		
+		//Manos Thanos' printing polygons!
+		int nodeCnt = 0;
+		int numPolygons2 = Clusters.size();
+		int totalPointsPar = 0;
+		
+		int w = raster.getWidth();
+		int numNodes = 4;
+		
+		String coords[] = new String[100000];
+		int coordsCnt = 0;
+		
+		List<Polygon> ClustersAsPolygon2 = new ArrayList<Polygon>();
+		int cnt2 = 0;
+		Point location2 = new Point(0, 0);
+		WritableRaster outraster2 = WritableRaster.createPackedRaster(1, inputImg.getMaxX(), inputImg.getMaxY(), 1, 1, location2);
+		for (Set<Point> cl : Clusters) {
+			Polygon polygon = new Polygon();
+			String polygonCoords = "POLYGON((";
+			int xmax = 0;
+			int xmin = Integer.MAX_VALUE;
+			int ymax = 0;
+			int ymin = Integer.MAX_VALUE;
+			for (Point pi : cl) {
+				totalPointsPar++;
+				polygon.addPoint((int) (pi.getX() + nodeCnt * (w / numNodes)), (int) pi.getY());
+				if (pi.x < xmin) xmin = pi.x;
+				if (pi.y < ymin) ymin = pi.y;
+				if (pi.x > xmax) xmax = pi.x;
+				if (pi.y > ymax) ymax = pi.y;
+			}
+			System.out.println("xmin = " + xmin);
+			System.out.println("xmax = " + xmax);
+			System.out.println("ymin = " + ymin);
+			System.out.println("nodeCnt = " + nodeCnt);
+			System.out.println("numNodes = " + numNodes);
+			polygonCoords += (MyUtils.pixelToGeoLocation(myRead.getTargetProduct(), xmin + nodeCnt * (w / numNodes), ymin) + ", ");
+			polygonCoords += (MyUtils.pixelToGeoLocation(myRead.getTargetProduct(), xmax + nodeCnt * (w / numNodes), ymin) + ", ");
+			polygonCoords += (MyUtils.pixelToGeoLocation(myRead.getTargetProduct(), xmax + nodeCnt * (w / numNodes), ymax) + ", ");
+			polygonCoords += (MyUtils.pixelToGeoLocation(myRead.getTargetProduct(), xmin + nodeCnt * (w / numNodes), ymax) + ", ");
+			polygonCoords += (MyUtils.pixelToGeoLocation(myRead.getTargetProduct(), xmin + nodeCnt * (w / numNodes), ymin));
+			polygonCoords += "))";
+			coords[coordsCnt++] = polygonCoords;
+			ClustersAsPolygon2.add(polygon);
+			Rectangle rect = polygon.getBounds();
+			for (Point pi : cl) {
+				int[] fArray = new int[]{1};
+				if (cnt2 > 0) outraster2.setPixel((int) (pi.getX() + nodeCnt * (w / numNodes)), (int) pi.getY(), fArray);
+			}
+			cnt2++;
+//			nodeCnt++;
+		}
+		for (int j = 0; j < coordsCnt; j++){
+			System.out.println(coords[j]);
+		}
 	}
+
+
+//			TiledImage outImg=new TiledImage(inputImg, raster.getWidth(), raster.getWidth());
+//			outImg.setData(outraster);
+//			Band tb = myRead.getTargetProduct().getBandAt(0);
+//			tb.setSourceImage(outImg);
+//			Product prod = myRead.getTargetProduct();
+//			prod.removeBand(targetBand);
+//			prod.addBand(tb);
+//			prod.setFileLocation(outputFile);
+//			MyWrite mywrite = new MyWrite(prod, outputFile, "BEAM-DIMAP");
+//			mywrite.setId("write");
+//			sp.initOperatorForMultipleBands(mywrite);
+//			Product targetProduct = mywrite.getTargetProduct();
+//			LoopLimits limits = new LoopLimits(targetProduct);
+//			int noOfBands = targetProduct.getNumBands();
+//			for (int i = 0; i < noOfBands; i++) {
+//				Band band = targetProduct.getBandAt(i);
+//				for (int tileY = 0; tileY < limits.getNumYTiles(); tileY++) {
+//					for (int tileX = 0; tileX < limits.getNumXTiles(); tileX++) {
+//						if (band.getClass() == Band.class && band.isSourceImageSet()) {
+//							GetTile getTile = new GetTile(band, mywrite);
+//							getTile.computeTile(tileX, tileY);
+//						}
+//					}
+//				}
+//			}
 	
 
 	private int checkChange(Raster raster, double changeThres) {
