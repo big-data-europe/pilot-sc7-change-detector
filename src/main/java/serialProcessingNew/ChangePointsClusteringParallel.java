@@ -1,42 +1,28 @@
 package serialProcessingNew;
 
 import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.geom.Point2D;
-import java.awt.image.Raster;
-import java.awt.image.SampleModel;
 import java.awt.Polygon;
-import java.awt.image.RenderedImage;
+import java.awt.Rectangle;
+import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import serialProcessingNew.SerialProcessor;
 
 import javax.media.jai.TiledImage;
 
-import org.esa.snap.core.datamodel.Band;
-import org.esa.snap.core.datamodel.GeoCoding;
-import org.esa.snap.core.datamodel.GeoPos;
-import org.esa.snap.core.datamodel.PixelPos;
-import org.esa.snap.core.datamodel.Product;
-import org.ujmp.core.doublematrix.calculation.general.missingvalues.Impute.ImputationMethod;
-import org.apache.commons.lang.StringUtils;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
-import org.esa.snap.core.dataio.ProductIO;
-import org.esa.snap.core.dataio.ProductWriter;
-import org.esa.snap.core.dataio.dimap.DimapProductWriter;
+import org.esa.snap.core.datamodel.Band;
+
+import com.vividsolutions.jts.geom.Geometry;
 
 public class ChangePointsClusteringParallel implements Serializable {
 
@@ -44,22 +30,18 @@ public class ChangePointsClusteringParallel implements Serializable {
 		String filesPath = args[0];
 		String inputFileName = args[1];
 		String outputFileName = args[2];
+		String referencePolygon = args[3];
+		double threshold = Double.parseDouble(args[4]);
 //		String filesPath = "/media/indiana/data/imgs/subseting/subset01_Larisa/Larisa_ncsr_result/";
 //		String inputFileName = "SparkChangeDetResult.dim";
 //		String outputFileName = "localspark2.txt";
 		File inputFile = new File(filesPath, inputFileName);
 		File outputFile = new File(filesPath, outputFileName);
 		ChangePointsClusteringParallel chalgo = new ChangePointsClusteringParallel();
-		chalgo.clusterChanges(inputFile, outputFile);
-//		String filesPath = "/home/ethanos/Desktop/BDEimages/VH";
-//		String inputFileName="changeD-tile-based-tiledImage.dim";
-//		File inputFile=new File(filesPath,inputFileName);
-//		File outputFile=new File(filesPath,"clustersTEST_200_2.txt");
-//		ChangePointsClusteringParallel chalgo=new ChangePointsClusteringParallel();
-//		chalgo.clusterChanges(inputFile, outputFile);
+		chalgo.clusterChanges(inputFile, outputFile, referencePolygon, threshold);
 	}
 	
-	public void clusterChanges(File inputFile, File outputFile) throws IOException {
+	public void clusterChanges(File inputFile, File outputFile, String referencePolygon, double threshold) throws IOException {
 		long startTime = System.currentTimeMillis();
 		MyRead myRead = new MyRead(inputFile, "read");
 		long readTime = System.currentTimeMillis();
@@ -73,9 +55,6 @@ public class ChangePointsClusteringParallel implements Serializable {
 		System.out.println("targetBand " + targetBand);
 		
 		TiledImage inputImg = (TiledImage)targetBand.getSourceImage().getImage(0);
-		System.out.println("inputImg " + inputImg.toString());
-		long bandTime = System.currentTimeMillis();
-		System.out.println("bandTime " + (bandTime - readTime));
 //		GeoCoding geoc = targetBand.getGeoCoding();
 		int imageWidth = inputImg.getWidth();
 		int imageHeight = inputImg.getHeight();
@@ -86,7 +65,7 @@ public class ChangePointsClusteringParallel implements Serializable {
 		///////////// make array list
 		int w = raster.getWidth();
 		int h = raster.getHeight();
-		boolean[][] isChangingBool = makeBool(raster, 3.0).clone();
+		boolean[][] isChangingBool = makeBool(raster, threshold).clone();
 		List<boolean[][]> isChangingList = new ArrayList<boolean[][]>();
 		for (int k = 0; k < numNodes; k++) {
 			boolean[][] isChanging1 = new boolean[w/numNodes][h];
@@ -98,21 +77,14 @@ public class ChangePointsClusteringParallel implements Serializable {
 			}
 			isChangingList.add(k, isChanging1);
 		}
-
-		long createArrayTime = System.currentTimeMillis();
-		System.out.println("createArrayTime " + (createArrayTime - bandTime));
 		//threshold, eps, minPTS
 //		SparkConf config = new SparkConf().setMaster("local[*]").setAppName("Parallel DBScan in Spark"); //everywhere EXCEPT cluster
 		SparkConf config = new SparkConf().setAppName("Parallel DBScan in Spark"); //ONLY in clusters
 		//configure spark to use Kryo serializer instead of the java serializer. 
 		//All classes that should be serialized by kryo, are registered in MyRegitration class .
 		config.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer");
-//		config.set("spark.kryo.registrator", "pernode_process.MyRegistrator").set("spark.kryoserializer.buffer.max", "550");
-		//conf.set("spark.kryo.registrationRequired", "true");  //brought the catastrophe
 		JavaSparkContext sc = new JavaSparkContext(config);
 
-		long sparkConfigTime = System.currentTimeMillis();
-		System.out.println("sparkConfigTime " + (sparkConfigTime - createArrayTime));
 		JavaRDD<boolean[][]> boolArDD = sc.parallelize(isChangingList); //changeFIX
 		JavaRDD<List<Set<Point>>> result = boolArDD.map(new Function<boolean[][], List<Set<Point>>>() {
 			public List<Set<Point>> call(boolean[][] x) { 
@@ -120,16 +92,14 @@ public class ChangePointsClusteringParallel implements Serializable {
 				}
 		});
 		int nodeCnt = 0;
-		int numPolygons = 0;
-		int totalPointsPar = 0;
-		String coords[] = new String[100000];
-		int coordsCnt = 0;
+//		String coords[] = new String[100000];
+		ArrayList<String> dbScanResult = new ArrayList<>();
+//		int coordsCnt = 0;
 		for (List<Set<Point>> ClustersRDD : result.collect()) {
 			List<Polygon> ClustersAsPolygon = new ArrayList<Polygon>();
 			int cnt = 0;
 			Point location = new Point(0, 0);
 			WritableRaster outraster = WritableRaster.createPackedRaster(1, inputImg.getMaxX(), inputImg.getMaxY(), 1, 1, location);
-			numPolygons += ClustersRDD.size();
 			System.out.println("PolygonNums: " + ClustersRDD.size());
 			for (Set<Point> cl : ClustersRDD) {
 				Polygon polygon = new Polygon();
@@ -140,7 +110,6 @@ public class ChangePointsClusteringParallel implements Serializable {
 				int ymax = 0;
 				int ymin = Integer.MAX_VALUE;
 				for (Point pi : cl) {
-					totalPointsPar++;
 //					System.out.print("- "+"\t"+(pi.x+nodeCnt*(w/numNodes))+"\t"+pi.y+"\t"); //add node array width (nodeCnt*numNodes) to x coordinates 
 					polygon.addPoint((int) (pi.getX() + nodeCnt * (w / numNodes)), (int) pi.getY());
 //					polygonCoords+=(pi.x+nodeCnt*(w/numNodes))+" "+pi.y+", ";
@@ -160,11 +129,9 @@ public class ChangePointsClusteringParallel implements Serializable {
 				polygonCoords += (MyUtils.pixelToGeoLocation(myRead.getTargetProduct(), xmin + nodeCnt * (w / numNodes), ymax) + ", ");
 				polygonCoords += (MyUtils.pixelToGeoLocation(myRead.getTargetProduct(), xmin + nodeCnt * (w / numNodes), ymin));
 				polygonCoords += "))";
-//				System.out.println();
-//				System.out.println(polygonCoords);
-				coords[coordsCnt++] = polygonCoords;
+//				coords[coordsCnt++] = polygonCoords;
+				dbScanResult.add(polygonCoords);
 				ClustersAsPolygon.add(polygon);
-				Rectangle rect = polygon.getBounds();
 				for (Point pi : cl)
 				{
 					int[] fArray = new int[]{1};
@@ -174,101 +141,40 @@ public class ChangePointsClusteringParallel implements Serializable {
 			}
 			nodeCnt++;
 		}
-		long getClustersParallelTime = System.currentTimeMillis();
-		System.out.println("getClustersParallelTime " + (getClustersParallelTime - sparkConfigTime));
-		//write to file the coords
-		try {
-		    PrintWriter writer = new PrintWriter(outputFile, "UTF-8");
-		   for (int i = 0; i < coordsCnt; i++)
-		   {
-			    writer.println(coords[i]);
-				System.out.println(coords[i]);
-		   }
-		    writer.close();
-		} catch (Exception e) {
-		   // do something
+		System.out.println("\n\n\tInitial dbScanResult:");
+		for (int i = 0; i < dbScanResult.size(); i++){
+			System.out.println(dbScanResult.get(i));
 		}
-//		System.out.println("NOT PARALLEL NOT PARALLEL");
-//		
-//		
-//		List<Set<Point>> Clusters = this.dbScanClusters(makeBool(raster, 2.0), 4, 10, raster.getWidth(), raster.getHeight());
-//		List<Polygon> ClustersAsPolygon = new ArrayList<Polygon>();
-//		int cnt=0;
-//		Point location = new Point(0,0);
-//		WritableRaster outraster = WritableRaster.createPackedRaster(1, inputImg.getMaxX(), inputImg.getMaxY(), 1, 1, location);
-//
-//		int totalPointsSer =0;
-//		System.out.println("PolygonNums: "+Clusters.size());
-//		for (Set<Point> cl : Clusters)
-//		{
-//			Polygon polygon = new Polygon();
-//			String polygonCoords = "POLYGON((";
-//			System.out.println("polygon points:"+cl.size());
-//			for (Point pi : cl)
-//			{
-//				totalPointsSer++;
-//				System.out.print("- "+"\t"+pi.x+"\t"+pi.y+"\t");
-//				polygon.addPoint((int) pi.getX(), (int) pi.getY());
-//				polygonCoords+=pi.x+" "+pi.y+", ";
-//			}
-//			polygonCoords+="))";
-//			System.out.println();
-//			System.out.println(polygonCoords);
-//			ClustersAsPolygon.add(polygon);
-//			Rectangle rect = polygon.getBounds();
-//			for (Point pi : cl)
-//			{
-//				int[] fArray = new int[]{1};
-//				if (cnt>0) outraster.setPixel((int) pi.getX(), (int) pi.getY(), fArray);
-//			}
-//			cnt++;
-//		}
-//		long getClustersSerialTime=System.currentTimeMillis();
-//		System.out.println("getClustersSerialTime "+(getClustersSerialTime-getClustersParallelTime));
-//
-//		System.out.println("readTime "+(readTime-startTime));
-//		System.out.println("bandTime "+(bandTime-readTime));
-//		System.out.println("createArrayTime "+(createArrayTime-bandTime));
-//		System.out.println("sparkConfigTime "+(sparkConfigTime-createArrayTime));
-//		System.out.println("getClustersParallelTime "+(getClustersParallelTime-sparkConfigTime));
-//		System.out.println("getClustersSerialTime "+(getClustersSerialTime-getClustersParallelTime));
-//
-//		System.out.println("PolygonNumsParallel: "+numPolygons);
-//		System.out.println("PolygonNumsSerial: "+Clusters.size());
-//		System.out.println("totalPointsPar: "+totalPointsPar);
-//		System.out.println("totalPointsSer: "+totalPointsSer);		
-//		System.out.println("geoPos "+MyUtils.pixelToGeoLocation(myRead.getTargetProduct(), 54, 32));
-//		System.out.println("geoPos "+MyUtils.pixelToGeoLocation(myRead.getTargetProduct(), 27, 82));
-//			TiledImage outImg=new TiledImage(inputImg, raster.getWidth(), raster.getWidth());
-//			outImg.setData(outraster);
-//			Band tb = myRead.getTargetProduct().getBandAt(0);
-//			tb.setSourceImage(outImg);
-//			Product prod = myRead.getTargetProduct();
-//			prod.removeBand(targetBand);
-//			prod.addBand(tb);
-//			prod.setFileLocation(outputFile);
-//			MyWrite mywrite = new MyWrite(prod, outputFile, "BEAM-DIMAP");
-//			mywrite.setId("write");
-//			sp.initOperatorForMultipleBands(mywrite);
-//			Product targetProduct = mywrite.getTargetProduct();
-//			LoopLimits limits = new LoopLimits(targetProduct);
-//			int noOfBands = targetProduct.getNumBands();
-//			for (int i = 0; i < noOfBands; i++) {
-//				Band band = targetProduct.getBandAt(i);
-//				for (int tileY = 0; tileY < limits.getNumYTiles(); tileY++) {
-//					for (int tileX = 0; tileX < limits.getNumXTiles(); tileX++) {
-//						if (band.getClass() == Band.class && band.isSourceImageSet()) {
-//							GetTile getTile = new GetTile(band, mywrite);
-//							getTile.computeTile(tileX, tileY);
-//						}
-//					}
-//				}
-//			}
-
-
+		System.out.println("\tEND-OF Initial dbScanResult.\n");
+		if(dbScanResult.size() > 0){
+			ArrayList<Geometry> checkedDBScanResult = MyUtils.resultChecker(dbScanResult, referencePolygon);
+			try {
+			    PrintWriter writer = new PrintWriter(outputFile, "UTF-8");
+			   for (int i = 0; i < checkedDBScanResult.size(); i++)
+			   {
+				    writer.println(checkedDBScanResult.get(i).toString());
+			   }
+			    writer.close();
+			} catch (Exception e) {
+				System.out.println("Could not create output File!!! Check local output filepath argument.");
+			}
+		}
+		else {
+			if(outputFile.exists()) {
+				System.out.println("File exists!");
+			}
+			else {
+				try {
+					outputFile.createNewFile();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					System.out.println("Cannot create file!There will be problem with next stage.");
+				}
+			}
+		}
 		
 	}
-	
 
 	private int checkChange(Raster raster, double changeThres) {
 		int width = raster.getWidth();
@@ -285,9 +191,7 @@ public class ChangePointsClusteringParallel implements Serializable {
 			}
 		}
 		return changed;
-
 	}
-	
 	
 	private boolean[][] makeBool(Raster raster, double changeThres) {
 
@@ -336,7 +240,6 @@ public class ChangePointsClusteringParallel implements Serializable {
 			}
 		}
 		return Clusters;
-
 	}
 	
 	private Set<Point> expandCluster(Point point, List<Point> neighbors, boolean[][] isChanging,
@@ -395,6 +298,5 @@ public class ChangePointsClusteringParallel implements Serializable {
         }
         return one;
     }
-	
 
 }
