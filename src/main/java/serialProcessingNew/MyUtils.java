@@ -162,9 +162,13 @@ public class MyUtils {
 			for(int i = 0; i < randomNum; i++){
 				rationalizedGeoms.add(inputGeometries.get(i));
 			}
+			System.out.println(rationalizedGeoms.size() + " Geometries will be returned.");
+			return rationalizedGeoms;
 		}
-		System.out.println(rationalizedGeoms.size() + " Geometries will be returned.");
-		return rationalizedGeoms;
+		else {
+			System.out.println(inputGeometries.size() + " (are all input) Geometries that are returned.");
+			return inputGeometries;
+		}
 	}
 
 	public static ArrayList<Geometry> resultChecker(ArrayList<String> inputStringGeometries, String referenceStringGeometry) {
