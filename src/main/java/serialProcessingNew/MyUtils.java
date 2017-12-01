@@ -127,7 +127,7 @@ public class MyUtils {
 				k++;
 			}
 		}
-		System.out.println(k + "\tgeometries found withing referenceGeometry.");
+		System.out.println(k + "\tgeometries found within referenceGeometry.");
 		System.out.println(withinGeometries.size() + "\tgeometries must have returned.");
 		return withinGeometries;	
 	}
@@ -214,7 +214,7 @@ public class MyUtils {
 			dupleAreaGeom.put(area, inputGeometries.get(i));
 		}
 		System.out.println(dupleAreaGeom.size() + " Geometries are put in TreeMap dupleGeomArea.");
-		System.out.println(inputGeometries.size() - dupleAreaGeom.size() + " Geometries had the same area and kicked out of the final TreeMap.");
+		System.out.println(inputGeometries.size() - dupleAreaGeom.size() + " Geometries had the exact same area and kicked out of the final TreeMap.");
 		for(double key : dupleAreaGeom.keySet()) {
 //			System.out.println("Area = " + key + "\nin Geometry:\t" + dupleAreaGeom.get(key) + "\n");
 			sortedByArea.add(dupleAreaGeom.get(key));
