@@ -32,9 +32,11 @@ public class ChangePointsClusteringParallel implements Serializable {
 		String outputFileName = args[2];
 		String referencePolygon = args[3];
 		double threshold = Double.parseDouble(args[4]);
-//		String filesPath = "/media/indiana/data/imgs/subseting/subset01_Larisa/Larisa_ncsr_result/";
-//		String inputFileName = "SparkChangeDetResult.dim";
-//		String outputFileName = "localspark2.txt";
+//		String filesPath = "/media/indiana/data/imgs/imgSaoPaolo/originalcode/originalCD";
+//		String inputFileName = "originalCD.dim";
+//		String outputFileName = "manosDB.txt";
+//		String referencePolygon = "POLYGON ((-46.941093 -22.658804,-46.180542 -22.473888,-45.699978 -24.201136,-46.469711 -24.389177,-46.941093 -22.658804))";
+//		double threshold = 1.3;
 		File inputFile = new File(filesPath, inputFileName);
 		File outputFile = new File(filesPath, outputFileName);
 		ChangePointsClusteringParallel chalgo = new ChangePointsClusteringParallel();
@@ -78,8 +80,8 @@ public class ChangePointsClusteringParallel implements Serializable {
 			isChangingList.add(k, isChanging1);
 		}
 		//threshold, eps, minPTS
-//		SparkConf config = new SparkConf().setMaster("local[*]").setAppName("Parallel DBScan in Spark"); //everywhere EXCEPT cluster
-		SparkConf config = new SparkConf().setAppName("Parallel DBScan in Spark"); //ONLY in clusters
+		SparkConf config = new SparkConf().setMaster("local[*]").setAppName("Parallel DBScan in Spark"); //everywhere EXCEPT cluster
+//		SparkConf config = new SparkConf().setAppName("Parallel DBScan in Spark"); //ONLY in clusters
 		//configure spark to use Kryo serializer instead of the java serializer. 
 		//All classes that should be serialized by kryo, are registered in MyRegitration class .
 		config.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer");
@@ -88,7 +90,7 @@ public class ChangePointsClusteringParallel implements Serializable {
 		JavaRDD<boolean[][]> boolArDD = sc.parallelize(isChangingList); //changeFIX
 		JavaRDD<List<Set<Point>>> result = boolArDD.map(new Function<boolean[][], List<Set<Point>>>() {
 			public List<Set<Point>> call(boolean[][] x) { 
-				return dbScanClusters(x, 4, 10, w/numNodes, h);
+				return dbScanClusters(x, 3, 10, w/numNodes, h);
 				}
 		});
 		int nodeCnt = 0;
@@ -193,8 +195,8 @@ public class ChangePointsClusteringParallel implements Serializable {
 		return changed;
 	}
 	
-	private boolean[][] makeBool(Raster raster, double changeThres) {
 
+	private boolean[][] makeBool(Raster raster, double changeThres) {
 		int width = raster.getWidth();
 		int height = raster.getHeight();
 		double[] dArray = new double[1];
