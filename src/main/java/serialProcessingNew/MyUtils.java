@@ -417,25 +417,42 @@ public class MyUtils {
 	}
 	
 	public static Double compassToDecimal(String rawCompassCoord) {
-		if (String.valueOf(rawCompassCoord.charAt(0)).equals("-")) {
+		if (String.valueOf(rawCompassCoord.charAt(0)).equals(" ")) {
 			String clear = rawCompassCoord.replaceAll("[^A-Za-z0-9]", " ");
 			String[] parts = clear.split(" ");
 			double d  = Double.parseDouble(parts[1]);
 			double m  = Double.parseDouble(parts[2]);
 			double s  = Double.parseDouble(parts[3]);
 			double dd = - (Math.abs(d) + (m / 60.0) + (s / 3600.0));
-			System.out.println(dd);
+//			System.out.println(dd);
 			return dd;
 		}
 		else {
 			String clear = rawCompassCoord.replaceAll("[^A-Za-z0-9]", " ");
+//			System.out.println(rawCompassCoord);
 			String[] parts = clear.split(" ");
-			double d  = Double.parseDouble(parts[0]);
-			double m  = Double.parseDouble(parts[1]);
-			double s  = Double.parseDouble(parts[2]);
-			double dd = (Math.abs(d) + (m / 60.0) + (s / 3600.0));
-			System.out.println(dd);
-			return dd;
+			if (parts.length == 5) {
+				double d  = Double.parseDouble(parts[0]);
+				double m  = Double.parseDouble(parts[1]);
+				double s  = Double.parseDouble(parts[2]);
+				double dd = (Math.abs(d) + (m / 60.0) + (s / 3600.0));
+				return dd;
+			}
+			else if (parts.length == 4) {
+				double d  = Double.parseDouble(parts[0]);
+				double m  = Double.parseDouble(parts[1]);
+				double dd = (Math.abs(d) + (m / 60.0));
+				return dd;
+			}
+			else if (parts.length == 3) {
+				double d  = Double.parseDouble(parts[0]);
+				double dd = (Math.abs(d));
+				return dd;
+			}
+			else {
+				System.out.println("Dafuq is this");
+				return 0.0;
+			}
 		}
 	}
 
