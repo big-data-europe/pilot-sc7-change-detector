@@ -34,7 +34,7 @@ public class DBScanSerial {
 //		String referencePolygon = args[3];
 //		double threshold = Double.parseDouble(args[4]);
 		String filesPath = "/media/indiana/data/docker-inout";
-		String inputFileName = "cd2F5Avs82A5_noThres.tif";
+		String inputFileName = "cd2F5Avs82A5_noThres_updated.tif";
 		String outputFileName = "giorgosDB2F5Avs82A5subset.txt";
 		String referencePolygon = "POLYGON ((36.30629539489746 32.27764132766419, 36.30629539489746 32.30601070258387, 36.34946823120117 32.30601070258387, 36.34946823120117 32.27764132766419, 36.30629539489746 32.27764132766419))";
 		double threshold = 2;
@@ -93,6 +93,7 @@ public class DBScanSerial {
 //		MyUtils.pointsToSomething(clusterOfCoordinates);
 		System.out.println("\n\n\tFINAL RESULT:");
 		for (Polygon vPol : visualPolygons) System.out.println(vPol.toString());
+		
 	}
 	
 	private TreeSet<Coordinate> pointToCoord(ArrayList<Point> points, Product product) throws IOException {
@@ -183,7 +184,7 @@ public class DBScanSerial {
 				if (pixelValue > changeThreshold || pixelValue < -changeThreshold) pointsOverThreshold.add(new Point(i, j));
 			}
 		}
-		System.out.println("\n" + pointsOverThreshold.size() + "\n points Over Threshold " + changeThreshold + " are found.");
+		System.out.println("\n" + pointsOverThreshold.size() + "\tpoints Over Threshold " + changeThreshold + " are found.");
 		return pointsOverThreshold;
 	}
 	

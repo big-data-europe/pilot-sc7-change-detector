@@ -21,8 +21,8 @@ public class ImageManipulation {
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-		String filesPath = "C:\\Users\\Giorgos\\Desktop\\BDE";
-		String inputFileName = "cd2F5Avs82A5_noThres.tif";
+		String filesPath = "/media/indiana/data/docker-inout";
+		String inputFileName = "cd2F5Avs82A5_noThres_updated.tif";
 		File inputFile = new File(filesPath, inputFileName);
 		
 		ImageManipulation im = new ImageManipulation();
@@ -42,8 +42,8 @@ public class ImageManipulation {
 		int imageHeight = inputImg.getHeight();
 		System.out.println("\n\nWidth=" + imageWidth + ", Height=" + imageHeight);
 		Raster raster = inputImg.getData(new Rectangle(0, 0, imageWidth, imageHeight));
-		visualizePoints(targetProduct, imageWidth, imageHeight);
-//		readCertainPixels(raster);
+//		visualizePoints(targetProduct, imageWidth, imageHeight);
+		readCertainPixels(raster);
 		
 	}
 	
