@@ -77,59 +77,62 @@ public class TileBasedFinal {
 		// args[4]: .tiff (slave image) local filepath
 		// args[5]: dir local filepath to write the final result
 		// args[6]: integer defining partition number (8 - 36, preferably 24)
-		if (args.length < 7) {
-			System.out.println("args[0]: dir in HDFS to store .tiff(s)");
-			System.out.println("args[1]: .dim (master image) local filepath");
-			System.out.println("args[2]: .tiff (master image) local filepath");
-			System.out.println("args[3]: .dim (slave image) local filepath");
-			System.out.println("args[4]: .tiff (slave image) local filepath");
-			System.out.println("args[5]: dir local filepath to write the final result");
-			System.out.println("args[6]: integer defining partition number (8 - 36, preferably 24)");
+		if (args.length < 6) {
+			System.out.println("args[0]: .dim (master image) local filepath");
+			System.out.println("args[1]: .tiff (master image) HDFS filepath");
+			System.out.println("args[2]: .dim (slave image) local filepath");
+			System.out.println("args[3]: .tiff (slave image) HDFS filepath");
+			System.out.println("args[4]: dir local filepath to write the final result");
+			System.out.println("args[5]: integer defining number of repeats");
 			throw new IOException("Error: Invalid Args");
 			
 		}
 		String devsMSG = "[Dev's MSG]\t";
+		int repeats = Integer.parseInt(args[5]);
 		
 		TileBasedFinal parallelTiles = new TileBasedFinal();
 		
-		long startAll = System.currentTimeMillis();
-		
-		parallelTiles.processTiles(args[0], args[1], args[2], args[3], args[4], args[5], Integer.parseInt(args[6]));
-		
-		long endAll = System.currentTimeMillis();
-		long totalAll = endAll - startAll;
-        System.out.println(devsMSG + totalAll + " ms [time4], for storing to HDFS and running all operators including Write (except deleting unwanted files).\n");
+		for (int i = 0; i < repeats; i++) {
+			long startAll = System.currentTimeMillis();
+			
+			parallelTiles.processTiles(args[0], args[1], args[2], args[3], args[4], 24);
+			
+			long endAll = System.currentTimeMillis();
+			long totalAll = endAll - startAll;
+			System.out.println("Experiment num.:\t" + i);
+	        System.out.println(devsMSG + totalAll + " ms [time4], for running all operators including Write.\n");			
+		}
         
         //***Deleting unnecessary files***
-        File masterTiff = new File(args[2]);
-        File slaveTiff = new File(args[4]);
-        if (masterTiff.exists()) {
-        	masterTiff.delete();
-        	System.out.println(devsMSG + masterTiff.getName() + " deleted succesfully!");
-        }
-        else {
-        	System.out.println(devsMSG + "Cannot delete: " + masterTiff.getName());
-        }
-        if (slaveTiff.exists()) {
-        	slaveTiff.delete();
-        	System.out.println(devsMSG + slaveTiff.getName() + " deleted succesfully!\n");
-        }
-        else {
-        	System.out.println(devsMSG + "Cannot delete: " + slaveTiff.getName() + "\n");
-        }
+//        File masterTiff = new File(args[2]);
+//        File slaveTiff = new File(args[4]);
+//        if (masterTiff.exists()) {
+//        	masterTiff.delete();
+//        	System.out.println(devsMSG + masterTiff.getName() + " deleted succesfully!");
+//        }
+//        else {
+//        	System.out.println(devsMSG + "Cannot delete: " + masterTiff.getName());
+//        }
+//        if (slaveTiff.exists()) {
+//        	slaveTiff.delete();
+//        	System.out.println(devsMSG + slaveTiff.getName() + " deleted succesfully!\n");
+//        }
+//        else {
+//        	System.out.println(devsMSG + "Cannot delete: " + slaveTiff.getName() + "\n");
+//        }
         
 	}
 
-	public void processTiles(String hdfsPath, String masterDimFilePath, String masterTiffFilePath, String slaveDimFilePath, String slaveTiffFilePath, String targetPath, int partitionsNumber)
+	public void processTiles(String masterDimFilePath, String masterTiffFilePath, String slaveDimFilePath, String slaveTiffFilePath, String targetPath, int partitionsNumber)
 			throws Exception {
 		String devsMSG = "[Dev's MSG]\t";
 		//***Storing tiffs to HDFS***
 		ZipHandler2 zipHandler = new ZipHandler2();
-//		String masterTiffInHDFS = "/media/indiana/data/imgs/subseting/subset03_SaoPaulo/subset_of_S1A_S6_GRDH_1SDV_20160815T214331_20160815T214400_012616_013C9D_2495.tif";
-		String masterTiffInHDFS = zipHandler.tiffLocalToHDFS(masterTiffFilePath, hdfsPath);
+		String masterTiffInHDFS = masterTiffFilePath;
+//		String masterTiffInHDFS = zipHandler.tiffLocalToHDFS(masterTiffFilePath, hdfsPath);
 		System.out.println(devsMSG + "Master's tiff HDFS-URI: " + masterTiffInHDFS);
-//		String slaveTiffInHDFS = "/media/indiana/data/imgs/subseting/subset03_SaoPaulo/subset_of_S1A_S6_GRDH_1SDV_20160908T214332_20160908T214401_012966_014840_ABDC.tif";
-		String slaveTiffInHDFS = zipHandler.tiffLocalToHDFS(slaveTiffFilePath, hdfsPath);
+		String slaveTiffInHDFS = slaveTiffFilePath;
+//		String slaveTiffInHDFS = zipHandler.tiffLocalToHDFS(slaveTiffFilePath, hdfsPath);
 		System.out.println(devsMSG + "Slave's tiff HDFS-URI: " + slaveTiffInHDFS + "\n");	
 		
 		System.out.println(devsMSG + "Serial Processing to acquire metadata...\n\n");
