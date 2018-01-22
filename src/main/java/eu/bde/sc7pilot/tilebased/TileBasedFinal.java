@@ -502,7 +502,7 @@ public class TileBasedFinal {
 
 
 		
-		//sc.close();
+		sc.close();
 	}
 	
 }
