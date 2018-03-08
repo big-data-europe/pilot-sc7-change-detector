@@ -38,30 +38,30 @@ import eu.bde.sc7pilot.tilebased.model.MyTile;
 public class SerialProcessor {
 
     public static void main(String[] args) throws IOException {
-        // String filesPath =
-        // "E:\\ImageProcessing\\sentinel-images\\sentinel-images-subsets2\\";
-        String filesPath = "/home/efi/SNAP/sentinel-images/";
-        File targetFile = new File(filesPath, "chd-serial-VH");
-//		 File masterFile = new File(filesPath,
-//		 "subset3_of_S1A_IW_GRDH_1SSV_20141225T142407_20141225T142436_003877_004A54_040F.dim");
-//		 File slaveFile = new File(filesPath,
-//		 "subset3_of_S1A_IW_GRDH_1SSV_20150518T142409_20150518T142438_005977_007B49_AF76.dim");
-        // String filesPath =
-        // "E:\\ImageProcessing\\sentinel-images\\newsamples\\";
-        // File targetFile = new File(filesPath, "serialProcessor");
-//		File masterFile = new File(filesPath,
-//				"subset_0_of_S1A_IW_GRDH_1SDV_20151110T145915_20151110T145940_008544_00C1A6_F175.dim");
-//		File slaveFile = new File(filesPath,
-//				"subset_1_of_S1A_IW_GRDH_1SDV_20151029T145915_20151029T145940_008369_00BD0B_334C.dim");
-        File masterFile = new File(filesPath,
-                "S1A_IW_GRDH_1SSV_20141225T142407_20141225T142436_003877_004A54_040F.zip");
-        File slaveFile = new File(filesPath,
-                "S1A_IW_GRDH_1SSV_20150518T142409_20150518T142438_005977_007B49_AF76.zip");
+    	long startAll = System.currentTimeMillis();
+//        String filesPath = "/home/efi/SNAP/sentinel-images/";
+//        File targetFile = new File(filesPath, "chd-serial-VH");
+//        File masterFile = new File(filesPath, "S1A_IW_GRDH_1SSV_20141225T142407_20141225T142436_003877_004A54_040F.zip");
+//        File slaveFile = new File(filesPath,  "S1A_IW_GRDH_1SSV_20150518T142409_20150518T142438_005977_007B49_AF76.zip");
+    	String imgsDir = args[0];
+    	String img1Name = args[1];
+    	String img2Name = args[2];
+    	String resultPrefName = args[3];
+    	// PREPARING FILES
+    	File masterFile = new File(imgsDir, img1Name);
+    	File slaveFile = new File(imgsDir,  img2Name);
+    	File resultFile = new File(imgsDir, resultPrefName);
         SerialProcessor processor = new SerialProcessor();
-        processor.processImages(masterFile, slaveFile, targetFile);
+        processor.processImages(masterFile, slaveFile, resultFile);
+        
+        long endAll = System.currentTimeMillis();
+        long spDuration = endAll - startAll;
+        System.out.println(spDuration + "\tms for Serial Processing to run.");
     }
 
     public void processImages(File masterFile, File slaveFile, File targetFile) throws IOException {
+    	
+    	long startOperators = System.currentTimeMillis();
 
         String[] selectedPolarisations = null;
         MyRead myRead1 = new MyRead(masterFile, "read1");
@@ -77,6 +77,10 @@ public class SerialProcessor {
         MyBandSelect bandselect2 = new MyBandSelect(selectedPolarisations, null);
         bandselect2.setSourceProduct(myRead2.getTargetProduct());
         initOperatorForMultipleBands(bandselect2);
+        
+        long endRead = System.currentTimeMillis();
+        long readDuration = endRead - startOperators;
+        System.out.println(readDuration + "\tms for Read to run.");
 
         Boolean[] bParams1 = {false, false, false, false, true, false, false, false};
         MyCalibration myCalibration1 = new MyCalibration(null, bParams1, null);
@@ -92,6 +96,10 @@ public class SerialProcessor {
         initOperatorForMultipleBands(myCalibration2);
         myRead2 = null;
         processTiles(myCalibration2);
+        
+        long endCalib = System.currentTimeMillis();
+        long calibDuration = endCalib - endRead;
+        System.out.println(calibDuration + "\tms for Calibrate to run.");
 
         Product[] sourcesForCreateStack = new Product[2];
         sourcesForCreateStack[0] = myCalibration1.getTargetProduct();
@@ -105,6 +113,10 @@ public class SerialProcessor {
         myRead1 = null;
         myRead2 = null;
         processTiles(myCreateStack);
+        
+        long endCS = System.currentTimeMillis();
+        long csDuration = endCS - endCalib;
+        System.out.println(csDuration + "\tms for CS to run.");
 
         boolean[] bParams = {false, false, false, false};
         int[] iParams = {1000, 10, 3};
@@ -116,6 +128,10 @@ public class SerialProcessor {
         initOperatorForMultipleBands(gcpSelectionOp);
         myCreateStack = null;
         processTiles(gcpSelectionOp);
+        
+        long endGCP = System.currentTimeMillis();
+        long gcpDuration = endGCP - endCS;
+        System.out.println(gcpDuration + "\tms for GCP to run.");
 
         boolean[] bParams2 = {false, false};
         MyWarp warpOp = new MyWarp(bParams2, 0.05f, 1, "Bilinear interpolation");
@@ -124,6 +140,10 @@ public class SerialProcessor {
         initOperatorForMultipleBands(warpOp);
         gcpSelectionOp = null;
         processTiles(warpOp);
+        
+        long endWarp = System.currentTimeMillis();
+        long warpDuration = endWarp - endGCP;
+        System.out.println(warpDuration + "\tms for Warp to run.");
 
         boolean[] bParams3 = {false, false};
         float[] fParams = {2.0f, -2.0f};
@@ -132,11 +152,19 @@ public class SerialProcessor {
         initOperatorForMultipleBands(myChangeDetection);
         warpOp = null;
         processTiles(myChangeDetection);
-
+        
+        long endCD = System.currentTimeMillis();
+        long cdDuration = endCD - endWarp;
+        System.out.println(cdDuration + "\tms for CD to run.");
+        
         MyWrite writeOp = new MyWrite(myChangeDetection.getTargetProduct(), targetFile, "BEAM-DIMAP");
         writeOp.setId("write");
         initOperatorForMultipleBands(writeOp);
         storeResult(writeOp);
+        
+        long endWrite = System.currentTimeMillis();
+        long writeDuration = endWrite - endCD;
+        System.out.println(writeDuration + "\tms for Write to run.\n");
     }
 
     public BufferedImage createSourceImages(Band band) {
