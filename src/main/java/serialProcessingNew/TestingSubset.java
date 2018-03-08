@@ -45,7 +45,7 @@ public class TestingSubset {
 		else {
 			System.out.println("Cannot recognize file type");
 		}
-		String outputFilePath = args[0] + "subset_of_" + zipName;
+		String outputFilePath = args[0] + "xlSub_of_" + zipName;
 		File sourceFile = new File(sourceFilePath);
 		File targetFile = new File(outputFilePath);
 		
@@ -58,22 +58,6 @@ public class TestingSubset {
 		processor.getBufferedImage(myRead,selectedPolarisations);
 		Product readProduct = myRead.getTargetProduct();
 		
-//		GeoCoding gc = readProduct.getSceneGeoCoding();
-//		PixelPos upLeft = gc.getPixelPos(new GeoPos(Double.parseDouble(args[2]), Double.parseDouble(args[3])), null);
-//		PixelPos downRight = gc.getPixelPos(new GeoPos(Double.parseDouble(args[4]), Double.parseDouble(args[5])), null);
-
-//		System.out.println(upLeft.getX());
-//		System.out.println(upLeft.getY());
-//		System.out.println(downRight.getX());
-//		System.out.println(downRight.getY());
-		
-//		String polygon = MyUtils.pixelsToPolygon(readProduct,Integer.parseInt(args[2]),Integer.parseInt(args[3]),
-//				Integer.parseInt(args[4]),Integer.parseInt(args[5]));
-//		String polygon = MyUtils.pixelsToPolygon(readProduct, (int) upLeft.getX() , (int) upLeft.getY(),
-//				(int) downRight.getX() , (int) downRight.getY());
-//		
-//		String polygon = "POLYGON ((54.19128967926016 23.674497781625785, 54.30677317926283 23.695156287934374, 54.27579913318672 23.839347507740186, 54.16018560647655 23.818696658552703, 54.19128967926016 23.674497781625785))";
-//		String polygon = "POLYGON ((54.19058929112497 23.682048668938, 54.3060817017794 23.702707616024373, 54.2750071961143 23.846879154190272, 54.159384677099624 23.82622759888463, 54.19058929112497 23.682048668938))";
 		String polygon = args[2];
 		for (int i=3; i<args.length; i++)
 		{
@@ -103,13 +87,13 @@ public class TestingSubset {
         processor.myStoreResult(writeOp2, selectedPolarisations);
         
         //Deleting input and unwanted output
-        if (sourceFile.exists()) {
-        	sourceFile.delete();
-        	System.out.println("Input-Image deleted succesfully!");
-        }
-        else {
-        	System.out.println("Cannot delete Input-Image");
-        }
+//        if (sourceFile.exists()) {
+//        	sourceFile.delete();
+//        	System.out.println("Input-Image deleted succesfully!");
+//        }
+//        else {
+//        	System.out.println("Cannot delete Input-Image");
+//        }
         
 	}
 	

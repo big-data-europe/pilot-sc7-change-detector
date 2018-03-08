@@ -38,40 +38,10 @@ import tileBased.model.MyTile;
 public class SerialProcessor {
 
 	public static void main(String[] args) throws IOException {
-		// String filesPath =
-		// "E:\\ImageProcessing\\sentinel-images\\sentinel-images-subsets2\\";
 		String filesPath = "/home/gvastakis/Desktop/sentinel-images-subsets/";
-		//String filesPath = "D:\\work-di\\SNAP\\sentinel-images\\";
-		File targetFile = new File(filesPath, "changeD-subs22Serial");
-//		 File masterFile = new File(filesPath,
-//		 "subset3_of_S1A_IW_GRDH_1SSV_20141225T142407_20141225T142436_003877_004A54_040F.dim");
-//		 File slaveFile = new File(filesPath,
-//		 "subset3_of_S1A_IW_GRDH_1SSV_20150518T142409_20150518T142438_005977_007B49_AF76.dim");
-		 
-//		 File masterFile = new File(filesPath,
-//				 "subset2_of_S1A_IW_GRDH_1SSV_20141225T142407_20141225T142436_003877_004A54_040F.dim");
-//				 File slaveFile = new File(filesPath,
-//				 "subset2_of_S1A_IW_GRDH_1SSV_20150518T142409_20150518T142438_005977_007B49_AF76.dim");
-//		File slaveFile = new File(filesPath,
-//							 "subset_1_of_S1A_IW_GRDH_1SSV_20150518T142409_20150518T142438_005977_007B49_AF76.dim");
-//		File masterFile = new File(filesPath,
-//									 "subset_0_of_S1A_IW_GRDH_1SSV_20141225T142407_20141225T142436_003877_004A54_040F.dim");	 
-		   File slaveFile = new File(filesPath,
-					 "subset2_of_S1A_IW_GRDH_1SSV_20141225T142407_20141225T142436_003877_004A54_040F.dim");
-		   File masterFile = new File(filesPath,
-					 "subset2_of_S1A_IW_GRDH_1SSV_20150518T142409_20150518T142438_005977_007B49_AF76.dim");
-		
-		// String filesPath =
-		// "E:\\ImageProcessing\\sentinel-images\\newsamples\\";
-		// File targetFile = new File(filesPath, "serialProcessor");
-//		File masterFile = new File(filesPath,
-//				"subset_0_of_S1A_IW_GRDH_1SDV_20151110T145915_20151110T145940_008544_00C1A6_F175.dim");
-//		File slaveFile = new File(filesPath,
-//				"subset_1_of_S1A_IW_GRDH_1SDV_20151029T145915_20151029T145940_008369_00BD0B_334C.dim");
-//		 File masterFile = new File(filesPath,
-//		 "S1A_IW_GRDH_1SSV_20141225T142407_20141225T142436_003877_004A54_040F.zip");
-//		 File slaveFile = new File(filesPath,
-//		 "S1A_IW_GRDH_1SSV_20150518T142409_20150518T142438_005977_007B49_AF76.zip");
+		File targetFile = new File(filesPath, "cd_SPNew_");	 
+		File slaveFile = new File(filesPath, "subset2_of_S1A_IW_GRDH_1SSV_20141225T142407_20141225T142436_003877_004A54_040F.dim");
+		File masterFile = new File(filesPath, "subset2_of_S1A_IW_GRDH_1SSV_20150518T142409_20150518T142438_005977_007B49_AF76.dim");
 		SerialProcessor processor = new SerialProcessor();
 		processor.processImages(masterFile, slaveFile, targetFile);
 	}
@@ -113,7 +83,7 @@ public class SerialProcessor {
 		sourcesForCreateStack[0] = myCalibration1.getTargetProduct();
 		sourcesForCreateStack[1] = myCalibration2.getTargetProduct();
 
-		String[] parameters = { "NONE", "Master", "Orbit" };
+		String[] parameters = {"NONE", "Master", "Orbit" };
 		MyCreateStack myCreateStack = new MyCreateStack(parameters);
 		myCreateStack.setSourceProduct(sourcesForCreateStack);
 		myCreateStack.setId("myCreateStack");
@@ -141,8 +111,8 @@ public class SerialProcessor {
 		gcpSelectionOp = null;
 		processTiles(warpOp);
 
-		boolean[] bParams3 = { false, false };
-		float[] fParams = { 2.0f, -2.0f };
+		boolean[] bParams3 = {false, false};
+		float[] fParams = {2.0f, -2.0f};
 		MyChangeDetection myChangeDetection = new MyChangeDetection(bParams3, fParams,null);
 		myChangeDetection.setSourceProduct(warpOp.getTargetProduct());
 		initOperatorForMultipleBands(myChangeDetection);

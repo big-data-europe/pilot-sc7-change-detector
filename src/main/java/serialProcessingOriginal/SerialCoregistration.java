@@ -19,29 +19,13 @@ public class SerialCoregistration {
     public static void main(String[] args) {
         String filesPath = "/home/efi/SNAP/sentinel-images/";
         File targetFile = new File(filesPath, "ORIGINALALL-FINAL");
-         File masterFile = new File(filesPath, "subset_0_of_S1A_IW_GRDH_1SDV_20151110T145915_20151110T145940_008544_00C1A6_F175.dim");
+        File masterFile = new File(filesPath, "subset_0_of_S1A_IW_GRDH_1SDV_20151110T145915_20151110T145940_008544_00C1A6_F175.dim");
         File slaveFile = new File(filesPath, "subset_1_of_S1A_IW_GRDH_1SDV_20151029T145915_20151029T145940_008369_00BD0B_334C.dim");
-//        File masterFile = new File(filesPath,
-//				"subset3_of_S1A_IW_GRDH_1SSV_20141225T142407_20141225T142436_003877_004A54_040F.dim");
-//		File slaveFile = new File(filesPath,
-//				"subset3_of_S1A_IW_GRDH_1SSV_20150518T142409_20150518T142438_005977_007B49_AF76.dim");
-//        File masterFile = new File(filesPath,
-//				 "S1A_IW_GRDH_1SSV_20141225T142407_20141225T142436_003877_004A54_040F.zip");
-//				 File slaveFile = new File(filesPath,
-//				 "S1A_IW_GRDH_1SSV_20150518T142409_20150518T142438_005977_007B49_AF76.zip");
         final OperatorSpiRegistry spiRegistry = GPF.getDefaultInstance().getOperatorSpiRegistry();
         spiRegistry.loadOperatorSpis();
 
         MyRead readOp1 = new MyRead(masterFile, spiRegistry);
         MyRead readOp2 = new MyRead(slaveFile, spiRegistry);
-        
-//        MyBandSelect myBandSelect1=new MyBandSelect();
-//        myBandSelect1.setSourceProducts(readOp1.targetProduct);
-//        myBandSelect1.setParameters(new String[]{"VH"}, null);
-//       
-//        MyBandSelect myBandSelect2=new MyBandSelect();
-//        myBandSelect1.setSourceProducts(readOp2.targetProduct);
-//        myBandSelect2.setParameters(new String[]{"VH"}, null);
         
         Boolean[] bParams={false,false,false,false,true,false,false,false};	
         MyCalibration myCalibration1=new MyCalibration();
